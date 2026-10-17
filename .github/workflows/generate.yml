@@ -1,0 +1,31 @@
+name: Generate Wedding Invite
+on:
+  repository_dispatch:
+    types: [generate_invite]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      
+      - name: Run Generator
+        env:
+          GUEST_NAME: ${{ github.event.client_payload.name }}
+          TEMPLATE: ${{ github.event.client_payload.template }}
+        run: python generate.py
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Generated invite for ${{ github.event.client_payload.name }}"
+          git push
