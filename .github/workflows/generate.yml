@@ -19,8 +19,11 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Verify Files Present
+        run: ls -la
+
       - name: Install Dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r req.txt
 
       - name: Run URLovingly Generator
         env:
