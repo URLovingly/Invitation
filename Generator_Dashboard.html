@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>URLovingly — Personalized Digital Invites Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              navy: '#151438',
+              pink: '#F42F6C',
+              coral: '#FF6B8B',
+              purple: '#6C2BD9',
+              violet: '#8B5CF6',
+              soft: '#FDF7FF'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #FFFFFF 0%, #FDF4FF 50%, #FFF0F5 100%);
+      color: #151438;
+    }
+    .phone-frame {
+      box-shadow: 0 25px 60px -15px rgba(108, 43, 217, 0.22), 0 0 0 10px #151438, 0 0 0 12px #3b2d64;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(244, 47, 108, 0.25); border-radius: 9999px; }
+    .brand-gradient {
+      background: linear-gradient(135deg, #FF5E8E 0%, #F42F6C 48%, #6C2BD9 100%);
+    }
+    .brand-text-gradient {
+      background: linear-gradient(135deg, #F42F6C 0%, #6C2BD9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.06); opacity: 0.4; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .animate-pulse-slow { animation: pulse-ring 3s infinite ease-in-out; }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col selection:bg-pink-200 selection:text-brand-navy">
+
+  <!-- Reusable SVG Defs for URLovingly Envelope Heart Logo -->
+  <svg width="0" height="0" class="hidden">
+    <defs>
+      <linearGradient id="urlovingly-env-back" x1="15" y1="15" x2="105" y2="105" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#FF7597"/>
+        <stop offset="50%" stop-color="#F42F6C"/>
+        <stop offset="100%" stop-color="#5B21B6"/>
+      </linearGradient>
+      <linearGradient id="urlovingly-heart" x1="30" y1="22" x2="90" y2="85" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#FFA185"/>
+        <stop offset="45%" stop-color="#F42F6C"/>
+        <stop offset="100%" stop-color="#7E22CE"/>
+      </linearGradient>
+      <linearGradient id="urlovingly-flap" x1="20" y1="55" x2="100" y2="105" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#D61F69"/>
+        <stop offset="50%" stop-color="#FF5E8E"/>
+        <stop offset="100%" stop-color="#6C2BD9"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-pink-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Identity: URLovingly Icon + Typography -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-50 to-purple-50 border border-pink-100 flex items-center justify-center shadow-sm">
+          <svg class="w-10 h-10" viewBox="0 0 120 120" fill="none">
+            <!-- Sparkles -->
+            <path d="M14 48L17 53L22 56L17 59L14 64L11 59L6 56L11 53L14 48Z" fill="#F42F6C"/>
+            <path d="M106 52L108.5 56.5L113 59L108.5 61.5L106 66L103.5 61.5L99 59L103.5 56.5L106 52Z" fill="#7E22CE"/>
+            <circle cx="18" cy="36" r="2" fill="#FF6B8B"/>
+            <circle cx="102" cy="40" r="2" fill="#8B5CF6"/>
+            <!-- Open Envelope Back -->
+            <path d="M22 50L60 18L98 50V95C98 100 94 104 89 104H31C26 104 22 100 22 95V50Z" fill="url(#urlovingly-env-back)"/>
+            <!-- Inner Dark Purple Pocket -->
+            <path d="M24 52L60 78L96 52L60 24L24 52Z" fill="#3B0764" fill-opacity="0.45"/>
+            <!-- 3D Heart Inside Envelope -->
+            <path d="M60 84C60 84 30 63 30 42C30 31.5 38 24 47.5 24C53.5 24 57.8 27.2 60 31.5C62.2 27.2 66.5 24 72.5 24C82 24 90 31.5 90 42C90 63 60 84 60 84Z" fill="url(#urlovingly-heart)"/>
+            <!-- White Page Curl Accent on Right of Heart -->
+            <path d="M87 52C82 55 77 54 75 50C79 60 72 68 65 73C75 68 84 60 87 52Z" fill="#FFFFFF" fill-opacity="0.9"/>
+            <!-- Envelope Side Flaps & Bottom Flap -->
+            <path d="M22 51L55 78L22 101V51Z" fill="#E11D48" fill-opacity="0.65"/>
+            <path d="M98 51L65 78L98 101V51Z" fill="#5B21B6" fill-opacity="0.75"/>
+            <path d="M23 102L60 69L97 102C95 103.5 92 104 89 104H31C28 104 25 103.5 23 102Z" fill="url(#urlovingly-flap)"/>
+            <path d="M24 101L60 70L96 101" stroke="#FFB4C6" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-baseline tracking-tight">
+            <span class="font-serif text-2xl sm:text-3xl font-bold text-brand-navy">UR</span>
+            <span class="font-serif text-2xl sm:text-3xl font-bold text-brand-pink ml-0.5">Lovingly</span>
+          </div>
+          <p class="text-[11px] font-medium text-brand-navy/70 -mt-1">Personalized digital invites for your special days</p>
+        </div>
+      </div>
+
+      <!-- Right Controls -->
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <div id="connectionBadge" class="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-800 border border-purple-200">
+          <span id="connectionDot" class="w-2 h-2 rounded-full bg-purple-600 animate-pulse"></span>
+          <span id="connectionText">Demo Mode Active</span>
+        </div>
+
+        <button onclick="toggleModal('codeModal')" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-purple-900 bg-purple-50 hover:bg-purple-100 border border-purple-200 transition flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-brand-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+          </svg>
+          <span>GitHub & Worker Code</span>
+        </button>
+
+        <button onclick="toggleConfigDrawer()" class="px-4 py-2 rounded-xl text-xs font-bold text-white brand-gradient hover:opacity-95 transition flex items-center gap-1.5 shadow-md shadow-pink-500/20">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <span>Pipeline Settings</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Collapsible Pipeline Configuration Bar -->
+    <div id="configDrawer" class="hidden bg-gradient-to-r from-[#151438] via-[#2b124c] to-[#151438] text-white border-b border-purple-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
+          <div>
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-pink"></span>
+              URLovingly Cloud Deployment Settings
+            </h3>
+            <p class="text-xs text-purple-200 mt-0.5">Connect your Cloudflare Worker endpoint and GitHub Pages URL to publish live guest invites.</p>
+          </div>
+          <label class="inline-flex items-center cursor-pointer bg-white/10 px-3.5 py-2 rounded-xl border border-white/15">
+            <input type="checkbox" id="demoModeToggle" class="sr-only peer" checked onchange="saveConfig()">
+            <div class="relative w-9 h-5 bg-purple-950 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-pink"></div>
+            <span class="ms-2.5 text-xs font-semibold text-white">Simulate Pipeline (Demo Mode)</span>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+          <div class="md:col-span-5">
+            <label class="block text-[11px] font-semibold uppercase tracking-wider text-pink-200 mb-1.5">Cloudflare Worker Trigger URL</label>
+            <input type="url" id="workerUrlInput" placeholder="https://invite-trigger.yourname.workers.dev" 
+              class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-purple-400/30 text-sm text-white placeholder-purple-300/50 focus:outline-none focus:border-brand-pink">
+          </div>
+          <div class="md:col-span-5">
+            <label class="block text-[11px] font-semibold uppercase tracking-wider text-pink-200 mb-1.5">Base Hosted Domain / GitHub Pages URL</label>
+            <input type="url" id="baseDomainInput" placeholder="https://urlovingly.github.io/wedding-invites" 
+              class="w-full px-3.5 py-2 rounded-xl bg-white/10 border border-purple-400/30 text-sm text-white placeholder-purple-300/50 focus:outline-none focus:border-brand-pink">
+          </div>
+          <div class="md:col-span-2">
+            <button onclick="saveConfig(true)" class="w-full py-2 px-4 brand-gradient hover:opacity-95 text-white font-bold text-xs rounded-xl transition shadow-md">
+              Save Settings
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT COLUMN: Generator Controls (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- Section 1: Wedding Event Defaults -->
+        <div class="bg-white rounded-3xl border border-pink-100 shadow-sm p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-xl bg-pink-50 text-brand-pink border border-pink-200 flex items-center justify-center text-xs font-extrabold">1</span>
+              <div>
+                <h2 class="text-base font-bold text-brand-navy">Event & Couple Details</h2>
+                <p class="text-xs text-slate-500">Shared across all generated guest invitations</p>
+              </div>
+            </div>
+            <button type="button" onclick="saveEventDefaults()" class="text-xs font-bold text-brand-pink hover:text-brand-purple flex items-center gap-1 transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Save as Default
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-brand-navy mb-1">Couple Names</label>
+              <input type="text" id="coupleNames" value="Aarav & Priya" oninput="updateLivePreview()"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs font-semibold text-brand-navy mb-1">Event Date</label>
+                <input type="text" id="weddingDate" value="Dec 18, 2026" oninput="updateLivePreview()"
+                  class="w-full px-3 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-brand-navy mb-1">Time</label>
+                <input type="text" id="weddingTime" value="5:30 PM Onwards" oninput="updateLivePreview()"
+                  class="w-full px-3 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink">
+              </div>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-brand-navy mb-1">Venue Name & Address</label>
+              <input type="text" id="venueName" value="The Grand Ballroom, Taj Lands End, Mumbai" oninput="updateLivePreview()"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-brand-navy mb-1">Google Maps Venue Link</label>
+              <input type="url" id="mapUrl" value="https://maps.google.com" oninput="updateLivePreview()"
+                class="w-full px-3.5 py-2 rounded-xl border border-purple-200 text-xs text-slate-600 focus:outline-none focus:border-brand-pink">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-brand-navy mb-1">Host WhatsApp RSVP Number</label>
+              <input type="text" id="rsvpPhone" value="919876543210" oninput="updateLivePreview()"
+                class="w-full px-3.5 py-2 rounded-xl border border-purple-200 text-xs text-slate-600 focus:outline-none focus:border-brand-pink">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Guest Personalization & Template Form -->
+        <form id="inviteForm" onsubmit="handleGenerateSubmit(event)" class="bg-white rounded-3xl border border-pink-100 shadow-sm p-6 space-y-5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-xl brand-gradient text-white flex items-center justify-center text-xs font-extrabold shadow-sm">2</span>
+              <div>
+                <h2 class="text-base font-bold text-brand-navy">Personalize Guest Invitation</h2>
+                <p class="text-xs text-slate-500">Generates a dedicated URL path for this guest</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-bold px-3 py-1 rounded-full bg-pink-50 text-brand-pink border border-pink-200">
+              /to/<span id="slugPreview">rahul-sharma-and-family</span>
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-brand-navy mb-1">Guest / Family Name <span class="text-brand-pink">*</span></label>
+              <input type="text" id="guestName" required value="Rahul Sharma & Family" oninput="updateLivePreview()"
+                placeholder="e.g., Priya Verma & Family"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-brand-navy mb-1">Seating / VIP Pass</label>
+              <input type="text" id="tableNo" value="Table 04 • VIP" oninput="updateLivePreview()"
+                placeholder="e.g., Table 4"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-brand-navy mb-1">Warm Personal Note</label>
+            <textarea id="customNote" rows="2" oninput="updateLivePreview()"
+              class="w-full px-3.5 py-2 rounded-xl border border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink">We are so excited to invite you to celebrate the beginning of our new chapter together!</textarea>
+          </div>
+
+          <!-- Template Selector Cards -->
+          <div>
+            <label class="block text-xs font-semibold text-brand-navy mb-2.5">Choose Invitation Theme</label>
+            <div class="grid grid-cols-3 gap-3">
+              <!-- Theme 1: URLovingly Signature (Purple, Pink & White) -->
+              <label class="cursor-pointer group">
+                <input type="radio" name="templateType" value="urlovingly" checked onchange="updateLivePreview()" class="sr-only peer">
+                <div class="p-3.5 rounded-2xl border-2 border-purple-100 peer-checked:border-brand-pink peer-checked:bg-pink-50/40 hover:bg-purple-50/30 transition text-center">
+                  <div class="w-9 h-9 mx-auto mb-2 rounded-full bg-gradient-to-tr from-brand-pink to-brand-purple border border-pink-200 flex items-center justify-center shadow-sm">
+                    <span class="font-serif text-xs font-bold text-white">UL</span>
+                  </div>
+                  <div class="text-xs font-bold text-brand-navy">URLovingly</div>
+                  <div class="text-[10px] text-brand-pink font-medium">Purple, Pink & White</div>
+                </div>
+              </label>
+
+              <!-- Theme 2: Violet Velvet -->
+              <label class="cursor-pointer group">
+                <input type="radio" name="templateType" value="royal" onchange="updateLivePreview()" class="sr-only peer">
+                <div class="p-3.5 rounded-2xl border-2 border-purple-100 peer-checked:border-brand-pink peer-checked:bg-pink-50/40 hover:bg-purple-50/30 transition text-center">
+                  <div class="w-9 h-9 mx-auto mb-2 rounded-full bg-[#2b124c] border border-pink-400 flex items-center justify-center shadow-sm">
+                    <span class="font-serif text-xs font-bold text-pink-300">VV</span>
+                  </div>
+                  <div class="text-xs font-bold text-brand-navy">Royal Violet</div>
+                  <div class="text-[10px] text-slate-500">Deep Plum & Rose</div>
+                </div>
+              </label>
+
+              <!-- Theme 3: Blush Minimal -->
+              <label class="cursor-pointer group">
+                <input type="radio" name="templateType" value="modern" onchange="updateLivePreview()" class="sr-only peer">
+                <div class="p-3.5 rounded-2xl border-2 border-purple-100 peer-checked:border-brand-pink peer-checked:bg-pink-50/40 hover:bg-purple-50/30 transition text-center">
+                  <div class="w-9 h-9 mx-auto mb-2 rounded-full bg-white border-2 border-brand-navy flex items-center justify-center shadow-sm">
+                    <span class="font-sans text-[10px] font-extrabold text-brand-navy">BM</span>
+                  </div>
+                  <div class="text-xs font-bold text-brand-navy">Blush Minimal</div>
+                  <div class="text-[10px] text-slate-500">Crisp Editorial</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Generate CTA Button -->
+          <div class="pt-1">
+            <button type="submit" id="submitBtn" class="w-full py-3.5 px-6 rounded-2xl brand-gradient hover:opacity-95 text-white font-bold text-sm shadow-lg shadow-pink-500/25 transition flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+              <span>Generate & Host Personalized URL</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Pipeline Live Progress Tracker -->
+        <div id="pipelineCard" class="hidden bg-white rounded-3xl border border-pink-200 shadow-sm p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-brand-purple">Live Deployment Pipeline</h3>
+            <span id="pipelineTimer" class="text-xs font-mono text-slate-500">0.0s</span>
+          </div>
+          <div class="grid grid-cols-4 gap-2 text-center">
+            <div id="step1" class="p-2.5 rounded-xl bg-purple-50/60 border border-purple-100 transition">
+              <div class="text-xs font-bold text-brand-navy">1. Worker API</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">Webhook Auth</div>
+            </div>
+            <div id="step2" class="p-2.5 rounded-xl bg-purple-50/60 border border-purple-100 transition">
+              <div class="text-xs font-bold text-brand-navy">2. GitHub Action</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">Dispatch Trigger</div>
+            </div>
+            <div id="step3" class="p-2.5 rounded-xl bg-purple-50/60 border border-purple-100 transition">
+              <div class="text-xs font-bold text-brand-navy">3. Python Jinja2</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">Build HTML</div>
+            </div>
+            <div id="step4" class="p-2.5 rounded-xl bg-purple-50/60 border border-purple-100 transition">
+              <div class="text-xs font-bold text-brand-navy">4. GitHub Pages</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">Live URL</div>
+            </div>
+          </div>
+
+          <div id="resultBanner" class="hidden mt-4 p-4 rounded-2xl bg-gradient-to-r from-pink-50 via-purple-50 to-pink-50 border border-pink-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div class="min-w-0 flex-1">
+              <div class="text-[11px] font-bold text-brand-pink uppercase tracking-wider">Invitation Hosted & Ready</div>
+              <a id="generatedUrlLink" href="#" target="_blank" class="text-sm font-bold text-brand-navy hover:text-brand-pink underline truncate block mt-0.5"></a>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button onclick="copyGeneratedLink()" class="px-3 py-1.5 rounded-xl bg-white border border-purple-200 text-brand-navy text-xs font-bold hover:bg-purple-50 transition">
+                Copy URL
+              </button>
+              <a id="whatsappShareBtn" href="#" target="_blank" class="px-3.5 py-1.5 rounded-xl brand-gradient text-white text-xs font-bold hover:opacity-95 transition">
+                Share on WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Generated Guest Links History Table -->
+        <div class="bg-white rounded-3xl border border-pink-100 shadow-sm p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-base font-bold text-brand-navy">Generated Guest Links</h3>
+              <p class="text-xs text-slate-500">Stored in your browser for quick sharing</p>
+            </div>
+            <button onclick="exportLinksCsv()" class="px-3 py-1.5 rounded-xl border border-purple-200 text-xs font-bold text-brand-purple hover:bg-purple-50 transition">
+              Export CSV
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-pink-100 text-[11px] font-bold uppercase text-slate-400">
+                  <th class="pb-2.5">Guest</th>
+                  <th class="pb-2.5">Theme</th>
+                  <th class="pb-2.5">Hosted Link</th>
+                  <th class="pb-2.5 text-right">Share</th>
+                </tr>
+              </thead>
+              <tbody id="guestHistoryBody" class="divide-y divide-pink-50 text-xs"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Live Mobile Preview (5 cols) -->
+      <div class="lg:col-span-5 lg:sticky lg:top-24 flex flex-col items-center">
+        <div class="mb-3 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-brand-pink animate-ping"></span>
+          <span class="text-xs font-bold uppercase tracking-widest text-brand-purple">Live Mobile Invite Preview</span>
+        </div>
+
+        <!-- Phone Mockup Frame -->
+        <div class="w-[335px] sm:w-[365px] h-[670px] rounded-[46px] phone-frame bg-white overflow-hidden flex flex-col relative">
+          <!-- Speaker Notch -->
+          <div class="h-6 bg-[#151438] flex items-center justify-center shrink-0">
+            <div class="w-20 h-3 bg-black/50 rounded-full"></div>
+          </div>
+
+          <!-- Address Bar -->
+          <div class="bg-purple-50 border-b border-purple-100 px-3.5 py-2 flex items-center gap-2 shrink-0">
+            <svg class="w-3.5 h-3.5 text-brand-pink shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+            </svg>
+            <div id="previewBrowserUrl" class="text-[11px] font-mono text-brand-navy/80 truncate">
+              urlovingly.com/to/rahul-sharma-and-family
+            </div>
+          </div>
+
+          <!-- Dynamic Rendered Invitation Card -->
+          <div id="mobilePreviewViewport" class="flex-1 overflow-y-auto custom-scrollbar"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Modal for GitHub & Cloudflare Worker Code -->
+  <div id="codeModal" class="fixed inset-0 z-50 hidden bg-brand-navy/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-pink-100 overflow-hidden">
+      <div class="px-6 py-4 bg-gradient-to-r from-brand-navy to-purple-950 text-white flex items-center justify-between">
+        <div>
+          <h3 class="text-sm font-bold">URLovingly Cloudflare Worker Script</h3>
+          <p class="text-[11px] text-pink-200">Deploy this to your Cloudflare Worker to forward form payloads to GitHub Actions</p>
+        </div>
+        <button onclick="toggleModal('codeModal')" class="text-pink-200 hover:text-white text-xl font-bold">&times;</button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-4 text-xs">
+        <p class="text-slate-600">Add secrets <code class="px-1.5 py-0.5 bg-pink-50 text-brand-pink rounded font-bold">GH_PAT</code>, <code class="px-1.5 py-0.5 bg-pink-50 text-brand-pink rounded font-bold">GH_OWNER</code>, and <code class="px-1.5 py-0.5 bg-pink-50 text-brand-pink rounded font-bold">GH_REPO</code> in your Cloudflare Worker settings:</p>
+        <pre class="bg-slate-900 text-pink-100 p-4 rounded-2xl overflow-x-auto font-mono text-[11px] leading-relaxed">export default {
+  async fetch(request, env) {
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        }
+      });
+    }
+    if (request.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
+    const payload = await request.json();
+
+    const ghRes = await fetch(`https://api.github.com/repos/${env.GH_OWNER}/${env.GH_REPO}/dispatches`, {
+      method: "POST",
+      headers: {
+        "Accept": "application/vnd.github.v3+json",
+        "Authorization": `token ${env.GH_PAT}`,
+        "User-Agent": "URLovingly-Worker"
+      },
+      body: JSON.stringify({
+        event_type: "generate_invite",
+        client_payload: payload
+      })
+    });
+
+    return new Response(JSON.stringify({ ok: ghRes.ok }), {
+      status: ghRes.ok ? 200 : 500,
+      headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" }
+    });
+  }
+};</pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEYS = {
+      CONFIG: 'urlovingly_config_v1',
+      DEFAULTS: 'urlovingly_defaults_v1',
+      HISTORY: 'urlovingly_history_v1'
+    };
+
+    let guestHistory = [];
+
+    function slugify(text) {
+      return (text || '')
+        .toString()
+        .toLowerCase()
+        .replace(/&/g, 'and')
+        .replace(/[\W_]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'guest';
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function toggleConfigDrawer() {
+      document.getElementById('configDrawer').classList.toggle('hidden');
+    }
+
+    function toggleModal(id) {
+      document.getElementById(id).classList.toggle('hidden');
+    }
+
+    function loadSavedState() {
+      const savedConfig = JSON.parse(localStorage.getItem(STORAGE_KEYS.CONFIG) || '{}');
+      document.getElementById('workerUrlInput').value = savedConfig.workerUrl || '';
+      document.getElementById('baseDomainInput').value = savedConfig.baseDomain || 'https://urlovingly.github.io/wedding-invites';
+      document.getElementById('demoModeToggle').checked = savedConfig.demoMode !== undefined ? savedConfig.demoMode : true;
+      updateConnectionBadge();
+
+      const savedDefaults = JSON.parse(localStorage.getItem(STORAGE_KEYS.DEFAULTS) || '{}');
+      if (savedDefaults.coupleNames) document.getElementById('coupleNames').value = savedDefaults.coupleNames;
+      if (savedDefaults.weddingDate) document.getElementById('weddingDate').value = savedDefaults.weddingDate;
+      if (savedDefaults.weddingTime) document.getElementById('weddingTime').value = savedDefaults.weddingTime;
+      if (savedDefaults.venueName) document.getElementById('venueName').value = savedDefaults.venueName;
+      if (savedDefaults.mapUrl) document.getElementById('mapUrl').value = savedDefaults.mapUrl;
+      if (savedDefaults.rsvpPhone) document.getElementById('rsvpPhone').value = savedDefaults.rsvpPhone;
+
+      guestHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]');
+      renderHistoryTable();
+      updateLivePreview();
+    }
+
+    function saveConfig(closeAfter = false) {
+      const config = {
+        workerUrl: document.getElementById('workerUrlInput').value.trim(),
+        baseDomain: document.getElementById('baseDomainInput').value.trim().replace(/\/+$/, ''),
+        demoMode: document.getElementById('demoModeToggle').checked
+      };
+      localStorage.setItem(STORAGE_KEYS.CONFIG, JSON.stringify(config));
+      updateConnectionBadge();
+      updateLivePreview();
+      if (closeAfter) toggleConfigDrawer();
+    }
+
+    function updateConnectionBadge() {
+      const isDemo = document.getElementById('demoModeToggle').checked;
+      const workerUrl = document.getElementById('workerUrlInput').value.trim();
+      const dot = document.getElementById('connectionDot');
+      const text = document.getElementById('connectionText');
+
+      if (!isDemo && workerUrl) {
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+        text.textContent = 'Live Worker Connected';
+      } else {
+        dot.className = 'w-2 h-2 rounded-full bg-brand-pink animate-pulse';
+        text.textContent = 'Demo Mode Active';
+      }
+    }
+
+    function saveEventDefaults() {
+      const defaults = {
+        coupleNames: document.getElementById('coupleNames').value,
+        weddingDate: document.getElementById('weddingDate').value,
+        weddingTime: document.getElementById('weddingTime').value,
+        venueName: document.getElementById('venueName').value,
+        mapUrl: document.getElementById('mapUrl').value,
+        rsvpPhone: document.getElementById('rsvpPhone').value
+      };
+      localStorage.setItem(STORAGE_KEYS.DEFAULTS, JSON.stringify(defaults));
+    }
+
+    function getFormState() {
+      const guestName = document.getElementById('guestName').value || 'Valued Guest';
+      const selectedRadio = document.querySelector('input[name="templateType"]:checked');
+      const baseDomain = (document.getElementById('baseDomainInput').value || 'https://urlovingly.github.io/wedding-invites').replace(/\/+$/, '');
+      const slug = slugify(guestName);
+
+      return {
+        name: guestName,
+        slug: slug,
+        template: selectedRadio ? selectedRadio.value : 'urlovingly',
+        couple_names: document.getElementById('coupleNames').value,
+        wedding_date: document.getElementById('weddingDate').value,
+        wedding_time: document.getElementById('weddingTime').value,
+        venue: document.getElementById('venueName').value,
+        map_url: document.getElementById('mapUrl').value,
+        rsvp_phone: document.getElementById('rsvpPhone').value,
+        table_no: document.getElementById('tableNo').value,
+        custom_note: document.getElementById('customNote').value,
+        fullUrl: `${baseDomain}/to/${slug}/`
+      };
+    }
+
+    function getEnvelopeSvgHtml(sizeClass = "w-14 h-14") {
+      return `
+        <svg class="${sizeClass} mx-auto" viewBox="0 0 120 120" fill="none">
+          <path d="M14 48L17 53L22 56L17 59L14 64L11 59L6 56L11 53L14 48Z" fill="#F42F6C"/>
+          <path d="M106 52L108.5 56.5L113 59L108.5 61.5L106 66L103.5 61.5L99 59L103.5 56.5L106 52Z" fill="#7E22CE"/>
+          <path d="M22 50L60 18L98 50V95C98 100 94 104 89 104H31C26 104 22 100 22 95V50Z" fill="url(#urlovingly-env-back)"/>
+          <path d="M60 84C60 84 30 63 30 42C30 31.5 38 24 47.5 24C53.5 24 57.8 27.2 60 31.5C62.2 27.2 66.5 24 72.5 24C82 24 90 31.5 90 42C90 63 60 84 60 84Z" fill="url(#urlovingly-heart)"/>
+          <path d="M87 52C82 55 77 54 75 50C79 60 72 68 65 73C75 68 84 60 87 52Z" fill="#FFFFFF" fill-opacity="0.9"/>
+          <path d="M23 102L60 69L97 102C95 103.5 92 104 89 104H31C28 104 25 103.5 23 102Z" fill="url(#urlovingly-flap)"/>
+        </svg>
+      `;
+    }
+
+    function updateLivePreview() {
+      const data = getFormState();
+      document.getElementById('slugPreview').textContent = data.slug;
+      document.getElementById('previewBrowserUrl').textContent = data.fullUrl.replace(/^https?:\/\//, '');
+
+      const viewport = document.getElementById('mobilePreviewViewport');
+      const waLink = `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(`Hi! I (${data.name}) confirm my RSVP for${data.couple_names}'s wedding!`)}`;
+
+      if (data.template === 'urlovingly') {
+        viewport.innerHTML = `
+          <div class="min-h-full bg-gradient-to-b from-purple-50 via-pink-50/60 to-white p-5 text-center flex flex-col justify-between">
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-pink-100 relative overflow-hidden">
+              <div class="absolute top-0 inset-x-0 h-1.5 brand-gradient"></div>
+              ${getEnvelopeSvgHtml("w-16 h-16")}
+              <span class="inline-block mt-2 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest bg-pink-50 text-brand-pink border border-pink-200">
+                Personal Wedding Invite
+              </span>
+              <div class="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-purple-50/80 to-pink-50/80 border border-purple-100">
+                <div class="text-[9px] uppercase tracking-widest font-bold text-brand-purple">Exclusively For</div>
+                <div class="font-serif text-xl font-bold text-brand-navy mt-0.5">${escapeHtml(data.name)}</div>
+              </div>
+              <p class="mt-4 text-[10px] uppercase tracking-widest text-brand-purple font-bold">Together With Their Families</p>
+              <h1 class="font-serif text-3xl font-bold brand-text-gradient my-1">${escapeHtml(data.couple_names)}</h1>
+              <p class="text-xs text-slate-600 italic leading-relaxed my-3">"${escapeHtml(data.custom_note)}"</p>
+              <div class="bg-purple-50/50 rounded-2xl p-3.5 border border-purple-100 text-left space-y-2 text-xs">
+                <div>
+                  <span class="text-[9px] font-bold uppercase text-brand-pink block">Date & Time</span>
+                  <span class="font-semibold text-brand-navy">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</span>
+                </div>
+                <div>
+                  <span class="text-[9px] font-bold uppercase text-brand-pink block">Venue</span>
+                  <span class="font-semibold text-brand-navy">${escapeHtml(data.venue)}</span>
+                </div>
+                <div>
+                  <span class="text-[9px] font-bold uppercase text-brand-pink block">Seating</span>
+                  <span class="font-semibold text-brand-navy">${escapeHtml(data.table_no)}</span>
+                </div>
+              </div>
+              <div class="mt-4 space-y-2">
+                <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full py-2.5 rounded-xl bg-purple-50 text-brand-purple font-bold text-xs border border-purple-200">📍 View Venue Map</a>
+                <a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs shadow">💌 Confirm RSVP on WhatsApp</a>
+              </div>
+              <div class="mt-4 text-[10px] text-slate-400">Powered by <strong class="text-brand-pink">URLovingly</strong></div>
+            </div>
+          </div>
+        `;
+      } else if (data.template === 'royal') {
+        viewport.innerHTML = `
+          <div class="min-h-full bg-gradient-to-b from-[#151438] via-[#2b124c] to-[#151438] text-white p-6 text-center flex flex-col justify-between">
+            <div class="border border-pink-400/30 rounded-3xl p-5 bg-white/5 backdrop-blur-sm">
+              ${getEnvelopeSvgHtml("w-14 h-14")}
+              <div class="mt-3 text-[10px] uppercase tracking-widest text-pink-300 font-bold">Royal Celebration</div>
+              <div class="mt-3 p-3 rounded-2xl bg-white/10 border border-pink-300/20">
+                <div class="text-[9px] uppercase tracking-widest text-pink-200">Honored Guest</div>
+                <div class="font-serif text-xl font-bold text-white mt-0.5">${escapeHtml(data.name)}</div>
+              </div>
+              <h1 class="font-serif text-3xl font-bold text-pink-300 my-4">${escapeHtml(data.couple_names)}</h1>
+              <p class="text-xs text-purple-100/90 italic mb-4">"${escapeHtml(data.custom_note)}"</p>
+              <div class="bg-black/25 rounded-2xl p-3.5 text-xs space-y-2 border border-white/10">
+                <div class="text-pink-200 font-semibold">${escapeHtml(data.wedding_date)} at ${escapeHtml(data.wedding_time)}</div>
+                <div class="text-white/90">${escapeHtml(data.venue)}</div>
+                <div class="text-pink-300 font-bold">${escapeHtml(data.table_no)}</div>
+              </div>
+              <div class="mt-4 space-y-2">
+                <a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs">Confirm Royal RSVP</a>
+              </div>
+              <div class="mt-4 text-[10px] text-purple-300">URLovingly Digital Invites</div>
+            </div>
+          </div>
+        `;
+      } else {
+        viewport.innerHTML = `
+          <div class="min-h-full bg-white p-6 text-left flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-pink-100 pb-3">
+                <span class="font-serif font-bold text-sm text-brand-navy">URLovingly</span>
+                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-pink-50 text-brand-pink">${escapeHtml(data.table_no)}</span>
+              </div>
+              <div class="mt-5">
+                <div class="text-[10px] font-bold uppercase tracking-widest text-brand-purple">Personal Invite For</div>
+                <div class="font-serif text-2xl font-bold text-brand-navy">${escapeHtml(data.name)}</div>
+              </div>
+              <h1 class="font-serif text-4xl font-bold text-brand-pink my-4 leading-tight">${escapeHtml(data.couple_names)}</h1>
+              <p class="text-xs text-slate-600 leading-relaxed mb-5">${escapeHtml(data.custom_note)}</p>
+              <div class="border-l-2 border-brand-pink pl-3.5 space-y-2 text-xs">
+                <div class="font-bold text-brand-navy">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</div>
+                <div class="text-slate-600">${escapeHtml(data.venue)}</div>
+              </div>
+            </div>
+            <div class="space-y-2 pt-6">
+              <a href="${waLink}" target="_blank" class="block w-full text-center py-3 rounded-xl bg-brand-navy text-white font-bold text-xs">RSVP via WhatsApp</a>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    async function handleGenerateSubmit(e) {
+      e.preventDefault();
+      const data = getFormState();
+      const isDemo = document.getElementById('demoModeToggle').checked;
+      const workerUrl = document.getElementById('workerUrlInput').value.trim();
+
+      const pipelineCard = document.getElementById('pipelineCard');
+      const resultBanner = document.getElementById('resultBanner');
+      pipelineCard.classList.remove('hidden');
+      resultBanner.classList.add('hidden');
+
+      const steps = ['step1', 'step2', 'step3', 'step4'];
+      steps.forEach(id => {
+        document.getElementById(id).className = 'p-2.5 rounded-xl bg-purple-50/60 border border-purple-100 transition';
+      });
+
+      const activateStep = (id) => {
+        document.getElementById(id).className = 'p-2.5 rounded-xl bg-pink-50 border-2 border-brand-pink text-brand-navy shadow-sm transition';
+      };
+
+      activateStep('step1');
+
+      if (!isDemo && workerUrl) {
+        try {
+          const response = await fetch(workerUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          if (!response.ok) throw new Error('Worker returned error');
+        } catch (err) {
+          alert('Failed to contact Cloudflare Worker. Check your Worker URL in Pipeline Settings or enable Demo Mode.');
+          return;
+        }
+      }
+
+      setTimeout(() => activateStep('step2'), 600);
+      setTimeout(() => activateStep('step3'), 1300);
+      setTimeout(() => {
+        activateStep('step4');
+        showCompletedInvite(data);
+      }, 2100);
+    }
+
+    function showCompletedInvite(data) {
+      const resultBanner = document.getElementById('resultBanner');
+      const linkEl = document.getElementById('generatedUrlLink');
+      const waBtn = document.getElementById('whatsappShareBtn');
+
+      linkEl.textContent = data.fullUrl;
+      linkEl.href = data.fullUrl;
+
+      const shareMsg = `Hi ${data.name}! Here is your personalized wedding invitation from ${data.couple_names}: ${data.fullUrl}`;
+      waBtn.href = `https://wa.me/?text=${encodeURIComponent(shareMsg)}`;
+
+      resultBanner.classList.remove('hidden');
+
+      guestHistory.unshift({
+        name: data.name,
+        template: data.template,
+        url: data.fullUrl,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(guestHistory.slice(0, 100)));
+      renderHistoryTable();
+    }
+
+    function copyGeneratedLink() {
+      const url = document.getElementById('generatedUrlLink').textContent;
+      navigator.clipboard.writeText(url);
+    }
+
+    function renderHistoryTable() {
+      const tbody = document.getElementById('guestHistoryBody');
+      if (!guestHistory.length) {
+        tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-slate-400">No guest links generated yet. Submit the form above to create your first URLovingly link!</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = guestHistory.map(item => `
+        <tr class="hover:bg-pink-50/40">
+          <td class="py-2.5 font-bold text-brand-navy">${escapeHtml(item.name)}</td>
+          <td class="py-2.5"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-brand-purple capitalize">${escapeHtml(item.template)}</span></td>
+          <td class="py-2.5 font-mono text-[11px] text-brand-pink truncate max-w-[180px]"><a href="${escapeHtml(item.url)}" target="_blank" class="hover:underline">${escapeHtml(item.url)}</a></td>
+          <td class="py-2.5 text-right">
+            <a href="https://wa.me/?text=${encodeURIComponent(`Hi ${
