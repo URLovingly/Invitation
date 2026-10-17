@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>URLovingly — Personalized Digital Wedding Invites</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              navy: '#151438',
+              pink: '#F42F6C',
+              coral: '#FF6B8B',
+              purple: '#6C2BD9',
+              violet: '#8B5CF6',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #fcfaff;
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(255, 107, 139, 0.12) 0px, transparent 50%),
+        radial-gradient(at 90% 15%, rgba(108, 43, 217, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 90%, rgba(244, 47, 108, 0.08) 0px, transparent 50%);
+      color: #151438;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(244, 47, 108, 0.14);
+      box-shadow: 0 20px 50px -15px rgba(21, 20, 56, 0.06);
+    }
+    .brand-gradient {
+      background: linear-gradient(135deg, #FF5E8E 0%, #F42F6C 45%, #6C2BD9 100%);
+    }
+    .brand-text-gradient {
+      background: linear-gradient(135deg, #151438 0%, #F42F6C 50%, #6C2BD9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .phone-mockup {
+      box-shadow: 
+        0 30px 70px -15px rgba(108, 43, 217, 0.28),
+        0 0 0 11px #151438,
+        0 0 0 14px #f3e8ff;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(244, 47, 108, 0.25); border-radius: 9999px; }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col selection:bg-pink-200 selection:text-brand-navy">
+
+  <!-- Shared SVG Gradients for URLovingly Envelope Heart Icon -->
+  <svg width="0" height="0" class="hidden">
+    <defs>
+      <linearGradient id="urlovingly-env-back" x1="15" y1="15" x2="105" y2="105" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#FF7597"/>
+        <stop offset="50%" stop-color="#F42F6C"/>
+        <stop offset="100%" stop-color="#5B21B6"/>
+      </linearGradient>
+      <linearGradient id="urlovingly-heart" x1="30" y1="22" x2="90" y2="85" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#FFA185"/>
+        <stop offset="45%" stop-color="#F42F6C"/>
+        <stop offset="100%" stop-color="#7E22CE"/>
+      </linearGradient>
+      <linearGradient id="urlovingly-flap" x1="20" y1="55" x2="100" y2="105" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#D61F69"/>
+        <stop offset="50%" stop-color="#FF5E8E"/>
+        <stop offset="100%" stop-color="#6C2BD9"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Minimalist Modern Header -->
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-pink-100/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-50 via-white to-purple-50 border border-pink-200/70 flex items-center justify-center shadow-sm">
+          <svg class="w-10 h-10" viewBox="0 0 120 120" fill="none">
+            <path d="M14 48L17 53L22 56L17 59L14 64L11 59L6 56L11 53L14 48Z" fill="#F42F6C"/>
+            <path d="M106 52L108.5 56.5L113 59L108.5 61.5L106 66L103.5 61.5L99 59L103.5 56.5L106 52Z" fill="#7E22CE"/>
+            <circle cx="18" cy="36" r="2" fill="#FF6B8B"/>
+            <circle cx="102" cy="40" r="2" fill="#8B5CF6"/>
+            <path d="M22 50L60 18L98 50V95C98 100 94 104 89 104H31C26 104 22 100 22 95V50Z" fill="url(#urlovingly-env-back)"/>
+            <path d="M24 52L60 78L96 52L60 24L24 52Z" fill="#3B0764" fill-opacity="0.45"/>
+            <path d="M60 84C60 84 30 63 30 42C30 31.5 38 24 47.5 24C53.5 24 57.8 27.2 60 31.5C62.2 27.2 66.5 24 72.5 24C82 24 90 31.5 90 42C90 63 60 84 60 84Z" fill="url(#urlovingly-heart)"/>
+            <path d="M87 52C82 55 77 54 75 50C79 60 72 68 65 73C75 68 84 60 87 52Z" fill="#FFFFFF" fill-opacity="0.9"/>
+            <path d="M22 51L55 78L22 101V51Z" fill="#E11D48" fill-opacity="0.65"/>
+            <path d="M98 51L65 78L98 101V51Z" fill="#5B21B6" fill-opacity="0.75"/>
+            <path d="M23 102L60 69L97 102C95 103.5 92 104 89 104H31C28 104 25 103.5 23 102Z" fill="url(#urlovingly-flap)"/>
+            <path d="M24 101L60 70L96 101" stroke="#FFB4C6" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-baseline tracking-tight">
+            <span class="font-serif text-3xl font-bold text-brand-navy">UR</span>
+            <span class="font-serif text-3xl font-bold text-brand-pink ml-0.5">Lovingly</span>
+          </div>
+          <p class="text-[11px] font-medium text-brand-navy/65 -mt-1">Personalized digital invites for your special days</p>
+        </div>
+      </div>
+
+      <div class="hidden sm:flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-pink-50 to-purple-50 border border-pink-200/60">
+        <span class="w-2 h-2 rounded-full bg-brand-pink animate-ping"></span>
+        <span class="text-xs font-bold text-brand-navy">Instant Link Generator Studio</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-pink-100/80 text-brand-pink">
+          ✨ Crafted with Love
+        </span>
+        <h1 class="font-serif text-3xl sm:text-4xl font-bold text-brand-navy mt-2">
+          Create Bespoke Wedding Invitations
+        </h1>
+      </div>
+      <p class="text-xs sm:text-sm text-slate-600 max-w-md">
+        Enter your wedding details and personalize each guest's invitation with a dedicated URL ready to share over WhatsApp or Email.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Studio Grid -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT COLUMN: Creation Studio Forms (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- Card 1: Event & Couple Details -->
+        <div class="glass-card rounded-[28px] p-6 sm:p-7">
+          <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-2xl bg-pink-50 border border-pink-200 text-brand-pink flex items-center justify-center text-xs font-extrabold">01</div>
+              <div>
+                <h2 class="text-base font-bold text-brand-navy">Event & Couple Details</h2>
+                <p class="text-xs text-slate-500">Set your celebration details once for all guests</p>
+              </div>
+            </div>
+            <button type="button" onclick="saveEventDefaults()" id="saveDefaultsBtn" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-brand-purple text-xs font-bold transition flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>Save Defaults</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-brand-navy mb-1.5">Couple Names</label>
+              <input type="text" id="coupleNames" value="Aarav & Priya" oninput="updateLivePreview()"
+                class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-brand-navy mb-1.5">Wedding Date</label>
+              <input type="text" id="weddingDate" value="December 18, 2026" oninput="updateLivePreview()"
+                class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-brand-navy mb-1.5">Ceremony Time</label>
+              <input type="text" id="weddingTime" value="5:30 PM Onwards" oninput="updateLivePreview()"
+                class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-brand-navy mb-1.5">Venue Name & Address</label>
+              <input type="text" id="venueName" value="The Grand Ballroom, Taj Lands End, Mumbai" oninput="updateLivePreview()"
+                class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-brand-navy mb-1.5">Host WhatsApp Number</label>
+              <input type="text" id="rsvpPhone" value="919876543210" placeholder="e.g., 919876543210" oninput="updateLivePreview()"
+                class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-brand-navy mb-1.5">Host Email ID</label>
+              <input type="email" id="hostEmail" value="rsvp@urlovingly.com" placeholder="e.g., couple@gmail.com" oninput="updateLivePreview()"
+                class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-brand-navy mb-1.5">Google Maps Location URL</label>
+              <input type="url" id="mapUrl" value="https://maps.google.com" oninput="updateLivePreview()"
+                class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Guest Personalization -->
+        <form id="inviteForm" onsubmit="handleGenerateSubmit(event)" class="glass-card rounded-[28px] p-6 sm:p-7 space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-2xl brand-gradient text-white flex items-center justify-center text-xs font-extrabold shadow-sm">02</div>
+              <div>
+                <h2 class="text-base font-bold text-brand-navy">Personalize Guest Invitation</h2>
+                <p class="text-xs text-slate-500">Customize the greeting and theme for your guest</p>
+              </div>
+            </div>
+            <div class="px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-mono font-bold text-brand-pink">
+              /to/<span id="slugPreview">rahul-sharma-and-family</span>
+            </div>
+          </div>
+
+          <!-- Guest Name -->
+          <div>
+            <label class="block text-xs font-bold text-brand-navy mb-1.5">Guest or Family Name <span class="text-brand-pink">*</span></label>
+            <input type="text" id="guestName" required value="Rahul Sharma & Family" oninput="updateLivePreview()"
+              placeholder="e.g., Ananya Verma & Family"
+              class="w-full px-4 py-3 rounded-2xl bg-white border border-purple-200 text-sm font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+          </div>
+
+          <!-- Selectable Warm Personal Note Options -->
+          <div class="space-y-3">
+            <label class="block text-xs font-bold text-brand-navy">Select a Warm Personal Note</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="notePresetGroup">
+              
+              <label class="cursor-pointer">
+                <input type="radio" name="noteOption" value="We are so excited to invite you to celebrate the beginning of our new chapter together!" checked onchange="handleNoteOptionChange()" class="sr-only peer">
+                <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
+                  <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
+                    <span>✨ Joyful New Chapter</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"We are so excited to invite you to celebrate the beginning of our new chapter together!"</p>
+                </div>
+              </label>
+
+              <label class="cursor-pointer">
+                <input type="radio" name="noteOption" value="Your presence and blessings mean the world to us as we tie the knot and begin our forever." onchange="handleNoteOptionChange()" class="sr-only peer">
+                <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
+                  <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
+                    <span>🙏 Traditional & Heartfelt</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"Your presence and blessings mean the world to us as we tie the knot and begin our forever."</p>
+                </div>
+              </label>
+
+              <label class="cursor-pointer">
+                <input type="radio" name="noteOption" value="Our wedding simply wouldn't be complete without you by our side! Come ready to dance and celebrate." onchange="handleNoteOptionChange()" class="sr-only peer">
+                <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
+                  <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
+                    <span>🥂 Warm & Festive</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"Our wedding simply wouldn't be complete without you by our side! Come ready to dance and celebrate."</p>
+                </div>
+              </label>
+
+              <label class="cursor-pointer">
+                <input type="radio" name="noteOption" value="custom" onchange="handleNoteOptionChange()" class="sr-only peer">
+                <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full flex flex-col justify-center">
+                  <div class="text-xs font-bold text-brand-pink flex items-center gap-1.5">
+                    <span>✍️ Write a Personal Message</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-1">Craft a custom note specifically for this guest or family.</p>
+                </div>
+              </label>
+
+            </div>
+
+            <!-- Custom Personal Message Box (Shown when 'Write a Personal Message' is chosen) -->
+            <div id="customNoteContainer" class="hidden pt-1">
+              <textarea id="customNoteInput" rows="2" oninput="updateLivePreview()"
+                placeholder="Write your personal message for this guest..."
+                class="w-full px-4 py-2.5 rounded-2xl bg-white border border-brand-pink text-sm text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Dear Rahul & Family, we have shared so many wonderful memories together and can't wait to celebrate with you!</textarea>
+            </div>
+          </div>
+
+          <!-- Theme Selector -->
+          <div>
+            <label class="block text-xs font-bold text-brand-navy mb-2.5">Invitation Visual Style</label>
+            <div class="grid grid-cols-3 gap-3">
+              <label class="cursor-pointer">
+                <input type="radio" name="templateType" value="urlovingly" checked onchange="updateLivePreview()" class="sr-only peer">
+                <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                  <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl brand-gradient flex items-center justify-center text-white font-serif font-bold text-xs shadow-sm">UL</div>
+                  <div class="text-xs font-bold text-brand-navy">Signature</div>
+                  <div class="text-[10px] text-brand-pink font-medium">Pink & Purple</div>
+                </div>
+              </label>
+
+              <label class="cursor-pointer">
+                <input type="radio" name="templateType" value="royal" onchange="updateLivePreview()" class="sr-only peer">
+                <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                  <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-[#241142] border border-pink-400 flex items-center justify-center text-pink-300 font-serif font-bold text-xs shadow-sm">RV</div>
+                  <div class="text-xs font-bold text-brand-navy">Royal Velvet</div>
+                  <div class="text-[10px] text-slate-500">Deep Plum</div>
+                </div>
+              </label>
+
+              <label class="cursor-pointer">
+                <input type="radio" name="templateType" value="modern" onchange="updateLivePreview()" class="sr-only peer">
+                <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                  <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-pink-50 border border-brand-navy flex items-center justify-center text-brand-navy font-sans font-extrabold text-[10px] shadow-sm">BM</div>
+                  <div class="text-xs font-bold text-brand-navy">Blush Minimal</div>
+                  <div class="text-[10px] text-slate-500">Pure White</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" id="submitBtn" class="w-full py-4 px-6 rounded-2xl brand-gradient hover:opacity-95 text-white font-bold text-sm shadow-xl shadow-pink-500/25 transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+            </svg>
+            <span id="submitBtnText">Create & Publish Personalized Invite Link</span>
+          </button>
+        </form>
+
+        <!-- Result & Share Banner -->
+        <div id="resultBanner" class="hidden glass-card rounded-[28px] p-6 border-2 border-brand-pink/40 bg-gradient-to-r from-pink-50/90 via-white to-purple-50/90">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="min-w-0 flex-1">
+              <div class="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-brand-pink uppercase tracking-wider">
+                <span class="w-2 h-2 rounded-full bg-brand-pink animate-ping"></span>
+                <span id="statusTitle">Publishing Your Invite Link...</span>
+              </div>
+              <a id="generatedUrlLink" href="#" target="_blank" class="text-sm font-bold text-brand-navy hover:text-brand-pink underline truncate block mt-1"></a>
+              <p id="statusSubtext" class="text-[11px] text-slate-500 mt-0.5">GitHub Pages will make this link live in ~20–30 seconds.</p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" onclick="copyGeneratedLink()" id="copyBtn" class="px-4 py-2.5 rounded-xl bg-white border border-purple-200 text-brand-navy text-xs font-bold hover:bg-purple-50 transition">
+                Copy Link
+              </button>
+              <a id="whatsappShareBtn" href="#" target="_blank" class="px-4 py-2.5 rounded-xl brand-gradient text-white text-xs font-bold hover:opacity-95 transition shadow-md">
+                Send via WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest Links History -->
+        <div class="glass-card rounded-[28px] p-6 sm:p-7">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-base font-bold text-brand-navy">Generated Guest Invitations</h3>
+              <p class="text-xs text-slate-500">All personalized links created from this browser</p>
+            </div>
+            <button onclick="exportLinksCsv()" class="px-3.5 py-1.5 rounded-xl bg-purple-50 border border-purple-200 text-xs font-bold text-brand-purple hover:bg-purple-100 transition">
+              Download CSV
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-pink-100 text-[11px] font-bold uppercase text-slate-400">
+                  <th class="pb-2.5">Guest Name</th>
+                  <th class="pb-2.5">Style</th>
+                  <th class="pb-2.5">Invitation URL</th>
+                  <th class="pb-2.5 text-right">Share</th>
+                </tr>
+              </thead>
+              <tbody id="guestHistoryBody" class="divide-y divide-pink-50 text-xs"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Sticky Live Mobile Preview (5 cols) -->
+      <div class="lg:col-span-5 lg:sticky lg:top-24 flex flex-col items-center">
+        <div class="mb-3 flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/80 border border-purple-100 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-brand-purple"></span>
+          <span class="text-[11px] font-bold uppercase tracking-widest text-brand-navy">Live Guest Mobile View</span>
+        </div>
+
+        <div class="w-[335px] sm:w-[365px] h-[680px] rounded-[48px] phone-mockup bg-white overflow-hidden flex flex-col">
+          <!-- Phone Top Speaker Bar -->
+          <div class="h-6 bg-[#151438] flex items-center justify-center shrink-0">
+            <div class="w-20 h-3 bg-black/40 rounded-full"></div>
+          </div>
+
+          <!-- Simulated Mobile Browser Bar -->
+          <div class="bg-purple-50/70 border-b border-purple-100 px-4 py-2 flex items-center gap-2 shrink-0">
+            <svg class="w-3.5 h-3.5 text-brand-pink shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+            </svg>
+            <div id="previewBrowserUrl" class="text-[11px] font-mono text-brand-navy/75 truncate"></div>
+          </div>
+
+          <!-- Dynamic Guest Card Viewport -->
+          <div id="mobilePreviewViewport" class="flex-1 overflow-y-auto custom-scrollbar"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // ============================================================================
+    // DEFAULT HARDCODED CLOUDFLARE WORKER & HOSTED DOMAIN CONFIGURATION
+    // Replace these two URLs with your own Cloudflare Worker URL and GitHub Pages URL
+    // ============================================================================
+    const CLOUDFLARE_WORKER_URL = "https://invite-trigger.urlovingly.workers.dev";
+    const BASE_HOSTED_DOMAIN    = "https://urlovingly.github.io/wedding-invites";
+
+    const STORAGE_KEYS = {
+      DEFAULTS: 'urlovingly_event_defaults_v2',
+      HISTORY: 'urlovingly_guest_history_v2'
+    };
+
+    let guestHistory = [];
+
+    function slugify(text) {
+      return (text || '')
+        .toString()
+        .toLowerCase()
+        .replace(/&/g, 'and')
+        .replace(/[\W_]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'guest';
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function getSelectedNote() {
+      const selected = document.querySelector('input[name="noteOption"]:checked');
+      if (!selected) return '';
+      if (selected.value === 'custom') {
+        return document.getElementById('customNoteInput').value.trim();
+      }
+      return selected.value;
+    }
+
+    function handleNoteOptionChange() {
+      const selected = document.querySelector('input[name="noteOption"]:checked');
+      const customBox = document.getElementById('customNoteContainer');
+      if (selected && selected.value === 'custom') {
+        customBox.classList.remove('hidden');
+      } else {
+        customBox.classList.add('hidden');
+      }
+      updateLivePreview();
+    }
+
+    function getEnvelopeIconHtml(sizeClass = "w-14 h-14") {
+      return `
+        <svg class="${sizeClass} mx-auto" viewBox="0 0 120 120" fill="none">
+          <path d="M14 48L17 53L22 56L17 59L14 64L11 59L6 56L11 53L14 48Z" fill="#F42F6C"/>
+          <path d="M106 52L108.5 56.5L113 59L108.5 61.5L106 66L103.5 61.5L99 59L103.5 56.5L106 52Z" fill="#7E22CE"/>
+          <path d="M22 50L60 18L98 50V95C98 100 94 104 89 104H31C26 104 22 100 22 95V50Z" fill="url(#urlovingly-env-back)"/>
+          <path d="M60 84C60 84 30 63 30 42C30 31.5 38 24 47.5 24C53.5 24 57.8 27.2 60 31.5C62.2 27.2 66.5 24 72.5 24C82 24 90 31.5 90 42C90 63 60 84 60 84Z" fill="url(#urlovingly-heart)"/>
+          <path d="M87 52C82 55 77 54 75 50C79 60 72 68 65 73C75 68 84 60 87 52Z" fill="#FFFFFF" fill-opacity="0.9"/>
+          <path d="M23 102L60 69L97 102C95 103.5 92 104 89 104H31C28 104 25 103.5 23 102Z" fill="url(#urlovingly-flap)"/>
+        </svg>
+      `;
+    }
+
+    function getFormState() {
+      const guestName = document.getElementById('guestName').value || 'Valued Guest';
+      const selectedTheme = document.querySelector('input[name="templateType"]:checked');
+      const slug = slugify(guestName);
+      const cleanBase = BASE_HOSTED_DOMAIN.replace(/\/+$/, '');
+
+      return {
+        name: guestName,
+        slug: slug,
+        template: selectedTheme ? selectedTheme.value : 'urlovingly',
+        couple_names: document.getElementById('coupleNames').value,
+        wedding_date: document.getElementById('weddingDate').value,
+        wedding_time: document.getElementById('weddingTime').value,
+        venue: document.getElementById('venueName').value,
+        map_url: document.getElementById('mapUrl').value,
+        rsvp_phone: document.getElementById('rsvpPhone').value,
+        host_email: document.getElementById('hostEmail').value,
+        custom_note: getSelectedNote(),
+        fullUrl: `${cleanBase}/to/${slug}/`
+      };
+    }
+
+    function updateLivePreview() {
+      const data = getFormState();
+      document.getElementById('slugPreview').textContent = data.slug;
+      document.getElementById('previewBrowserUrl').textContent = data.fullUrl.replace(/^https?:\/\//, '');
+
+      const viewport = document.getElementById('mobilePreviewViewport');
+      const rsvpText = `Hi! I (${data.name}) happily confirm my attendance for ${data.couple_names}'s wedding!`;
+      const waLink = `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`;
+      const mailLink = `mailto:${encodeURIComponent(data.host_email)}?subject=${encodeURIComponent(`Wedding RSVP - ${data.name}`)}&body=${encodeURIComponent(rsvpText)}`;
+
+      if (data.template === 'urlovingly') {
+        viewport.innerHTML = `
+          <div class="min-h-full bg-gradient-to-b from-purple-50/90 via-pink-50/60 to-white p-5 text-center flex flex-col justify-between">
+            <div class="bg-white rounded-[28px] p-6 shadow-md border border-pink-100 relative overflow-hidden">
+              <div class="absolute top-0 inset-x-0 h-1.5 brand-gradient"></div>
+              ${getEnvelopeIconHtml("w-16 h-16")}
+              <span class="inline-block mt-2 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest bg-pink-50 text-brand-pink border border-pink-200">
+                Wedding Invitation
+              </span>
+              <div class="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-purple-50/80 to-pink-50/80 border border-purple-100">
+                <div class="text-[9px] uppercase tracking-widest font-bold text-brand-purple">Exclusively Prepared For</div>
+                <div class="font-serif text-xl font-bold text-brand-navy mt-0.5">${escapeHtml(data.name)}</div>
+              </div>
+              <p class="mt-4 text-[10px] uppercase tracking-widest text-brand-purple font-bold">Together With Their Families</p>
+              <h1 class="font-serif text-3xl font-bold brand-text-gradient my-1">${escapeHtml(data.couple_names)}</h1>
+              <p class="text-xs text-slate-600 italic leading-relaxed my-3">"${escapeHtml(data.custom_note)}"</p>
+              <div class="bg-purple-50/50 rounded-2xl p-3.5 border border-purple-100 text-left space-y-2 text-xs">
+                <div>
+                  <span class="text-[9px] font-bold uppercase text-brand-pink block">Date & Time</span>
+                  <span class="font-semibold text-brand-navy">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</span>
+                </div>
+                <div>
+                  <span class="text-[9px] font-bold uppercase text-brand-pink block">Venue</span>
+                  <span class="font-semibold text-brand-navy">${escapeHtml(data.venue)}</span>
+                </div>
+              </div>
+              <div class="mt-4 space-y-2">
+                <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full py-2.5 rounded-xl bg-purple-50 text-brand-purple font-bold text-xs border border-purple-200">📍 View Venue Map</a>
+                <a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs shadow">💌 RSVP via WhatsApp</a>
+                <a href="${mailLink}" class="block w-full py-2 rounded-xl bg-white text-brand-navy font-semibold text-[11px] border border-pink-200">✉️ RSVP via Email (${escapeHtml(data.host_email)})</a>
+              </div>
+              <div class="mt-4 text-[10px] text-slate-400">Created with <strong class="text-brand-pink">URLovingly</strong></div>
+            </div>
+          </div>
+        `;
+      } else if (data.template === 'royal') {
+        viewport.innerHTML = `
+          <div class="min-h-full bg-gradient-to-b from-[#151438] via-[#2b124c] to-[#151438] text-white p-5 text-center flex flex-col justify-between">
+            <div class="border border-pink-400/30 rounded-[28px] p-5 bg-white/5 backdrop-blur-sm">
+              ${getEnvelopeIconHtml("w-14 h-14")}
+              <div class="mt-2 text-[10px] uppercase tracking-widest text-pink-300 font-bold">Royal Celebration</div>
+              <div class="mt-3 p-3 rounded-2xl bg-white/10 border border-pink-300/20">
+                <div class="text-[9px] uppercase tracking-widest text-pink-200">Honored Guest</div>
+                <div class="font-serif text-xl font-bold text-white mt-0.5">${escapeHtml(data.name)}</div>
+              </div>
+              <h1 class="font-serif text-3xl font-bold text-pink-300 my-4">${escapeHtml(data.couple_names)}</h1>
+              <p class="text-xs text-purple-100/90 italic mb-4">"${escapeHtml(data.custom_note)}"</p>
+              <div class="bg-black/25 rounded-2xl p-3.5 text-xs space-y-2 border border-white/10">
+                <div class="text-pink-200 font-semibold">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</div>
+                <div class="text-white/90">${escapeHtml(data.venue)}</div>
+              </div>
+              <div class="mt-4 space-y-2">
+                <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full py-2 rounded-xl bg-white/10 text-pink-200 font-bold text-xs">📍 Location Map</a>
+                <a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs">💌 WhatsApp RSVP</a>
+                <a href="${mailLink}" class="block w-full py-2 rounded-xl border border-pink-300/30 text-pink-100 text-[11px]">✉️ Email RSVP</a>
+              </div>
+              <div class="mt-4 text-[10px] text-purple-300">URLovingly Digital Invites</div>
+            </div>
+          </div>
+        `;
+      } else {
+        viewport.innerHTML = `
+          <div class="min-h-full bg-white p-6 text-left flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-pink-100 pb-3">
+                <span class="font-serif font-bold text-base text-brand-navy">UR<span class="text-brand-pink">Lovingly</span></span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-brand-purple">Wedding Invite</span>
+              </div>
+              <div class="mt-5">
+                <div class="text-[10px] font-bold uppercase tracking-widest text-brand-purple">Personal Invitation For</div>
+                <div class="font-serif text-2xl font-bold text-brand-navy mt-0.5">${escapeHtml(data.name)}</div>
+              </div>
+              <h1 class="font-serif text-4xl font-bold text-brand-pink my-4 leading-tight">${escapeHtml(data.couple_names)}</h1>
+              <p class="text-xs text-slate-600 italic leading-relaxed mb-5">"${escapeHtml(data.custom_note)}"</p>
+              <div class="border-l-2 border-brand-pink pl-3.5 space-y-2 text-xs">
+                <div class="font-bold text-brand-navy">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</div>
+                <div class="text-slate-600">${escapeHtml(data.venue)}</div>
+              </div>
+            </div>
+            <div class="space-y-2 pt-6">
+              <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full text-center py-2.5 rounded-xl bg-purple-50 text-brand-purple font-bold text-xs">📍 Open Venue Map</a>
+              <a href="${waLink}" target="_blank" class="block w-full text-center py-2.5 rounded-xl bg-brand-navy text-white font-bold text-xs">💌 Confirm on WhatsApp</a>
+              <a href="${mailLink}" class="block w-full text-center py-2 rounded-xl border border-slate-200 text-slate-700 font-semibold text-[11px]">✉️ Confirm via Email</a>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function saveEventDefaults() {
+      const defaults = {
+        coupleNames: document.getElementById('coupleNames').value,
+        weddingDate: document.getElementById('weddingDate').value,
+        weddingTime: document.getElementById('weddingTime').value,
+        venueName: document.getElementById('venueName').value,
+        mapUrl: document.getElementById('mapUrl').value,
+        rsvpPhone: document.getElementById('rsvpPhone').value,
+        hostEmail: document.getElementById('hostEmail').value
+      };
+      localStorage.setItem(STORAGE_KEYS.DEFAULTS, JSON.stringify(defaults));
+      const btn = document.getElementById('saveDefaultsBtn');
+      btn.innerHTML = '<span>✓ Saved</span>';
+      setTimeout(() => { btn.innerHTML = '<span>Save Defaults</span>'; }, 1800);
+    }
+
+    async function handleGenerateSubmit(e) {
+      e.preventDefault();
+      const data = getFormState();
+      const submitBtn = document.getElementById('submitBtn');
+      const submitBtnText = document.getElementById('submitBtnText');
+      const resultBanner = document.getElementById('resultBanner');
+
+      submitBtn.disabled = true;
+      submitBtnText.textContent = 'Triggering URLovingly Cloud Builder...';
+
+      try {
+        await fetch(CLOUDFLARE_WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      } catch (err) {
+        console.warn('Cloudflare Worker dispatch notice:', err);
+      }
+
+      submitBtn.disabled = false;
+      submitBtnText.textContent = 'Create & Publish Personalized Invite Link';
+
+      document.getElementById('statusTitle').textContent = 'Personalized Invite Link Created!';
+      const linkEl = document.getElementById('generatedUrlLink');
+      linkEl.textContent = data.fullUrl;
+      linkEl.href = data.fullUrl;
+
+      const shareMsg = `Hi ${data.name}! Here is your personalized wedding invitation from ${data.couple_names}: ${data.fullUrl}`;
+      document.getElementById('whatsappShareBtn').href = `https://wa.me/?text=${encodeURIComponent(shareMsg)}`;
+      resultBanner.classList.remove('hidden');
+
+      guestHistory.unshift({
+        name: data.name,
+        template: data.template,
+        url: data.fullUrl
+      });
+      localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(guestHistory.slice(0, 200)));
+      renderHistoryTable();
+    }
+
+    function copyGeneratedLink() {
+      const url = document.getElementById('generatedUrlLink').textContent;
+      navigator.clipboard.writeText(url);
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy Link'; }, 1500);
+    }
+
+    function renderHistoryTable() {
+      const tbody = document.getElementById('guestHistoryBody');
+      if (!guestHistory.length) {
+        tbody.innerHTML = `<tr><td colspan="4" class="py-5 text-center text-slate-400">No guest links generated yet. Fill in the guest details above to create your first link.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = guestHistory.map(item => `
+        <tr class="hover:bg-pink-50/40">
+          <td class="py-3 font-bold text-brand-navy">${escapeHtml(item.name)}</td>
+          <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-brand-purple capitalize">${escapeHtml(item.template)}</span></td>
+          <td class="py-3 font-mono text-[11px] text-brand-pink truncate max-w-[200px]"><a href="${escapeHtml(item.url)}" target="_blank" class="hover:underline">${escapeHtml(item.url)}</a></td>
+          <td class="py-3 text-right">
+            <a href="https://wa.me/?text=${encodeURIComponent(`Hi ${item.name}, here is your personalized wedding invite:${item.url}`)}" target="_blank" class="text-brand-purple hover:text-brand-pink font-bold">WhatsApp →</a>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function exportLinksCsv() {
+      if (!guestHistory.length) return;
+      const rows = [['Guest Name', 'Style', 'Invitation URL'], ...guestHistory.map(i => [i.name, i.template, i.url])];
+      const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'urlovingly-invites.csv';
+      a.click();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedDefaults = JSON.parse(localStorage.getItem(STORAGE_KEYS.DEFAULTS) || '{}');
+      if (savedDefaults.coupleNames) document.getElementById('coupleNames').value = savedDefaults.coupleNames;
+      if (savedDefaults.weddingDate) document.getElementById('weddingDate').value = savedDefaults.weddingDate;
+      if (savedDefaults.weddingTime) document.getElementById('weddingTime').value = savedDefaults.weddingTime;
+      if (savedDefaults.venueName) document.getElementById('venueName').value = savedDefaults.venueName;
+      if (savedDefaults.mapUrl) document.getElementById('mapUrl').value = savedDefaults.mapUrl;
+      if (savedDefaults.rsvpPhone) document.getElementById('rsvpPhone').value = savedDefaults.rsvpPhone;
+      if (savedDefaults.hostEmail) document.getElementById('hostEmail').value = savedDefaults.hostEmail;
+
+      guestHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY) || '[]');
+      renderHistoryTable();
+      updateLivePreview();
+    });
+  </script>
+</body>
+</html>

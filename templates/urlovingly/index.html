@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{ guest_name }} — You're Invited! | URLovingly</title>
+  <title>{{ guest_name }} — Wedding Invitation | URLovingly</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -90,18 +90,22 @@
       font-weight: 700;
       text-decoration: none;
       margin-bottom: 10px;
-      transition: transform 0.2s;
     }
-    .btn:active { transform: scale(0.98); }
     .btn-primary {
       background: linear-gradient(135deg, #f42f6c 0%, #7e22ce 100%);
       color: #ffffff;
-      box-shadow: 0 8px 20px rgba(244, 47, 108, 0.3);
+      box-shadow: 0 8px 20px rgba(244, 47, 108, 0.25);
     }
     .btn-secondary {
       background: #f5f3ff;
       color: #6d28d9;
       border: 1px solid #ddd6fe;
+    }
+    .btn-outline {
+      background: #ffffff;
+      color: #151438;
+      border: 1px solid #f5d0fe;
+      font-size: 12px;
     }
     .footer { margin-top: 22px; font-size: 11px; color: #9ca3af; }
     .footer span { color: #f42f6c; font-weight: 700; }
@@ -109,7 +113,6 @@
 </head>
 <body>
   <div class="card">
-    <!-- URLovingly Heart Envelope Icon -->
     <svg class="logo-icon" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="envGrad" x1="15" y1="20" x2="105" y2="105" gradientUnits="userSpaceOnUse">
@@ -149,14 +152,11 @@
         <div class="detail-title">Venue</div>
         <div class="detail-val">{{ venue }}</div>
       </div>
-      <div class="detail-row">
-        <div class="detail-title">Reserved Seating</div>
-        <div class="detail-val">{{ table_no }}</div>
-      </div>
     </div>
 
     <a href="{{ map_url }}" target="_blank" class="btn btn-secondary">📍 View Venue on Google Maps</a>
     <a href="https://wa.me/{{ rsvp_phone }}?text=Hi!%20I%20({{ guest_name | urlencode }})%20confirm%20my%20attendance%20for%20{{ couple_names | urlencode }}'s%20wedding!" target="_blank" class="btn btn-primary">💌 Confirm RSVP on WhatsApp</a>
+    <a href="mailto:{{ host_email }}?subject=Wedding%20RSVP%20-%20{{ guest_name | urlencode }}&body=Hi!%20I%20({{ guest_name | urlencode }})%20confirm%20my%20attendance%20for%20{{ couple_names | urlencode }}'s%20wedding!" class="btn btn-outline">✉️ Confirm RSVP via Email</a>
 
     <div class="footer">Created with love by <span>URLovingly</span></div>
   </div>

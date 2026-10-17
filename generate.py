@@ -20,8 +20,8 @@ def main():
     venue = os.environ.get("VENUE", "The Grand Ballroom, Taj Lands End, Mumbai")
     map_url = os.environ.get("MAP_URL", "https://maps.google.com")
     rsvp_phone = os.environ.get("RSVP_PHONE", "919876543210")
-    table_no = os.environ.get("TABLE_NO", "VIP Lounge")
-    custom_note = os.environ.get("CUSTOM_NOTE", "We can't wait to celebrate our special day with you!")
+    host_email = os.environ.get("HOST_EMAIL", "rsvp@urlovingly.com")
+    custom_note = os.environ.get("CUSTOM_NOTE", "We are so excited to invite you to celebrate the beginning of our new chapter together!")
 
     slug = slugify(guest_name)
     env = Environment(loader=FileSystemLoader("templates"))
@@ -39,7 +39,7 @@ def main():
         venue=venue,
         map_url=map_url,
         rsvp_phone=rsvp_phone,
-        table_no=table_no,
+        host_email=host_email,
         custom_note=custom_note
     )
 

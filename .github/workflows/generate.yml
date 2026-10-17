@@ -32,7 +32,7 @@ jobs:
           VENUE: ${{ github.event.client_payload.venue }}
           MAP_URL: ${{ github.event.client_payload.map_url }}
           RSVP_PHONE: ${{ github.event.client_payload.rsvp_phone }}
-          TABLE_NO: ${{ github.event.client_payload.table_no }}
+          HOST_EMAIL: ${{ github.event.client_payload.host_email }}
           CUSTOM_NOTE: ${{ github.event.client_payload.custom_note }}
         run: python generate.py
 
