@@ -344,7 +344,7 @@
     const STORAGE_KEYS = { DEFAULTS: 'urlovingly_event_defaults_v2' };
     
     let activeSessionToken = localStorage.getItem("urlovingly_session");
-    
+
     window.addEventListener('DOMContentLoaded', () => {
       if (activeSessionToken) {
         verifyAndLoadStudio();
@@ -358,12 +358,17 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token: response.credential })
         });
+        
         if (!res.ok) throw new Error("Login failed");
+        
         const data = await res.json();
         activeSessionToken = data.session;
         localStorage.setItem("urlovingly_session", activeSessionToken);
         localStorage.setItem("urlovingly_email", data.email);
+        
+        // ✅ Added this call to instantly hide the login screen and load the studio
         verifyAndLoadStudio();
+        
       } catch (err) {
         document.getElementById("loginErrorMsg").classList.remove("hidden");
       }
