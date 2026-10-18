@@ -287,9 +287,37 @@
             </button>
           </form>
 
-          <div id="resultBanner" class="hidden glass-card rounded-[28px] p-6 border-2 border-brand-pink/40 bg-gradient-to-r from-pink-50/90 via-white to-purple-50/90">
-            <span id="statusTitle" class="text-[11px] font-extrabold text-brand-pink uppercase">Publishing Your Invite Link...</span>
-            <a id="generatedUrlLink" href="#" target="_blank" class="text-sm font-bold text-brand-navy hover:text-brand-pink underline truncate block mt-1"></a>
+          <!-- Result & Share Banner with Progress Bar -->
+          <div id="resultBanner" class="hidden glass-card rounded-[28px] p-6 border-2 border-brand-pink/40 bg-gradient-to-r from-pink-50/90 via-white to-purple-50/90 space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-brand-pink uppercase tracking-wider">
+                <span id="statusTitle">Triggering GitHub Action...</span>
+              </div>
+              <span id="progressPercent" class="text-xs font-mono font-bold text-brand-purple">0%</span>
+            </div>
+
+            <!-- Progress Bar Track -->
+            <div class="w-full bg-purple-100 rounded-full h-2 overflow-hidden">
+              <div id="progressBar" class="bg-gradient-to-r from-pink-500 to-purple-600 h-2 rounded-full transition-all duration-300" style="width: 5%"></div>
+            </div>
+
+            <p id="statusSubtext" class="text-[11px] text-slate-500">Waiting for GitHub Actions build to complete...</p>
+
+            <!-- Hidden until action completes successfully -->
+            <div id="completedLinkSection" class="hidden pt-2 border-t border-pink-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="min-w-0 flex-1">
+                <span class="text-[10px] font-bold uppercase text-emerald-600 block">✨ Invite is Live!</span>
+                <a id="generatedUrlLink" href="#" target="_blank" class="text-sm font-bold text-brand-navy hover:text-brand-pink underline truncate block mt-0.5"></a>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <button type="button" onclick="copyGeneratedLink()" id="copyBtn" class="px-4 py-2.5 rounded-xl bg-white border border-purple-200 text-brand-navy text-xs font-bold hover:bg-purple-50 transition">
+                  Copy Link
+                </button>
+                <a id="whatsappShareBtn" href="#" target="_blank" class="px-4 py-2.5 rounded-xl brand-gradient text-white text-xs font-bold hover:opacity-95 transition shadow-md">
+                  Send via WhatsApp
+                </a>
+              </div>
+            </div>
           </div>
 
           <!-- Guest Links History -->
@@ -411,11 +439,26 @@
 
       const data = getFormState();
       const submitBtn = document.getElementById('submitBtn');
-      
+      const resultBanner = document.getElementById('resultBanner');
+      const progressBar = document.getElementById('progressBar');
+      const progressPercent = document.getElementById('progressPercent');
+      const statusTitle = document.getElementById('statusTitle');
+      const statusSubtext = document.getElementById('statusSubtext');
+      const completedLinkSection = document.getElementById('completedLinkSection');
+
       submitBtn.disabled = true;
       document.getElementById('submitBtnText').textContent = 'Triggering URLovingly Cloud Builder...';
+      
+      // Reset banner view
+      resultBanner.classList.remove('hidden');
+      completedLinkSection.classList.add('hidden');
+      progressBar.style.width = '10%';
+      progressPercent.textContent = '10%';
+      statusTitle.textContent = 'Triggering GitHub Action...';
+      statusSubtext.textContent = 'Initializing workflow dispatch...';
 
       try {
+        // 1. Trigger Cloudflare Worker -> GitHub Action
         await fetch(`${CLOUDFLARE_WORKER_URL}/generate`, {
           method: 'POST',
           headers: { 
@@ -424,18 +467,65 @@
           },
           body: JSON.stringify(data)
         });
-        fetchHistory(); 
+
+        progressBar.style.width = '30%';
+        progressPercent.textContent = '30%';
+        statusTitle.textContent = 'Building Invitation...';
+        statusSubtext.textContent = 'GitHub Action is compiling and deploying your template (~20-30s)...';
+
+        // 2. Poll GitHub Pages URL until it's live (Status 200)
+        let isLive = false;
+        let attempts = 0;
+        const maxAttempts = 20; // Try for up to ~80 seconds
+
+        while (!attempts || (attempts < maxAttempts && !isLive)) {
+          await new Promise(resolve => setTimeout(resolve, 4000)); // wait 4 seconds per poll
+          attempts++;
+
+          // Increment progress smoothly up to 90% while waiting
+          const currentProgress = Math.min(30 + (attempts * 4), 90);
+          progressBar.style.width = `${currentProgress}%`;
+          progressPercent.textContent = `${currentProgress}%`;
+
+          try {
+            // Check if the target index.html file exists and returns 200 OK
+            const checkRes = await fetch(data.fullUrl, { method: 'HEAD' });
+            if (checkRes.ok) {
+              isLive = true;
+            }
+          } catch (err) {
+            // CORS or network fetch block during deployment propagation is normal, keep polling
+          }
+        }
+
+        if (isLive) {
+          progressBar.style.width = '100%';
+          progressPercent.textContent = '100%';
+          statusTitle.textContent = 'Invitation Published Successfully!';
+          statusSubtext.textContent = 'Your custom guest link is now fully live.';
+          
+          const linkEl = document.getElementById('generatedUrlLink');
+          linkEl.textContent = data.fullUrl;
+          linkEl.href = data.fullUrl;
+
+          const shareMsg = `Hi ${data.name}! Here is your personalized wedding invitation from ${data.couple_names}: ${data.fullUrl}`;
+          document.getElementById('whatsappShareBtn').href = `https://wa.me/?text=${encodeURIComponent(shareMsg)}`;
+          
+          completedLinkSection.classList.remove('hidden');
+          fetchHistory();
+        } else {
+          statusTitle.textContent = 'Deployment Taking Longer Than Expected';
+          statusSubtext.textContent = 'The action was triggered, but page verification timed out. Check your GitHub Actions tab.';
+        }
+
       } catch (err) {
         console.warn('Worker dispatch notice:', err);
+        statusTitle.textContent = 'Error Triggering Action';
+        statusSubtext.textContent = err.message;
       }
 
       submitBtn.disabled = false;
       document.getElementById('submitBtnText').textContent = 'Create & Publish Personalized Invite Link';
-
-      const linkEl = document.getElementById('generatedUrlLink');
-      linkEl.textContent = data.fullUrl;
-      linkEl.href = data.fullUrl;
-      document.getElementById('resultBanner').classList.remove('hidden');
     }
 
     function slugify(text) { return (text || '').toLowerCase().replace(/&/g, 'and').replace(/[\W_]+/g, '-').replace(/^-+|-+$/g, '') || 'guest'; }
