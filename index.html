@@ -6,7 +6,6 @@
   <title>URLovingly — Personalized Digital Wedding Invites</title>
   
   <link rel="icon" href="URLovingly_Icon.jpg" type="image/jpeg">
-  
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,225 +56,227 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(244, 47, 108, 0.25); border-radius: 9999px; }
   </style>
 </head>
-<body class="font-sans antialiased min-h-screen flex flex-col selection:bg-pink-200 selection:text-brand-navy">
+<body class="font-sans antialiased min-h-screen selection:bg-pink-200 selection:text-brand-navy relative">
 
-  <!-- Header -->
-  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-pink-100/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <div class="flex items-center gap-3.5">
-        <img src="URLovingly_Icon.jpg" alt="URLovingly Logo" class="w-12 h-12 rounded-2xl object-cover shadow-sm border border-pink-200/70">
-        <div>
-          <div class="flex items-baseline tracking-tight">
-            <span class="font-serif text-3xl font-bold text-brand-navy">UR</span>
-            <span class="font-serif text-3xl font-bold text-brand-pink ml-0.5">Lovingly</span>
-          </div>
-          <p class="text-[11px] font-medium text-brand-navy/65 -mt-1">Personalized digital invites for your special days</p>
-        </div>
-      </div>
-      <div id="authContainer" class="flex items-center gap-4">
-        <!-- Google Sign-In Button -->
+  <!-- ================= LOGIN / SIGN-UP OVERLAY ================= -->
+  <div id="loginSection" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/60 backdrop-blur-md transition-opacity duration-500">
+    <div class="glass-card p-10 rounded-3xl text-center max-w-md w-full mx-4">
+      <img src="URLovingly_Icon.jpg" alt="URLovingly Logo" class="w-16 h-16 mx-auto rounded-2xl object-cover shadow-sm border border-pink-200/70 mb-4">
+      <h2 class="font-serif text-3xl font-bold text-brand-navy mb-2">Welcome to URLovingly</h2>
+      <p class="text-sm text-slate-600 mb-8">Sign in or create an account with your Google email to manage your bespoke wedding invitations.</p>
+      
+      <div class="flex justify-center">
+        <!-- Google Sign-In Button Configuration -->
         <div id="g_id_onload"
-             data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+             data-client_id="412855134600-qku667pr3h0713748chh1o5i7u0nfo9p.apps.googleusercontent.com"
              data-context="signin"
              data-ux_mode="popup"
              data-callback="handleCredentialResponse"
              data-auto_prompt="false">
         </div>
-        <div class="g_id_signin" data-type="standard"></div>
-      </div>
-      <div id="userProfile" class="hidden flex items-center gap-3">
-        <span id="userEmailDisplay" class="text-xs font-bold text-brand-navy"></span>
-        <button onclick="logout()" class="px-3 py-1.5 rounded-xl bg-purple-50 text-brand-purple text-xs font-bold hover:bg-purple-100 transition">Logout</button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Login Overlay -->
-  <div id="loginOverlay" class="fixed inset-0 z-20 bg-white/60 backdrop-blur-md flex flex-col items-center justify-center transition-opacity">
-    <div class="glass-card p-10 rounded-3xl text-center max-w-md w-full mx-4">
-      <h2 class="font-serif text-3xl font-bold text-brand-navy mb-2">Welcome to URLovingly</h2>
-      <p class="text-sm text-slate-600 mb-6">Sign in with your Google account to access your studio and manage your guest invitations securely.</p>
-      <div class="flex justify-center">
         <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
       </div>
+      <p id="loginErrorMsg" class="text-xs text-red-500 mt-4 hidden">Authentication failed. Please try again.</p>
     </div>
   </div>
 
-  <!-- Main Studio Grid (Hidden until authenticated) -->
-  <main id="studioMain" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 opacity-0 pointer-events-none transition-opacity duration-500">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-      
-      <!-- LEFT COLUMN -->
-      <div class="lg:col-span-7 space-y-6">
+  <!-- ================= MAIN STUDIO WORKSPACE (HIDDEN INITIALLY) ================= -->
+  <div id="studioSection" class="hidden flex-col min-h-screen">
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-pink-100/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <img src="URLovingly_Icon.jpg" alt="URLovingly Logo" class="w-12 h-12 rounded-2xl object-cover shadow-sm border border-pink-200/70">
+          <div>
+            <div class="flex items-baseline tracking-tight">
+              <span class="font-serif text-3xl font-bold text-brand-navy">UR</span>
+              <span class="font-serif text-3xl font-bold text-brand-pink ml-0.5">Lovingly</span>
+            </div>
+            <p class="text-[11px] font-medium text-brand-navy/65 -mt-1">Personalized digital invites for your special days</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <span id="userEmailDisplay" class="hidden sm:block text-xs font-bold text-brand-navy"></span>
+          <button onclick="logout()" class="px-4 py-2 rounded-xl bg-purple-50 text-brand-purple text-xs font-bold hover:bg-purple-100 transition shadow-sm border border-purple-100">Sign Out</button>
+        </div>
+      </div>
+    </header>
 
-        <!-- Card 1: Event & Couple Details -->
-        <div class="glass-card rounded-[28px] p-6 sm:p-7">
-          <div class="flex items-center justify-between mb-5">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-2xl bg-pink-50 border border-pink-200 text-brand-pink flex items-center justify-center text-xs font-extrabold">01</div>
+    <!-- Hero Banner -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-pink-100/80 text-brand-pink">
+            ✨ Crafted with Love
+          </span>
+          <h1 class="font-serif text-3xl sm:text-4xl font-bold text-brand-navy mt-2">
+            Create Bespoke Wedding Invitations
+          </h1>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 max-w-md">
+          Enter your wedding details and personalize each guest's invitation with a dedicated URL ready to share over WhatsApp or Email.
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Studio Grid -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- LEFT COLUMN: Creation Studio Forms (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+
+          <!-- Card 1: Event & Couple Details -->
+          <div class="glass-card rounded-[28px] p-6 sm:p-7">
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-2xl bg-pink-50 border border-pink-200 text-brand-pink flex items-center justify-center text-xs font-extrabold">01</div>
+                <div>
+                  <h2 class="text-base font-bold text-brand-navy">Event & Couple Details</h2>
+                  <p class="text-xs text-slate-500">Set your celebration details once for all guests</p>
+                </div>
+              </div>
+              <button type="button" onclick="saveEventDefaults()" id="saveDefaultsBtn" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-brand-purple text-xs font-bold transition flex items-center gap-1.5">
+                <span>Save Defaults</span>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-brand-navy mb-1.5">Couple Names</label>
+                <input type="text" id="coupleNames" value="Aarav & Priya" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
               <div>
-                <h2 class="text-base font-bold text-brand-navy">Event & Couple Details</h2>
-                <p class="text-xs text-slate-500">Set your celebration details once for all guests</p>
+                <label class="block text-xs font-bold text-brand-navy mb-1.5">Wedding Date</label>
+                <input type="text" id="weddingDate" value="December 18, 2026" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-brand-navy mb-1.5">Ceremony Time</label>
+                <input type="text" id="weddingTime" value="5:30 PM Onwards" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-brand-navy mb-1.5">Venue Name & Address</label>
+                <input type="text" id="venueName" value="The Grand Ballroom, Taj Lands End, Mumbai" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-brand-navy mb-1.5">Host WhatsApp Number</label>
+                <input type="text" id="rsvpPhone" value="919876543210" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-brand-navy mb-1.5">Host Email ID</label>
+                <input type="email" id="hostEmail" value="rsvp@urlovingly.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-bold text-brand-navy mb-1.5">Google Maps Location URL</label>
+                <input type="url" id="mapUrl" value="https://maps.google.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
               </div>
             </div>
-            <button type="button" onclick="saveEventDefaults()" id="saveDefaultsBtn" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-brand-purple text-xs font-bold transition flex items-center gap-1.5">
-              <span>Save Defaults</span>
+          </div>
+
+          <!-- Card 2: Guest Personalization -->
+          <form id="inviteForm" onsubmit="handleGenerateSubmit(event)" class="glass-card rounded-[28px] p-6 sm:p-7 space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-2xl brand-gradient text-white flex items-center justify-center text-xs font-extrabold shadow-sm">02</div>
+                <div>
+                  <h2 class="text-base font-bold text-brand-navy">Personalize Guest Invitation</h2>
+                  <p class="text-xs text-slate-500">Customize the greeting and theme for your guest</p>
+                </div>
+              </div>
+              <div class="px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-mono font-bold text-brand-pink">
+                /<span id="coupleSlugPreview">aarav-and-priya</span>/to/<span id="slugPreview">rahul-sharma-and-family</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-brand-navy mb-1.5">Guest or Family Name <span class="text-brand-pink">*</span></label>
+              <input type="text" id="guestName" required value="Rahul Sharma & Family" oninput="updateLivePreview()" class="w-full px-4 py-3 rounded-2xl bg-white border border-purple-200 text-sm font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+            </div>
+
+            <div class="space-y-3">
+              <label class="block text-xs font-bold text-brand-navy">Select a Warm Personal Note</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="notePresetGroup">
+                <label class="cursor-pointer">
+                  <input type="radio" name="noteOption" value="We are so excited to invite you to celebrate the beginning of our new chapter together!" checked onchange="handleNoteOptionChange()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 h-full text-xs font-bold text-brand-navy">✨ Joyful New Chapter</div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="noteOption" value="Your presence and blessings mean the world to us as we tie the knot and begin our forever." onchange="handleNoteOptionChange()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 h-full text-xs font-bold text-brand-navy">🙏 Traditional & Heartfelt</div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="noteOption" value="custom" onchange="handleNoteOptionChange()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 h-full text-xs font-bold text-brand-pink">✍️ Custom Message</div>
+                </label>
+              </div>
+              <div id="customNoteContainer" class="hidden pt-1">
+                <textarea id="customNoteInput" rows="2" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-brand-pink text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Dear Rahul & Family, we have shared so many wonderful memories together!</textarea>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-brand-navy mb-2.5">Invitation Visual Style</label>
+              <div class="grid grid-cols-3 gap-3">
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="urlovingly" checked onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center text-xs font-bold text-brand-navy">Signature</div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="royal" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center text-xs font-bold text-brand-navy">Royal Velvet</div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="modern" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center text-xs font-bold text-brand-navy">Blush Minimal</div>
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full py-4 px-6 rounded-2xl brand-gradient hover:opacity-95 text-white font-bold text-sm shadow-xl shadow-pink-500/25 transition">
+              <span id="submitBtnText">Create & Publish Personalized Invite Link</span>
             </button>
+          </form>
+
+          <div id="resultBanner" class="hidden glass-card rounded-[28px] p-6 border-2 border-brand-pink/40 bg-gradient-to-r from-pink-50/90 via-white to-purple-50/90">
+            <span id="statusTitle" class="text-[11px] font-extrabold text-brand-pink uppercase">Publishing Your Invite Link...</span>
+            <a id="generatedUrlLink" href="#" target="_blank" class="text-sm font-bold text-brand-navy hover:text-brand-pink underline truncate block mt-1"></a>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="sm:col-span-2">
-              <label class="block text-xs font-bold text-brand-navy mb-1.5">Couple Names</label>
-              <input type="text" id="coupleNames" value="Aarav & Priya" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-brand-navy mb-1.5">Wedding Date</label>
-              <input type="text" id="weddingDate" value="December 18, 2026" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-brand-navy mb-1.5">Ceremony Time</label>
-              <input type="text" id="weddingTime" value="5:30 PM Onwards" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-            </div>
-            <div class="sm:col-span-2">
-              <label class="block text-xs font-bold text-brand-navy mb-1.5">Venue Name & Address</label>
-              <input type="text" id="venueName" value="The Grand Ballroom, Taj Lands End, Mumbai" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-brand-navy mb-1.5">Host WhatsApp Number</label>
-              <input type="text" id="rsvpPhone" value="919876543210" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-brand-navy mb-1.5">Host Email ID</label>
-              <input type="email" id="hostEmail" value="rsvp@urlovingly.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-            </div>
-            <div class="sm:col-span-2">
-              <label class="block text-xs font-bold text-brand-navy mb-1.5">Google Maps Location URL</label>
-              <input type="url" id="mapUrl" value="https://maps.google.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+          <!-- Guest Links History -->
+          <div class="glass-card rounded-[28px] p-6 sm:p-7">
+            <h3 class="text-base font-bold text-brand-navy mb-4">Your Generated Invitations</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-pink-100 text-[11px] font-bold uppercase text-slate-400">
+                    <th class="pb-2.5">Guest Name</th>
+                    <th class="pb-2.5">Style</th>
+                    <th class="pb-2.5">Invitation URL</th>
+                  </tr>
+                </thead>
+                <tbody id="guestHistoryBody" class="divide-y divide-pink-50 text-xs"></tbody>
+              </table>
             </div>
           </div>
+
         </div>
 
-        <!-- Card 2: Guest Personalization -->
-        <form id="inviteForm" onsubmit="handleGenerateSubmit(event)" class="glass-card rounded-[28px] p-6 sm:p-7 space-y-5">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-2xl brand-gradient text-white flex items-center justify-center text-xs font-extrabold shadow-sm">02</div>
-              <div>
-                <h2 class="text-base font-bold text-brand-navy">Personalize Guest Invitation</h2>
-              </div>
+        <!-- RIGHT COLUMN: Sticky Live Mobile Preview -->
+        <div class="lg:col-span-5 lg:sticky lg:top-24 flex flex-col items-center">
+          <div class="mb-3 flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/80 border border-purple-100 shadow-sm">
+            <span class="text-[11px] font-bold uppercase tracking-widest text-brand-navy">Live Guest Mobile View</span>
+          </div>
+          <div class="w-[335px] sm:w-[365px] h-[680px] rounded-[48px] phone-mockup bg-white overflow-hidden flex flex-col">
+            <div class="bg-purple-50/70 border-b border-purple-100 px-4 py-2 flex items-center gap-2 shrink-0">
+              <div id="previewBrowserUrl" class="text-[11px] font-mono text-brand-navy/75 truncate"></div>
             </div>
-            <div class="px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-mono font-bold text-brand-pink">
-              /<span id="coupleSlugPreview">aarav-and-priya</span>/to/<span id="slugPreview">rahul-sharma-and-family</span>
-            </div>
+            <div id="mobilePreviewViewport" class="flex-1 overflow-y-auto custom-scrollbar p-5"></div>
           </div>
-
-          <div>
-            <label class="block text-xs font-bold text-brand-navy mb-1.5">Guest or Family Name <span class="text-brand-pink">*</span></label>
-            <input type="text" id="guestName" required value="Rahul Sharma & Family" oninput="updateLivePreview()" class="w-full px-4 py-3 rounded-2xl bg-white border border-purple-200 text-sm font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-          </div>
-
-          <!-- Selectable Warm Personal Note Options -->
-          <div class="space-y-3">
-            <label class="block text-xs font-bold text-brand-navy">Select a Warm Personal Note</label>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="notePresetGroup">
-              <label class="cursor-pointer">
-                <input type="radio" name="noteOption" value="We are so excited to invite you to celebrate the beginning of our new chapter together!" checked onchange="handleNoteOptionChange()" class="sr-only peer">
-                <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
-                  <div class="text-xs font-bold text-brand-navy">✨ Joyful New Chapter</div>
-                </div>
-              </label>
-              <label class="cursor-pointer">
-                <input type="radio" name="noteOption" value="Your presence and blessings mean the world to us as we tie the knot and begin our forever." onchange="handleNoteOptionChange()" class="sr-only peer">
-                <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
-                  <div class="text-xs font-bold text-brand-navy">🙏 Traditional & Heartfelt</div>
-                </div>
-              </label>
-              <label class="cursor-pointer">
-                <input type="radio" name="noteOption" value="custom" onchange="handleNoteOptionChange()" class="sr-only peer">
-                <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
-                  <div class="text-xs font-bold text-brand-pink">✍️ Custom Message</div>
-                </div>
-              </label>
-            </div>
-            <div id="customNoteContainer" class="hidden pt-1">
-              <textarea id="customNoteInput" rows="2" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-brand-pink text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Dear Rahul & Family, we have shared so many wonderful memories together!</textarea>
-            </div>
-          </div>
-
-          <!-- Theme Selector -->
-          <div>
-            <label class="block text-xs font-bold text-brand-navy mb-2.5">Invitation Visual Style</label>
-            <div class="grid grid-cols-3 gap-3">
-              <label class="cursor-pointer">
-                <input type="radio" name="templateType" value="urlovingly" checked onchange="updateLivePreview()" class="sr-only peer">
-                <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center">
-                  <div class="text-xs font-bold text-brand-navy">Signature</div>
-                </div>
-              </label>
-              <label class="cursor-pointer">
-                <input type="radio" name="templateType" value="royal" onchange="updateLivePreview()" class="sr-only peer">
-                <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center">
-                  <div class="text-xs font-bold text-brand-navy">Royal Velvet</div>
-                </div>
-              </label>
-              <label class="cursor-pointer">
-                <input type="radio" name="templateType" value="modern" onchange="updateLivePreview()" class="sr-only peer">
-                <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center">
-                  <div class="text-xs font-bold text-brand-navy">Blush Minimal</div>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <button type="submit" id="submitBtn" class="w-full py-4 px-6 rounded-2xl brand-gradient hover:opacity-95 text-white font-bold text-sm shadow-xl shadow-pink-500/25 transition">
-            <span id="submitBtnText">Create & Publish Personalized Invite Link</span>
-          </button>
-        </form>
-
-        <div id="resultBanner" class="hidden glass-card rounded-[28px] p-6 border-2 border-brand-pink/40 bg-gradient-to-r from-pink-50/90 via-white to-purple-50/90">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="min-w-0 flex-1">
-              <span id="statusTitle" class="text-[11px] font-extrabold text-brand-pink uppercase">Publishing Your Invite Link...</span>
-              <a id="generatedUrlLink" href="#" target="_blank" class="text-sm font-bold text-brand-navy hover:text-brand-pink underline truncate block mt-1"></a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Guest Links History -->
-        <div class="glass-card rounded-[28px] p-6 sm:p-7">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-base font-bold text-brand-navy">Your Generated Invitations</h3>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr class="border-b border-pink-100 text-[11px] font-bold uppercase text-slate-400">
-                  <th class="pb-2.5">Guest Name</th>
-                  <th class="pb-2.5">Style</th>
-                  <th class="pb-2.5">Invitation URL</th>
-                </tr>
-              </thead>
-              <tbody id="guestHistoryBody" class="divide-y divide-pink-50 text-xs"></tbody>
-            </table>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- RIGHT COLUMN: Sticky Live Mobile Preview -->
-      <div class="lg:col-span-5 lg:sticky lg:top-24 flex flex-col items-center">
-        <div class="mb-3 flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/80 border border-purple-100 shadow-sm">
-          <span class="text-[11px] font-bold uppercase tracking-widest text-brand-navy">Live Guest Mobile View</span>
-        </div>
-        <div class="w-[335px] sm:w-[365px] h-[680px] rounded-[48px] phone-mockup bg-white overflow-hidden flex flex-col">
-          <div class="bg-purple-50/70 border-b border-purple-100 px-4 py-2 flex items-center gap-2 shrink-0">
-            <div id="previewBrowserUrl" class="text-[11px] font-mono text-brand-navy/75 truncate"></div>
-          </div>
-          <div id="mobilePreviewViewport" class="flex-1 overflow-y-auto custom-scrollbar p-5"></div>
         </div>
       </div>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script>
     const CLOUDFLARE_WORKER_URL = "https://invite-guests.urlovingly-comp.workers.dev";
@@ -284,14 +285,14 @@
     
     let activeSessionToken = localStorage.getItem("urlovingly_session");
 
+    // Initialize SPA State on Load
     window.addEventListener('DOMContentLoaded', () => {
       if (activeSessionToken) {
         verifyAndLoadStudio();
       }
-      loadDefaults();
-      updateLivePreview();
     });
 
+    // Process Google Sign-In
     async function handleCredentialResponse(response) {
       try {
         const res = await fetch(`${CLOUDFLARE_WORKER_URL}/login`, {
@@ -309,27 +310,36 @@
         
         verifyAndLoadStudio();
       } catch (err) {
-        alert("Authentication failed. Please try again.");
+        document.getElementById("loginErrorMsg").classList.remove("hidden");
       }
     }
 
+    // Transition from Login to Studio
     function verifyAndLoadStudio() {
-      document.getElementById("loginOverlay").classList.add("opacity-0", "pointer-events-none");
-      document.getElementById("studioMain").classList.remove("opacity-0", "pointer-events-none");
-      document.getElementById("authContainer").classList.add("hidden");
-      document.getElementById("userProfile").classList.remove("hidden");
+      // Hide Login Overlay
+      document.getElementById("loginSection").classList.add("opacity-0", "pointer-events-none", "hidden");
+      
+      // Reveal Main Studio
+      document.getElementById("studioSection").classList.remove("hidden");
+      document.getElementById("studioSection").classList.add("flex");
+      
+      // Set User Data
       document.getElementById("userEmailDisplay").textContent = localStorage.getItem("urlovingly_email");
       
+      // Load UI State
+      loadDefaults();
+      updateLivePreview();
       fetchHistory();
     }
 
+    // Handle Logout
     function logout() {
       localStorage.removeItem("urlovingly_session");
       localStorage.removeItem("urlovingly_email");
-      location.reload();
+      location.reload(); // Restarts the SPA, bringing back the login screen
     }
 
-    // Replace the local storage history render with a backend fetch
+    // Fetch User's Specific History from Cloudflare D1 Database
     async function fetchHistory() {
       try {
         const res = await fetch(`${CLOUDFLARE_WORKER_URL}/api/invites`, {
@@ -357,17 +367,16 @@
       `).join('');
     }
 
+    // Submit New Invite
     async function handleGenerateSubmit(e) {
       e.preventDefault();
       if (!activeSessionToken) return alert("Please log in first.");
 
       const data = getFormState();
       const submitBtn = document.getElementById('submitBtn');
-      const submitBtnText = document.getElementById('submitBtnText');
-      const resultBanner = document.getElementById('resultBanner');
-
+      
       submitBtn.disabled = true;
-      submitBtnText.textContent = 'Triggering URLovingly Cloud Builder...';
+      document.getElementById('submitBtnText').textContent = 'Triggering URLovingly Cloud Builder...';
 
       try {
         await fetch(`${CLOUDFLARE_WORKER_URL}/generate`, {
@@ -379,23 +388,22 @@
           body: JSON.stringify(data)
         });
         
-        // Refresh history from DB after generation
-        fetchHistory();
+        // Refresh DB list after dispatch
+        fetchHistory(); 
       } catch (err) {
         console.warn('Worker dispatch notice:', err);
       }
 
       submitBtn.disabled = false;
-      submitBtnText.textContent = 'Create & Publish Personalized Invite Link';
+      document.getElementById('submitBtnText').textContent = 'Create & Publish Personalized Invite Link';
 
-      document.getElementById('statusTitle').textContent = 'Personalized Invite Link Created!';
       const linkEl = document.getElementById('generatedUrlLink');
       linkEl.textContent = data.fullUrl;
       linkEl.href = data.fullUrl;
-      resultBanner.classList.remove('hidden');
+      document.getElementById('resultBanner').classList.remove('hidden');
     }
 
-    // Standard Helpers
+    // Standard Form Helpers
     function slugify(text) { return (text || '').toLowerCase().replace(/&/g, 'and').replace(/[\W_]+/g, '-').replace(/^-+|-+$/g, '') || 'guest'; }
     function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     function getSelectedNote() {
@@ -416,13 +424,12 @@
       if (d.venueName) document.getElementById('venueName').value = d.venueName;
     }
     function saveEventDefaults() {
-      const defaults = {
+      localStorage.setItem(STORAGE_KEYS.DEFAULTS, JSON.stringify({
         coupleNames: document.getElementById('coupleNames').value,
         weddingDate: document.getElementById('weddingDate').value,
         weddingTime: document.getElementById('weddingTime').value,
         venueName: document.getElementById('venueName').value
-      };
-      localStorage.setItem(STORAGE_KEYS.DEFAULTS, JSON.stringify(defaults));
+      }));
     }
     function getFormState() {
       const guestName = document.getElementById('guestName').value || 'Valued Guest';
