@@ -218,7 +218,7 @@
               </div>
             </div>
             <div class="px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-mono font-bold text-brand-pink">
-              /to/<span id="slugPreview">rahul-sharma-and-family</span>
+              /<span id="coupleSlugPreview">aarav-and-priya</span>/to/<span id="slugPreview">rahul-sharma-and-family</span>
             </div>
           </div>
 
@@ -474,15 +474,19 @@
 
     function getFormState() {
       const guestName = document.getElementById('guestName').value || 'Valued Guest';
+      const coupleNames = document.getElementById('coupleNames').value || 'Aarav & Priya';
       const selectedTheme = document.querySelector('input[name="templateType"]:checked');
+      
       const slug = slugify(guestName);
+      const coupleSlug = slugify(coupleNames);
       const cleanBase = BASE_HOSTED_DOMAIN.replace(/\/+$/, '');
 
       return {
         name: guestName,
         slug: slug,
+        coupleSlug: coupleSlug,
         template: selectedTheme ? selectedTheme.value : 'urlovingly',
-        couple_names: document.getElementById('coupleNames').value,
+        couple_names: coupleNames,
         wedding_date: document.getElementById('weddingDate').value,
         wedding_time: document.getElementById('weddingTime').value,
         venue: document.getElementById('venueName').value,
@@ -490,15 +494,18 @@
         rsvp_phone: document.getElementById('rsvpPhone').value,
         host_email: document.getElementById('hostEmail').value,
         custom_note: getSelectedNote(),
-        fullUrl: `${cleanBase}/to/${slug}/`
+        fullUrl: `${cleanBase}/${coupleSlug}/to/${slug}/`
       };
     }
 
     function updateLivePreview() {
       const data = getFormState();
+      
+      // Update the visual preview bar text
+      document.getElementById('coupleSlugPreview').textContent = data.coupleSlug;
       document.getElementById('slugPreview').textContent = data.slug;
       document.getElementById('previewBrowserUrl').textContent = data.fullUrl.replace(/^https?:\/\//, '');
-
+      
       const viewport = document.getElementById('mobilePreviewViewport');
       const rsvpText = `Hi! I (${data.name}) happily confirm my attendance for ${data.couple_names}'s wedding!`;
       const waLink = `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`;

@@ -23,7 +23,9 @@ def main():
     host_email = os.environ.get("HOST_EMAIL", "rsvp@urlovingly.com")
     custom_note = os.environ.get("CUSTOM_NOTE", "We are so excited to invite you to celebrate the beginning of our new chapter together!")
 
-    slug = slugify(guest_name)
+    guest_slug = slugify(guest_name)
+    couple_slug = slugify(couple_names) # Converts "Aarav & Priya" into "aarav-and-priya"
+    
     env = Environment(loader=FileSystemLoader("templates"))
     
     try:
@@ -43,14 +45,15 @@ def main():
         custom_note=custom_note
     )
 
-    output_dir = os.path.join("to", slug)
+    # Nests the guest folder inside the couple's folder
+    output_dir = os.path.join(couple_slug, "to", guest_slug)
     os.makedirs(output_dir, exist_ok=True)
 
     output_file = os.path.join(output_dir, "index.html")
     with open(output_file, "w", encoding="utf-8") as out:
         out.write(html_out)
 
-    print(f"Successfully generated URLovingly invite for '{guest_name}' at /to/{slug}/index.html")
+    print(f"Successfully generated URLovingly invite for '{guest_name}' at /{couple_slug}/to/{guest_slug}/index.html")
 
 if __name__ == "__main__":
     main()

@@ -12,11 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v5 # Bump to the newest major version
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v6 # Bump to the newest major version
-        
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -25,7 +24,6 @@ jobs:
 
       - name: Execute Python Generator
         env:
-          # Added '.data.' to target the nested payload structure
           GUEST_NAME: ${{ github.event.client_payload.data.name }}
           TEMPLATE: ${{ github.event.client_payload.data.template }}
           COUPLE_NAMES: ${{ github.event.client_payload.data.couple_names }}
@@ -43,12 +41,9 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 1. Stage and commit the locally generated files FIRST
-          git add to/
+          # Stage all newly generated files and folders
+          git add .
           git commit -m "URLovingly: Generated invite for ${{ github.event.client_payload.data.name }}" || echo "No changes to commit"
           
-          # 2. Pull remote changes and rebase the new commit on top
           git pull --rebase origin main || true
-          
-          # 3. Push the successfully rebased commit to GitHub
           git push
