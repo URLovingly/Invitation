@@ -24,16 +24,17 @@ jobs:
 
       - name: Execute Python Generator
         env:
-          GUEST_NAME: ${{ github.event.client_payload.name }}
-          TEMPLATE: ${{ github.event.client_payload.template }}
-          COUPLE_NAMES: ${{ github.event.client_payload.couple_names }}
-          WEDDING_DATE: ${{ github.event.client_payload.wedding_date }}
-          WEDDING_TIME: ${{ github.event.client_payload.wedding_time }}
-          VENUE: ${{ github.event.client_payload.venue }}
-          MAP_URL: ${{ github.event.client_payload.map_url }}
-          RSVP_PHONE: ${{ github.event.client_payload.rsvp_phone }}
-          HOST_EMAIL: ${{ github.event.client_payload.host_email }}
-          CUSTOM_NOTE: ${{ github.event.client_payload.custom_note }}
+          # Added '.data.' to target the nested payload structure
+          GUEST_NAME: ${{ github.event.client_payload.data.name }}
+          TEMPLATE: ${{ github.event.client_payload.data.template }}
+          COUPLE_NAMES: ${{ github.event.client_payload.data.couple_names }}
+          WEDDING_DATE: ${{ github.event.client_payload.data.wedding_date }}
+          WEDDING_TIME: ${{ github.event.client_payload.data.wedding_time }}
+          VENUE: ${{ github.event.client_payload.data.venue }}
+          MAP_URL: ${{ github.event.client_payload.data.map_url }}
+          RSVP_PHONE: ${{ github.event.client_payload.data.rsvp_phone }}
+          HOST_EMAIL: ${{ github.event.client_payload.data.host_email }}
+          CUSTOM_NOTE: ${{ github.event.client_payload.data.custom_note }}
         run: python generate.py
 
       - name: Commit and Push to GitHub Pages
@@ -42,5 +43,5 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git pull --rebase origin main || true
           git add to/
-          git commit -m "URLovingly: Generated invite for ${{ github.event.client_payload.name }}" || echo "No changes to commit"
+          git commit -m "URLovingly: Generated invite for ${{ github.event.client_payload.data.name }}" || echo "No changes to commit"
           git push
