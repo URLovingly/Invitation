@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rahul — Wedding Invitation | URLovingly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #fdf4ff 0%, #fff1f5 50%, #f5f3ff 100%);
+      color: #151438;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 16px;
+    }
+    .card {
+      max-width: 440px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 40px 28px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(108, 43, 217, 0.12);
+      border: 1px solid rgba(244, 47, 108, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #ff5e8e, #f42f6c, #7e22ce);
+    }
+    .logo-icon { width: 72px; height: 72px; margin: 0 auto 14px; }
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #fff0f5, #f3e8ff);
+      color: #d61f69;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 99px;
+      margin-bottom: 18px;
+    }
+    .guest-box {
+      background: linear-gradient(135deg, #faf5ff, #fff1f5);
+      border: 1px solid #f5d0fe;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .guest-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #7e22ce; font-weight: 600; }
+    .guest-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: #151438; margin-top: 4px; }
+    .couple {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #151438 0%, #f42f6c 55%, #7e22ce 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 12px 0 16px;
+    }
+    .note { font-size: 14px; color: #5b587b; font-style: italic; line-height: 1.6; margin-bottom: 24px; }
+    .details {
+      background: #fcfaff;
+      border: 1px solid #ede9fe;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 24px;
+      font-size: 13px;
+    }
+    .detail-row { margin-bottom: 12px; }
+    .detail-row:last-child { margin-bottom: 0; }
+    .detail-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #f42f6c; }
+    .detail-val { font-weight: 600; color: #151438; margin-top: 2px; }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #f42f6c 0%, #7e22ce 100%);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(244, 47, 108, 0.25);
+    }
+    .btn-secondary {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border: 1px solid #ddd6fe;
+    }
+    .btn-outline {
+      background: #ffffff;
+      color: #151438;
+      border: 1px solid #f5d0fe;
+      font-size: 12px;
+    }
+    .footer { margin-top: 22px; font-size: 11px; color: #9ca3af; }
+    .footer span { color: #f42f6c; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <svg class="logo-icon" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="envGrad" x1="15" y1="20" x2="105" y2="105" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#FF6B8B"/>
+          <stop offset="50%" stop-color="#F42F6C"/>
+          <stop offset="100%" stop-color="#6C2BD9"/>
+        </linearGradient>
+        <linearGradient id="heartGrad" x1="30" y1="25" x2="90" y2="85" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#FF8DA1"/>
+          <stop offset="50%" stop-color="#F42F6C"/>
+          <stop offset="100%" stop-color="#7E22CE"/>
+        </linearGradient>
+      </defs>
+      <path d="M22 52L60 22L98 52V96C98 100.4 94.4 104 90 104H30C25.6 104 22 100.4 22 96V52Z" fill="url(#envGrad)"/>
+      <path d="M60 82C60 82 32 62 32 43C32 33.5 39.5 26 48.5 26C54 26 58 29 60 33C62 29 66 26 71.5 26C80.5 26 88 33.5 88 43C88 62 60 82 60 82Z" fill="url(#heartGrad)"/>
+      <path d="M22 54L60 80L98 54V96C98 100.4 94.4 104 90 104H30C25.6 104 22 100.4 22 96V54Z" fill="url(#envGrad)" fill-opacity="0.9"/>
+      <path d="M22 102L60 72L98 102" stroke="#ffffff" stroke-opacity="0.35" stroke-width="2"/>
+    </svg>
+
+    <div class="badge">Personal Wedding Invitation</div>
+
+    <div class="guest-box">
+      <div class="guest-label">Exclusively Prepared For</div>
+      <div class="guest-name">Rahul</div>
+    </div>
+
+    <p style="font-size: 12px; color: #7e22ce; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;">Together With Their Families</p>
+    <h1 class="couple">Aarav & Aleena</h1>
+    <p class="note">"We are so excited to invite you to celebrate the beginning of our new chapter together!"</p>
+
+    <div class="details">
+      <div class="detail-row">
+        <div class="detail-title">Date & Time</div>
+        <div class="detail-val">December 18, 2026 • 5:30 PM Onwards</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-title">Venue</div>
+        <div class="detail-val">The Grand Ballroom, Taj Lands End, Mumbai</div>
+      </div>
+    </div>
+
+    <a href="https://maps.google.com" target="_blank" class="btn btn-secondary">📍 View Venue on Google Maps</a>
+    <a href="https://wa.me/919876543210?text=Hi!%20I%20(Rahul)%20confirm%20my%20attendance%20for%20Aarav%20%26%20Aleena's%20wedding!" target="_blank" class="btn btn-primary">💌 Confirm RSVP on WhatsApp</a>
+    <a href="mailto:rsvp@urlovingly.com?subject=Wedding%20RSVP%20-%20Rahul&body=Hi!%20I%20(Rahul)%20confirm%20my%20attendance%20for%20Aarav%20%26%20Aleena's%20wedding!" class="btn btn-outline">✉️ Confirm RSVP via Email</a>
+
+    <div class="footer">Created with love by <span>URLovingly</span></div>
+  </div>
+</body>
+</html>
