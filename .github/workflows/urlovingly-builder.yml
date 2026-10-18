@@ -41,7 +41,13 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin main || true
+          
+          # 1. Stage and commit the locally generated files FIRST
           git add to/
           git commit -m "URLovingly: Generated invite for ${{ github.event.client_payload.data.name }}" || echo "No changes to commit"
+          
+          # 2. Pull remote changes and rebase the new commit on top
+          git pull --rebase origin main || true
+          
+          # 3. Push the successfully rebased commit to GitHub
           git push
