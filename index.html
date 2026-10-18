@@ -48,9 +48,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .phone-mockup {
-      box-shadow: 0 30px 70px -15px rgba(108, 43, 217, 0.28), 0 0 0 11px #151438, 0 0 0 14px #f3e8ff;
-    }
     .custom-scrollbar::-webkit-scrollbar { width: 5px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(244, 47, 108, 0.25); border-radius: 9999px; }
@@ -63,10 +60,9 @@
     <div class="glass-card p-10 rounded-3xl text-center max-w-md w-full mx-4">
       <img src="URLovingly_Icon.jpg" alt="URLovingly Logo" class="w-16 h-16 mx-auto rounded-2xl object-cover shadow-sm border border-pink-200/70 mb-4">
       <h2 class="font-serif text-3xl font-bold text-brand-navy mb-2">Welcome to URLovingly</h2>
-      <p class="text-sm text-slate-600 mb-8">Sign in or create an account with your Google email to manage your bespoke wedding invitations.</p>
+      <p class="text-sm text-slate-600 mb-8">Sign in or create an account with your Google email to securely view and manage your function's invitations.</p>
       
       <div class="flex justify-center">
-        <!-- Google Sign-In Button Configuration -->
         <div id="g_id_onload"
              data-client_id="412855134600-qku667pr3h0713748chh1o5i7u0nfo9p.apps.googleusercontent.com"
              data-context="signin"
@@ -80,7 +76,7 @@
     </div>
   </div>
 
-  <!-- ================= MAIN STUDIO WORKSPACE (HIDDEN INITIALLY) ================= -->
+  <!-- ================= MAIN STUDIO WORKSPACE ================= -->
   <div id="studioSection" class="hidden flex-col min-h-screen">
     
     <!-- Header -->
@@ -114,9 +110,6 @@
             Create Bespoke Wedding Invitations
           </h1>
         </div>
-        <p class="text-xs sm:text-sm text-slate-600 max-w-md">
-          Enter your wedding details and personalize each guest's invitation with a dedicated URL ready to share over WhatsApp or Email.
-        </p>
       </div>
     </section>
 
@@ -124,7 +117,7 @@
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        <!-- LEFT COLUMN: Creation Studio Forms (7 cols) -->
+        <!-- LEFT COLUMN: Forms -->
         <div class="lg:col-span-7 space-y-6">
 
           <!-- Card 1: Event & Couple Details -->
@@ -137,7 +130,7 @@
                   <p class="text-xs text-slate-500">Set your celebration details once for all guests</p>
                 </div>
               </div>
-              <button type="button" onclick="saveEventDefaults()" id="saveDefaultsBtn" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-brand-purple text-xs font-bold transition flex items-center gap-1.5">
+              <button type="button" onclick="saveEventDefaults()" id="saveDefaultsBtn" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-brand-purple text-xs font-bold transition">
                 <span>Save Defaults</span>
               </button>
             </div>
@@ -145,31 +138,31 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="sm:col-span-2">
                 <label class="block text-xs font-bold text-brand-navy mb-1.5">Couple Names</label>
-                <input type="text" id="coupleNames" value="Aarav & Priya" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                <input type="text" id="coupleNames" value="Aarav & Priya" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 transition">
               </div>
               <div>
                 <label class="block text-xs font-bold text-brand-navy mb-1.5">Wedding Date</label>
-                <input type="text" id="weddingDate" value="December 18, 2026" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                <input type="text" id="weddingDate" value="December 18, 2026" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 transition">
               </div>
               <div>
                 <label class="block text-xs font-bold text-brand-navy mb-1.5">Ceremony Time</label>
-                <input type="text" id="weddingTime" value="5:30 PM Onwards" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                <input type="text" id="weddingTime" value="5:30 PM Onwards" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 transition">
               </div>
               <div class="sm:col-span-2">
                 <label class="block text-xs font-bold text-brand-navy mb-1.5">Venue Name & Address</label>
-                <input type="text" id="venueName" value="The Grand Ballroom, Taj Lands End, Mumbai" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                <input type="text" id="venueName" value="The Grand Ballroom, Taj Lands End, Mumbai" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 transition">
               </div>
               <div>
                 <label class="block text-xs font-bold text-brand-navy mb-1.5">Host WhatsApp Number</label>
-                <input type="text" id="rsvpPhone" value="919876543210" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                <input type="text" id="rsvpPhone" value="919876543210" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 transition">
               </div>
               <div>
                 <label class="block text-xs font-bold text-brand-navy mb-1.5">Host Email ID</label>
-                <input type="email" id="hostEmail" value="rsvp@urlovingly.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                <input type="email" id="hostEmail" value="rsvp@urlovingly.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 transition">
               </div>
               <div class="sm:col-span-2">
                 <label class="block text-xs font-bold text-brand-navy mb-1.5">Google Maps Location URL</label>
-                <input type="url" id="mapUrl" value="https://maps.google.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                <input type="url" id="mapUrl" value="https://maps.google.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-pink/20 transition">
               </div>
             </div>
           </div>
@@ -181,7 +174,6 @@
                 <div class="w-8 h-8 rounded-2xl brand-gradient text-white flex items-center justify-center text-xs font-extrabold shadow-sm">02</div>
                 <div>
                   <h2 class="text-base font-bold text-brand-navy">Personalize Guest Invitation</h2>
-                  <p class="text-xs text-slate-500">Customize the greeting and theme for your guest</p>
                 </div>
               </div>
               <div class="px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-mono font-bold text-brand-pink">
@@ -191,103 +183,50 @@
 
             <div>
               <label class="block text-xs font-bold text-brand-navy mb-1.5">Guest or Family Name <span class="text-brand-pink">*</span></label>
-              <input type="text" id="guestName" required value="Rahul Sharma & Family" oninput="updateLivePreview()" class="w-full px-4 py-3 rounded-2xl bg-white border border-purple-200 text-sm font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              <input type="text" id="guestName" required value="Rahul Sharma & Family" oninput="updateLivePreview()" class="w-full px-4 py-3 rounded-2xl bg-white border border-purple-200 text-sm font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 transition">
             </div>
 
-            <!-- Restored Sample Personal Note Options -->
             <div class="space-y-3">
               <label class="block text-xs font-bold text-brand-navy">Select a Warm Personal Note</label>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="notePresetGroup">
-                
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <label class="cursor-pointer">
                   <input type="radio" name="noteOption" value="We are so excited to invite you to celebrate the beginning of our new chapter together!" checked onchange="handleNoteOptionChange()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
-                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
-                      <span>✨ Joyful New Chapter</span>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"We are so excited to invite you to celebrate the beginning of our new chapter together!"</p>
-                  </div>
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full text-xs font-bold text-brand-navy">✨ Joyful New Chapter</div>
                 </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="noteOption" value="Your presence and blessings mean the world to us as we tie the knot and begin our forever." onchange="handleNoteOptionChange()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
-                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
-                      <span>🙏 Traditional & Heartfelt</span>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"Your presence and blessings mean the world to us as we tie the knot and begin our forever."</p>
-                  </div>
-                </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="noteOption" value="Our wedding simply wouldn't be complete without you by our side! Come ready to dance and celebrate." onchange="handleNoteOptionChange()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
-                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
-                      <span>🥂 Warm & Festive</span>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"Our wedding simply wouldn't be complete without you by our side! Come ready to dance and celebrate."</p>
-                  </div>
-                </label>
-
                 <label class="cursor-pointer">
                   <input type="radio" name="noteOption" value="custom" onchange="handleNoteOptionChange()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full flex flex-col justify-center">
-                    <div class="text-xs font-bold text-brand-pink flex items-center gap-1.5">
-                      <span>✍️ Write a Personal Message</span>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-1">Craft a custom note specifically for this guest or family.</p>
-                  </div>
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full text-xs font-bold text-brand-pink">✍️ Custom Message</div>
                 </label>
-
               </div>
-
               <div id="customNoteContainer" class="hidden pt-1">
-                <textarea id="customNoteInput" rows="2" oninput="updateLivePreview()"
-                  placeholder="Write your personal message for this guest..."
-                  class="w-full px-4 py-2.5 rounded-2xl bg-white border border-brand-pink text-sm text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Dear Rahul & Family, we have shared so many wonderful memories together and can't wait to celebrate with you!</textarea>
+                <textarea id="customNoteInput" rows="2" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-brand-pink text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Dear Rahul & Family, we are excited to celebrate with you!</textarea>
               </div>
             </div>
 
-            <!-- Restored Template Selector -->
             <div>
               <label class="block text-xs font-bold text-brand-navy mb-2.5">Invitation Visual Style</label>
               <div class="grid grid-cols-3 gap-3">
                 <label class="cursor-pointer">
                   <input type="radio" name="templateType" value="urlovingly" checked onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl brand-gradient flex items-center justify-center text-white font-serif font-bold text-xs shadow-sm">UL</div>
-                    <div class="text-xs font-bold text-brand-navy">Signature</div>
-                    <div class="text-[10px] text-brand-pink font-medium">Pink & Purple</div>
-                  </div>
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center text-xs font-bold text-brand-navy">Signature</div>
                 </label>
-
                 <label class="cursor-pointer">
                   <input type="radio" name="templateType" value="royal" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-[#241142] border border-pink-400 flex items-center justify-center text-pink-300 font-serif font-bold text-xs shadow-sm">RV</div>
-                    <div class="text-xs font-bold text-brand-navy">Royal Velvet</div>
-                    <div class="text-[10px] text-slate-500">Deep Plum</div>
-                  </div>
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center text-xs font-bold text-brand-navy">Royal Velvet</div>
                 </label>
-
                 <label class="cursor-pointer">
                   <input type="radio" name="templateType" value="modern" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-pink-50 border border-brand-navy flex items-center justify-center text-brand-navy font-sans font-extrabold text-[10px] shadow-sm">BM</div>
-                    <div class="text-xs font-bold text-brand-navy">Blush Minimal</div>
-                    <div class="text-[10px] text-slate-500">Pure White</div>
-                  </div>
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center text-xs font-bold text-brand-navy">Blush Minimal</div>
                 </label>
               </div>
             </div>
 
-            <button type="submit" id="submitBtn" class="w-full py-4 px-6 rounded-2xl brand-gradient hover:opacity-95 text-white font-bold text-sm shadow-xl shadow-pink-500/25 transition flex items-center justify-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+            <button type="submit" id="submitBtn" class="w-full py-4 px-6 rounded-2xl brand-gradient hover:opacity-95 text-white font-bold text-sm shadow-xl shadow-pink-500/25 transition">
               <span id="submitBtnText">Create & Publish Personalized Invite Link</span>
             </button>
           </form>
 
-          <!-- Result & Share Banner with Progress Bar -->
+          <!-- Result Banner with Progress Bar -->
           <div id="resultBanner" class="hidden glass-card rounded-[28px] p-6 border-2 border-brand-pink/40 bg-gradient-to-r from-pink-50/90 via-white to-purple-50/90 space-y-4">
             <div class="flex items-center justify-between">
               <div class="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-brand-pink uppercase tracking-wider">
@@ -295,32 +234,24 @@
               </div>
               <span id="progressPercent" class="text-xs font-mono font-bold text-brand-purple">0%</span>
             </div>
-
-            <!-- Progress Bar Track -->
             <div class="w-full bg-purple-100 rounded-full h-2 overflow-hidden">
               <div id="progressBar" class="bg-gradient-to-r from-pink-500 to-purple-600 h-2 rounded-full transition-all duration-300" style="width: 5%"></div>
             </div>
-
             <p id="statusSubtext" class="text-[11px] text-slate-500">Waiting for GitHub Actions build to complete...</p>
 
-            <!-- Hidden until action completes successfully -->
             <div id="completedLinkSection" class="hidden pt-2 border-t border-pink-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div class="min-w-0 flex-1">
                 <span class="text-[10px] font-bold uppercase text-emerald-600 block">✨ Invite is Live!</span>
                 <a id="generatedUrlLink" href="#" target="_blank" class="text-sm font-bold text-brand-navy hover:text-brand-pink underline truncate block mt-0.5"></a>
               </div>
               <div class="flex items-center gap-2 shrink-0">
-                <button type="button" onclick="copyGeneratedLink()" id="copyBtn" class="px-4 py-2.5 rounded-xl bg-white border border-purple-200 text-brand-navy text-xs font-bold hover:bg-purple-50 transition">
-                  Copy Link
-                </button>
-                <a id="whatsappShareBtn" href="#" target="_blank" class="px-4 py-2.5 rounded-xl brand-gradient text-white text-xs font-bold hover:opacity-95 transition shadow-md">
-                  Send via WhatsApp
-                </a>
+                <button type="button" onclick="copyGeneratedLink()" id="copyBtn" class="px-4 py-2.5 rounded-xl bg-white border border-purple-200 text-brand-navy text-xs font-bold hover:bg-purple-50 transition">Copy Link</button>
+                <a id="whatsappShareBtn" href="#" target="_blank" class="px-4 py-2.5 rounded-xl brand-gradient text-white text-xs font-bold hover:opacity-95 transition shadow-md">WhatsApp</a>
               </div>
             </div>
           </div>
 
-          <!-- Guest Links History -->
+          <!-- History Table -->
           <div class="glass-card rounded-[28px] p-6 sm:p-7">
             <h3 class="text-base font-bold text-brand-navy mb-4">Your Generated Invitations</h3>
             <div class="overflow-x-auto">
@@ -339,18 +270,70 @@
 
         </div>
 
-        <!-- RIGHT COLUMN: Sticky Live Mobile Preview -->
+        <!-- RIGHT COLUMN: Multi-Device Previews with Icons -->
         <div class="lg:col-span-5 lg:sticky lg:top-24 flex flex-col items-center">
-          <div class="mb-3 flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/80 border border-purple-100 shadow-sm">
-            <span class="text-[11px] font-bold uppercase tracking-widest text-brand-navy">Live Guest Mobile View</span>
+          
+          <!-- Device View Selector Bar with Custom Icons -->
+          <div class="mb-3 flex items-center gap-1.5 p-1 bg-white/90 border border-purple-100 rounded-2xl shadow-sm">
+            
+            <!-- iPhone Button -->
+            <button type="button" onclick="setDeviceView('iphone')" id="btn-iphone" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-pink text-white transition flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              <span>iPhone</span>
+            </button>
+
+            <!-- Flip Phone Button -->
+            <button type="button" onclick="setDeviceView('flip')" id="btn-flip" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-purple-50 transition flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <span>Flip Phone</span>
+            </button>
+
+            <!-- Foldable Button -->
+            <button type="button" onclick="setDeviceView('foldable')" id="btn-foldable" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-purple-50 transition flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v14a1 1 0 01-1 1h-4a1 1 0 01-1-1V5z"/></svg>
+              <span>Foldable</span>
+            </button>
+
+            <!-- Desktop Button -->
+            <button type="button" onclick="setDeviceView('desktop')" id="btn-desktop" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-purple-50 transition flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <span>Desktop</span>
+            </button>
+
           </div>
-          <div class="w-[335px] sm:w-[365px] h-[680px] rounded-[48px] phone-mockup bg-white overflow-hidden flex flex-col">
-            <div class="bg-purple-50/70 border-b border-purple-100 px-4 py-2 flex items-center gap-2 shrink-0">
-              <div id="previewBrowserUrl" class="text-[11px] font-mono text-brand-navy/75 truncate"></div>
+
+          <!-- Dynamic Device Wrapper Frame -->
+          <div id="deviceFrame" class="relative w-[340px] h-[700px] bg-[#1a1a1a] rounded-[52px] p-3 shadow-[0_25px_60px_-15px_rgba(108,43,217,0.3)] border-4 border-[#333] transition-all duration-300">
+            <div class="relative w-full h-full bg-white rounded-[42px] overflow-hidden flex flex-col border border-slate-200">
+              
+              <!-- Notch Bar -->
+              <div id="deviceNotch" class="absolute top-0 inset-x-0 z-20 flex justify-center pt-2 pointer-events-none">
+                <div class="w-28 h-6 bg-black rounded-full flex items-center justify-between px-2.5 shadow-md">
+                  <div class="w-2 h-2 rounded-full bg-[#111] border border-slate-800"></div>
+                  <div class="w-3 h-3 rounded-full bg-[#0a0a0a] ring-1 ring-slate-800"></div>
+                </div>
+              </div>
+
+              <!-- Browser Bar -->
+              <div class="bg-slate-100 border-b border-slate-200 pt-8 pb-2.5 px-4 flex items-center gap-2 shrink-0 z-10">
+                <svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <div id="previewBrowserUrl" class="text-[10px] font-mono text-slate-600 truncate">urlovingly.github.io/...</div>
+              </div>
+
+              <!-- Viewport Iframe -->
+              <div class="flex-1 relative w-full h-full bg-white overflow-hidden">
+                <iframe id="mobilePreviewIframe" class="w-full h-full border-0 absolute inset-0" title="Device Preview"></iframe>
+              </div>
+
+              <!-- Home Indicator -->
+              <div id="deviceHomeBar" class="absolute bottom-1 inset-x-0 h-4 flex items-center justify-center pointer-events-none z-20">
+                <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+              </div>
+
             </div>
-            <div id="mobilePreviewViewport" class="flex-1 overflow-y-auto custom-scrollbar p-5"></div>
           </div>
         </div>
+
       </div>
     </main>
   </div>
@@ -363,9 +346,7 @@
     let activeSessionToken = localStorage.getItem("urlovingly_session");
 
     window.addEventListener('DOMContentLoaded', () => {
-      if (activeSessionToken) {
-        verifyAndLoadStudio();
-      }
+      if (activeSessionToken) verifyAndLoadStudio();
     });
 
     async function handleCredentialResponse(response) {
@@ -375,14 +356,11 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token: response.credential })
         });
-        
         if (!res.ok) throw new Error("Login failed");
-        
         const data = await res.json();
         activeSessionToken = data.session;
         localStorage.setItem("urlovingly_session", activeSessionToken);
         localStorage.setItem("urlovingly_email", data.email);
-        
         verifyAndLoadStudio();
       } catch (err) {
         document.getElementById("loginErrorMsg").classList.remove("hidden");
@@ -394,7 +372,6 @@
       document.getElementById("studioSection").classList.remove("hidden");
       document.getElementById("studioSection").classList.add("flex");
       document.getElementById("userEmailDisplay").textContent = localStorage.getItem("urlovingly_email");
-      
       loadDefaults();
       updateLivePreview();
       fetchHistory();
@@ -406,22 +383,56 @@
       location.reload();
     }
 
+    function setDeviceView(type) {
+      const frame = document.getElementById('deviceFrame');
+      const notch = document.getElementById('deviceNotch');
+      const homeBar = document.getElementById('deviceHomeBar');
+      
+      ['iphone', 'flip', 'foldable', 'desktop'].forEach(t => {
+        const btn = document.getElementById(`btn-${t}`);
+        if(t === type) {
+          btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-pink text-white transition flex items-center gap-1.5";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-purple-50 transition flex items-center gap-1.5";
+        }
+      });
+
+      if (type === 'iphone') {
+        frame.className = "relative w-[340px] h-[700px] bg-[#1a1a1a] rounded-[52px] p-3 shadow-[0_25px_60px_-15px_rgba(108,43,217,0.3)] border-4 border-[#333] transition-all duration-300";
+        notch.style.display = 'flex';
+        homeBar.style.display = 'flex';
+      } else if (type === 'flip') {
+        frame.className = "relative w-[280px] h-[600px] bg-[#222] rounded-[36px] p-2.5 shadow-[0_25px_60px_-15px_rgba(108,43,217,0.3)] border-4 border-[#444] transition-all duration-300";
+        notch.style.display = 'none';
+        homeBar.style.display = 'flex';
+      } else if (type === 'foldable') {
+        frame.className = "relative w-[400px] h-[620px] bg-[#111] rounded-[28px] p-3 shadow-[0_25px_60px_-15px_rgba(108,43,217,0.3)] border-4 border-[#333] transition-all duration-300";
+        notch.style.display = 'none';
+        homeBar.style.display = 'none';
+      } else if (type === 'desktop') {
+        frame.className = "relative w-full max-w-[540px] h-[500px] bg-[#0f172a] rounded-xl p-2 shadow-[0_25px_60px_-15px_rgba(108,43,217,0.3)] border-2 border-slate-700 transition-all duration-300";
+        notch.style.display = 'none';
+        homeBar.style.display = 'none';
+      }
+    }
+
     async function fetchHistory() {
       try {
         const res = await fetch(`${CLOUDFLARE_WORKER_URL}/api/invites`, {
           headers: { "Authorization": `Bearer ${activeSessionToken}` }
         });
+        if (!res.ok) throw new Error("Unauthorized");
         const invites = await res.json();
         renderHistoryTable(invites);
       } catch (err) {
-        console.error("Failed to load history");
+        console.error("Failed to load user history", err);
       }
     }
 
     function renderHistoryTable(invites) {
       const tbody = document.getElementById('guestHistoryBody');
       if (!invites || !invites.length) {
-        tbody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-slate-400">No guest links generated yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-slate-400">No guest links generated for your account yet.</td></tr>`;
         return;
       }
       tbody.innerHTML = invites.map(item => `
@@ -449,7 +460,6 @@
       submitBtn.disabled = true;
       document.getElementById('submitBtnText').textContent = 'Triggering URLovingly Cloud Builder...';
       
-      // Reset banner view
       resultBanner.classList.remove('hidden');
       completedLinkSection.classList.add('hidden');
       progressBar.style.width = '10%';
@@ -458,13 +468,9 @@
       statusSubtext.textContent = 'Initializing workflow dispatch...';
 
       try {
-        // 1. Trigger Cloudflare Worker -> GitHub Action
         await fetch(`${CLOUDFLARE_WORKER_URL}/generate`, {
           method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${activeSessionToken}` 
-          },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${activeSessionToken}` },
           body: JSON.stringify(data)
         });
 
@@ -473,29 +479,22 @@
         statusTitle.textContent = 'Building Invitation...';
         statusSubtext.textContent = 'GitHub Action is compiling and deploying your template (~20-30s)...';
 
-        // 2. Poll GitHub Pages URL until it's live (Status 200)
         let isLive = false;
         let attempts = 0;
-        const maxAttempts = 20; // Try for up to ~80 seconds
+        const maxAttempts = 20;
 
         while (!attempts || (attempts < maxAttempts && !isLive)) {
-          await new Promise(resolve => setTimeout(resolve, 4000)); // wait 4 seconds per poll
+          await new Promise(resolve => setTimeout(resolve, 4000));
           attempts++;
 
-          // Increment progress smoothly up to 90% while waiting
           const currentProgress = Math.min(30 + (attempts * 4), 90);
           progressBar.style.width = `${currentProgress}%`;
           progressPercent.textContent = `${currentProgress}%`;
 
           try {
-            // Check if the target index.html file exists and returns 200 OK
             const checkRes = await fetch(data.fullUrl, { method: 'HEAD' });
-            if (checkRes.ok) {
-              isLive = true;
-            }
-          } catch (err) {
-            // CORS or network fetch block during deployment propagation is normal, keep polling
-          }
+            if (checkRes.ok) isLive = true;
+          } catch (err) {}
         }
 
         if (isLive) {
@@ -514,12 +513,10 @@
           completedLinkSection.classList.remove('hidden');
           fetchHistory();
         } else {
-          statusTitle.textContent = 'Deployment Taking Longer Than Expected';
-          statusSubtext.textContent = 'The action was triggered, but page verification timed out. Check your GitHub Actions tab.';
+          statusTitle.textContent = 'Deployment Verification Timed Out';
+          statusSubtext.textContent = 'The action was triggered successfully, but page check timed out. Check your GitHub repository.';
         }
-
       } catch (err) {
-        console.warn('Worker dispatch notice:', err);
         statusTitle.textContent = 'Error Triggering Action';
         statusSubtext.textContent = err.message;
       }
@@ -528,11 +525,18 @@
       document.getElementById('submitBtnText').textContent = 'Create & Publish Personalized Invite Link';
     }
 
+    function copyGeneratedLink() {
+      navigator.clipboard.writeText(document.getElementById('generatedUrlLink').textContent);
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy Link'; }, 1500);
+    }
+
     function slugify(text) { return (text || '').toLowerCase().replace(/&/g, 'and').replace(/[\W_]+/g, '-').replace(/^-+|-+$/g, '') || 'guest'; }
     function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     function getSelectedNote() {
       const selected = document.querySelector('input[name="noteOption"]:checked');
-      return selected.value === 'custom' ? document.getElementById('customNoteInput').value.trim() : selected.value;
+      return selected && selected.value === 'custom' ? document.getElementById('customNoteInput').value.trim() : (selected ? selected.value : '');
     }
     function handleNoteOptionChange() {
       const selected = document.querySelector('input[name="noteOption"]:checked');
@@ -554,16 +558,30 @@
         weddingTime: document.getElementById('weddingTime').value,
         venueName: document.getElementById('venueName').value
       }));
+      const btn = document.getElementById('saveDefaultsBtn');
+      btn.textContent = '✓ Saved';
+      setTimeout(() => { btn.textContent = 'Save Defaults'; }, 1800);
     }
+
+    function getEnvelopeIconHtml(sizeClass = "w-14 h-14") {
+      return `
+        <svg class="${sizeClass} mx-auto" viewBox="0 0 120 120" fill="none">
+          <path d="M14 48L17 53L22 56L17 59L14 64L11 59L6 56L11 53L14 48Z" fill="#F42F6C"/>
+          <path d="M106 52L108.5 56.5L113 59L108.5 61.5L106 66L103.5 61.5L99 59L103.5 56.5L106 52Z" fill="#7E22CE"/>
+          <path d="M22 50L60 18L98 50V95C98 100 94 104 89 104H31C26 104 22 100 22 95V50Z" fill="url(#urlovingly-env-back)"/>
+          <path d="M60 84C60 84 30 63 30 42C30 31.5 38 24 47.5 24C53.5 24 57.8 27.2 60 31.5C62.2 27.2 66.5 24 72.5 24C82 24 90 31.5 90 42C90 63 60 84 60 84Z" fill="url(#urlovingly-heart)"/>
+          <path d="M87 52C82 55 77 54 75 50C79 60 72 68 65 73C75 68 84 60 87 52Z" fill="#FFFFFF" fill-opacity="0.9"/>
+          <path d="M23 102L60 69L97 102C95 103.5 92 104 89 104H31C28 104 25 103.5 23 102Z" fill="url(#urlovingly-flap)"/>
+        </svg>
+      `;
+    }
+
     function getFormState() {
       const guestName = document.getElementById('guestName').value || 'Valued Guest';
       const coupleNames = document.getElementById('coupleNames').value || 'Aarav & Priya';
       const selectedTheme = document.querySelector('input[name="templateType"]:checked');
       const slug = slugify(guestName), coupleSlug = slugify(coupleNames);
       
-      // Capture the live preview HTML container contents
-      const previewHtml = document.getElementById('mobilePreviewViewport').innerHTML;
-
       return {
         name: guestName, 
         slug: slug, 
@@ -577,64 +595,48 @@
         rsvp_phone: document.getElementById('rsvpPhone').value,
         host_email: document.getElementById('hostEmail').value,
         custom_note: getSelectedNote(),
-        rendered_html: previewHtml, // <--- Sends the exact designed template layout
+        rendered_html: window.currentRenderedTemplateHtml || '<p>Invitation Preview</p>',
         fullUrl: `${BASE_HOSTED_DOMAIN.replace(/\/+$/, '')}/${coupleSlug}/to/${slug}/`
       };
     }
+
     function updateLivePreview() {
       const data = getFormState();
-      
-      // Update visual URL preview elements
       document.getElementById('coupleSlugPreview').textContent = data.coupleSlug;
       document.getElementById('slugPreview').textContent = data.slug;
       document.getElementById('previewBrowserUrl').textContent = data.fullUrl.replace(/^https?:\/\//, '');
 
-      const viewport = document.getElementById('mobilePreviewViewport');
+      const iframe = document.getElementById('mobilePreviewIframe');
       const rsvpText = `Hi! I (${data.name}) happily confirm my attendance for ${data.couple_names}'s wedding!`;
       const waLink = `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`;
-      const mailLink = `mailto:${encodeURIComponent(data.host_email)}?subject=${encodeURIComponent(`Wedding RSVP - ${data.name}`)}&body=${encodeURIComponent(rsvpText)}`;
 
-      // Render template based on selection
+      let innerContent = '';
       if (data.template === 'urlovingly') {
-        viewport.innerHTML = `
-          <div class="min-h-full bg-gradient-to-b from-purple-50/90 via-pink-50/60 to-white p-5 text-center flex flex-col justify-between">
-            <div class="bg-white rounded-[28px] p-6 shadow-md border border-pink-100 relative overflow-hidden">
+        innerContent = `
+          <div class="min-h-full bg-gradient-to-b from-purple-50/90 via-pink-50/60 to-white p-6 text-center flex flex-col justify-between">
+            <div class="bg-white rounded-[28px] p-6 shadow-md border border-pink-100 relative overflow-hidden my-auto">
               <div class="absolute top-0 inset-x-0 h-1.5 brand-gradient"></div>
               ${getEnvelopeIconHtml("w-16 h-16")}
-              <span class="inline-block mt-2 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest bg-pink-50 text-brand-pink border border-pink-200">
-                Wedding Invitation
-              </span>
+              <span class="inline-block mt-2 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest bg-pink-50 text-brand-pink border border-pink-200">Wedding Invitation</span>
               <div class="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-purple-50/80 to-pink-50/80 border border-purple-100">
                 <div class="text-[9px] uppercase tracking-widest font-bold text-brand-purple">Exclusively Prepared For</div>
                 <div class="font-serif text-xl font-bold text-brand-navy mt-0.5">${escapeHtml(data.name)}</div>
               </div>
-              <p class="mt-4 text-[10px] uppercase tracking-widest text-brand-purple font-bold">Together With Their Families</p>
               <h1 class="font-serif text-3xl font-bold brand-text-gradient my-1">${escapeHtml(data.couple_names)}</h1>
               <p class="text-xs text-slate-600 italic leading-relaxed my-3">"${escapeHtml(data.custom_note)}"</p>
               <div class="bg-purple-50/50 rounded-2xl p-3.5 border border-purple-100 text-left space-y-2 text-xs">
-                <div>
-                  <span class="text-[9px] font-bold uppercase text-brand-pink block">Date & Time</span>
-                  <span class="font-semibold text-brand-navy">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</span>
-                </div>
-                <div>
-                  <span class="text-[9px] font-bold uppercase text-brand-pink block">Venue</span>
-                  <span class="font-semibold text-brand-navy">${escapeHtml(data.venue)}</span>
-                </div>
+                <div><span class="text-[9px] font-bold uppercase text-brand-pink block">Date & Time</span><span class="font-semibold text-brand-navy">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</span></div>
+                <div><span class="text-[9px] font-bold uppercase text-brand-pink block">Venue</span><span class="font-semibold text-brand-navy">${escapeHtml(data.venue)}</span></div>
               </div>
               <div class="mt-4 space-y-2">
-                <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full py-2.5 rounded-xl bg-purple-50 text-brand-purple font-bold text-xs border border-purple-200">📍 View Venue Map</a>
-                <a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs shadow">💌 RSVP via WhatsApp</a>
-                <a href="${mailLink}" class="block w-full py-2 rounded-xl bg-white text-brand-navy font-semibold text-[11px] border border-pink-200">✉️ RSVP via Email</a>
+                <a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs shadow">💌 WhatsApp RSVP</a>
               </div>
-              <div class="mt-4 text-[10px] text-slate-400">Created with <strong class="text-brand-pink">URLovingly</strong></div>
             </div>
-          </div>
-        `;
+          </div>`;
       } else if (data.template === 'royal') {
-        viewport.innerHTML = `
-          <div class="min-h-full bg-gradient-to-b from-[#151438] via-[#2b124c] to-[#151438] text-white p-5 text-center flex flex-col justify-between">
-            <div class="border border-pink-400/30 rounded-[28px] p-5 bg-white/5 backdrop-blur-sm">
-              ${getEnvelopeIconHtml("w-14 h-14")}
+        innerContent = `
+          <div class="min-h-full bg-gradient-to-b from-[#151438] via-[#2b124c] to-[#151438] text-white p-6 text-center flex flex-col justify-between">
+            <div class="border border-pink-400/30 rounded-[28px] p-6 bg-white/5 backdrop-blur-sm my-auto">
               <div class="mt-2 text-[10px] uppercase tracking-widest text-pink-300 font-bold">Royal Celebration</div>
               <div class="mt-3 p-3 rounded-2xl bg-white/10 border border-pink-300/20">
                 <div class="text-[9px] uppercase tracking-widest text-pink-200">Honored Guest</div>
@@ -642,22 +644,16 @@
               </div>
               <h1 class="font-serif text-3xl font-bold text-pink-300 my-4">${escapeHtml(data.couple_names)}</h1>
               <p class="text-xs text-purple-100/90 italic mb-4">"${escapeHtml(data.custom_note)}"</p>
-              <div class="bg-black/25 rounded-2xl p-3.5 text-xs space-y-2 border border-white/10">
+              <div class="bg-black/25 rounded-2xl p-3.5 text-xs space-y-2 border border-white/10 text-left">
                 <div class="text-pink-200 font-semibold">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</div>
                 <div class="text-white/90">${escapeHtml(data.venue)}</div>
               </div>
-              <div class="mt-4 space-y-2">
-                <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full py-2 rounded-xl bg-white/10 text-pink-200 font-bold text-xs">📍 Location Map</a>
-                <a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs">💌 WhatsApp RSVP</a>
-                <a href="${mailLink}" class="block w-full py-2 rounded-xl border border-pink-300/30 text-pink-100 text-[11px]">✉️ Email RSVP</a>
-              </div>
-              <div class="mt-4 text-[10px] text-purple-300">URLovingly Digital Invites</div>
+              <div class="mt-4"><a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs">💌 WhatsApp RSVP</a></div>
             </div>
-          </div>
-        `;
+          </div>`;
       } else {
-        viewport.innerHTML = `
-          <div class="min-h-full bg-white p-6 text-left flex flex-col justify-between">
+        innerContent = `
+          <div class="min-h-full bg-white p-6 text-left flex flex-col justify-between my-auto">
             <div>
               <div class="flex items-center justify-between border-b border-pink-100 pb-3">
                 <span class="font-serif font-bold text-base text-brand-navy">UR<span class="text-brand-pink">Lovingly</span></span>
@@ -674,14 +670,15 @@
                 <div class="text-slate-600">${escapeHtml(data.venue)}</div>
               </div>
             </div>
-            <div class="space-y-2 pt-6">
-              <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full text-center py-2.5 rounded-xl bg-purple-50 text-brand-purple font-bold text-xs">📍 Open Venue Map</a>
-              <a href="${waLink}" target="_blank" class="block w-full text-center py-2.5 rounded-xl bg-brand-navy text-white font-bold text-xs">💌 Confirm on WhatsApp</a>
-              <a href="${mailLink}" class="block w-full text-center py-2 rounded-xl border border-slate-200 text-slate-700 font-semibold text-[11px]">✉️ Confirm via Email</a>
-            </div>
-          </div>
-        `;
+            <div class="pt-6"><a href="${waLink}" target="_blank" class="block w-full text-center py-2.5 rounded-xl bg-brand-navy text-white font-bold text-xs">💌 Confirm on WhatsApp</a></div>
+          </div>`;
       }
+
+      const fullDoc = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>body{font-family:'Plus Jakarta Sans',sans-serif;margin:0;padding:0;height:100vh;overflow-y:auto;background:#fff;}</style></head><body>${innerContent}</body></html>`;
+
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open(); doc.write(fullDoc); doc.close();
+      window.currentRenderedTemplateHtml = fullDoc;
     }
   </script>
 </body>
