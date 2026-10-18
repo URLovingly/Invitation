@@ -344,9 +344,11 @@
     const STORAGE_KEYS = { DEFAULTS: 'urlovingly_event_defaults_v2' };
     
     let activeSessionToken = localStorage.getItem("urlovingly_session");
-
+    
     window.addEventListener('DOMContentLoaded', () => {
-      if (activeSessionToken) verifyAndLoadStudio();
+      if (activeSessionToken) {
+        verifyAndLoadStudio();
+      }
     });
 
     async function handleCredentialResponse(response) {
