@@ -2,7 +2,7 @@ name: URLovingly Generate Wedding Invite
 
 on:
   repository_dispatch:
-    types: [generate_invite]
+    types: [generate_invites]
 
 permissions:
   contents: write
