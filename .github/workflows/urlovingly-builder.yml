@@ -1,0 +1,46 @@
+name: URLovingly Builder
+
+on:
+  repository_dispatch:
+    types: [generate_invites]
+
+permissions:
+  contents: write
+
+jobs:
+  generate-page:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pip install -r req.txt
+
+      - name: Execute Python Generator
+        env:
+          GUEST_NAME: ${{ github.event.client_payload.name }}
+          TEMPLATE: ${{ github.event.client_payload.template }}
+          COUPLE_NAMES: ${{ github.event.client_payload.couple_names }}
+          WEDDING_DATE: ${{ github.event.client_payload.wedding_date }}
+          WEDDING_TIME: ${{ github.event.client_payload.wedding_time }}
+          VENUE: ${{ github.event.client_payload.venue }}
+          MAP_URL: ${{ github.event.client_payload.map_url }}
+          RSVP_PHONE: ${{ github.event.client_payload.rsvp_phone }}
+          HOST_EMAIL: ${{ github.event.client_payload.host_email }}
+          CUSTOM_NOTE: ${{ github.event.client_payload.custom_note }}
+        run: python generate.py
+
+      - name: Commit and Push to GitHub Pages
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main || true
+          git add to/
+          git commit -m "URLovingly: Generated invite for ${{ github.event.client_payload.name }}" || echo "No changes to commit"
+          git push
