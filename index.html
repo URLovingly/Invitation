@@ -194,46 +194,95 @@
               <input type="text" id="guestName" required value="Rahul Sharma & Family" oninput="updateLivePreview()" class="w-full px-4 py-3 rounded-2xl bg-white border border-purple-200 text-sm font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
             </div>
 
+            <!-- Restored Sample Personal Note Options -->
             <div class="space-y-3">
               <label class="block text-xs font-bold text-brand-navy">Select a Warm Personal Note</label>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="notePresetGroup">
+                
                 <label class="cursor-pointer">
                   <input type="radio" name="noteOption" value="We are so excited to invite you to celebrate the beginning of our new chapter together!" checked onchange="handleNoteOptionChange()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 h-full text-xs font-bold text-brand-navy">✨ Joyful New Chapter</div>
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
+                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
+                      <span>✨ Joyful New Chapter</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"We are so excited to invite you to celebrate the beginning of our new chapter together!"</p>
+                  </div>
                 </label>
+
                 <label class="cursor-pointer">
                   <input type="radio" name="noteOption" value="Your presence and blessings mean the world to us as we tie the knot and begin our forever." onchange="handleNoteOptionChange()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 h-full text-xs font-bold text-brand-navy">🙏 Traditional & Heartfelt</div>
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
+                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
+                      <span>🙏 Traditional & Heartfelt</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"Your presence and blessings mean the world to us as we tie the knot and begin our forever."</p>
+                  </div>
                 </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="noteOption" value="Our wedding simply wouldn't be complete without you by our side! Come ready to dance and celebrate." onchange="handleNoteOptionChange()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
+                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
+                      <span>🥂 Warm & Festive</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"Our wedding simply wouldn't be complete without you by our side! Come ready to dance and celebrate."</p>
+                  </div>
+                </label>
+
                 <label class="cursor-pointer">
                   <input type="radio" name="noteOption" value="custom" onchange="handleNoteOptionChange()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 h-full text-xs font-bold text-brand-pink">✍️ Custom Message</div>
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full flex flex-col justify-center">
+                    <div class="text-xs font-bold text-brand-pink flex items-center gap-1.5">
+                      <span>✍️ Write a Personal Message</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1">Craft a custom note specifically for this guest or family.</p>
+                  </div>
                 </label>
+
               </div>
+
               <div id="customNoteContainer" class="hidden pt-1">
-                <textarea id="customNoteInput" rows="2" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-brand-pink text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Dear Rahul & Family, we have shared so many wonderful memories together!</textarea>
+                <textarea id="customNoteInput" rows="2" oninput="updateLivePreview()"
+                  placeholder="Write your personal message for this guest..."
+                  class="w-full px-4 py-2.5 rounded-2xl bg-white border border-brand-pink text-sm text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Dear Rahul & Family, we have shared so many wonderful memories together and can't wait to celebrate with you!</textarea>
               </div>
             </div>
 
+            <!-- Restored Template Selector -->
             <div>
               <label class="block text-xs font-bold text-brand-navy mb-2.5">Invitation Visual Style</label>
               <div class="grid grid-cols-3 gap-3">
                 <label class="cursor-pointer">
                   <input type="radio" name="templateType" value="urlovingly" checked onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center text-xs font-bold text-brand-navy">Signature</div>
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl brand-gradient flex items-center justify-center text-white font-serif font-bold text-xs shadow-sm">UL</div>
+                    <div class="text-xs font-bold text-brand-navy">Signature</div>
+                    <div class="text-[10px] text-brand-pink font-medium">Pink & Purple</div>
+                  </div>
                 </label>
+
                 <label class="cursor-pointer">
                   <input type="radio" name="templateType" value="royal" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center text-xs font-bold text-brand-navy">Royal Velvet</div>
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-[#241142] border border-pink-400 flex items-center justify-center text-pink-300 font-serif font-bold text-xs shadow-sm">RV</div>
+                    <div class="text-xs font-bold text-brand-navy">Royal Velvet</div>
+                    <div class="text-[10px] text-slate-500">Deep Plum</div>
+                  </div>
                 </label>
+
                 <label class="cursor-pointer">
                   <input type="radio" name="templateType" value="modern" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 text-center text-xs font-bold text-brand-navy">Blush Minimal</div>
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-pink-50 border border-brand-navy flex items-center justify-center text-brand-navy font-sans font-extrabold text-[10px] shadow-sm">BM</div>
+                    <div class="text-xs font-bold text-brand-navy">Blush Minimal</div>
+                    <div class="text-[10px] text-slate-500">Pure White</div>
+                  </div>
                 </label>
               </div>
             </div>
 
-            <button type="submit" id="submitBtn" class="w-full py-4 px-6 rounded-2xl brand-gradient hover:opacity-95 text-white font-bold text-sm shadow-xl shadow-pink-500/25 transition">
+            <button type="submit" id="submitBtn" class="w-full py-4 px-6 rounded-2xl brand-gradient hover:opacity-95 text-white font-bold text-sm shadow-xl shadow-pink-500/25 transition flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
               <span id="submitBtnText">Create & Publish Personalized Invite Link</span>
             </button>
           </form>
@@ -285,14 +334,12 @@
     
     let activeSessionToken = localStorage.getItem("urlovingly_session");
 
-    // Initialize SPA State on Load
     window.addEventListener('DOMContentLoaded', () => {
       if (activeSessionToken) {
         verifyAndLoadStudio();
       }
     });
 
-    // Process Google Sign-In
     async function handleCredentialResponse(response) {
       try {
         const res = await fetch(`${CLOUDFLARE_WORKER_URL}/login`, {
@@ -314,32 +361,23 @@
       }
     }
 
-    // Transition from Login to Studio
     function verifyAndLoadStudio() {
-      // Hide Login Overlay
       document.getElementById("loginSection").classList.add("opacity-0", "pointer-events-none", "hidden");
-      
-      // Reveal Main Studio
       document.getElementById("studioSection").classList.remove("hidden");
       document.getElementById("studioSection").classList.add("flex");
-      
-      // Set User Data
       document.getElementById("userEmailDisplay").textContent = localStorage.getItem("urlovingly_email");
       
-      // Load UI State
       loadDefaults();
       updateLivePreview();
       fetchHistory();
     }
 
-    // Handle Logout
     function logout() {
       localStorage.removeItem("urlovingly_session");
       localStorage.removeItem("urlovingly_email");
-      location.reload(); // Restarts the SPA, bringing back the login screen
+      location.reload();
     }
 
-    // Fetch User's Specific History from Cloudflare D1 Database
     async function fetchHistory() {
       try {
         const res = await fetch(`${CLOUDFLARE_WORKER_URL}/api/invites`, {
@@ -367,7 +405,6 @@
       `).join('');
     }
 
-    // Submit New Invite
     async function handleGenerateSubmit(e) {
       e.preventDefault();
       if (!activeSessionToken) return alert("Please log in first.");
@@ -387,8 +424,6 @@
           },
           body: JSON.stringify(data)
         });
-        
-        // Refresh DB list after dispatch
         fetchHistory(); 
       } catch (err) {
         console.warn('Worker dispatch notice:', err);
@@ -403,7 +438,6 @@
       document.getElementById('resultBanner').classList.remove('hidden');
     }
 
-    // Standard Form Helpers
     function slugify(text) { return (text || '').toLowerCase().replace(/&/g, 'and').replace(/[\W_]+/g, '-').replace(/^-+|-+$/g, '') || 'guest'; }
     function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     function getSelectedNote() {
