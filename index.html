@@ -351,6 +351,18 @@
       }
     });
 
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+        cross_origin_opener_policy: "same-origin-allow-popups"
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("buttonDiv"),
+        { theme: "outline", size: "large" }
+      );
+    };
+
     async function handleCredentialResponse(response) {
       try {
         const res = await fetch(`${CLOUDFLARE_WORKER_URL}/login`, {
