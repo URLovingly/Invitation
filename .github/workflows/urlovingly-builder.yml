@@ -2,7 +2,7 @@ name: URLovingly Builder
 
 on:
   repository_dispatch:
-    types: [generate_invites]
+    types: [generate_invite]
 
 permissions:
   contents: write
