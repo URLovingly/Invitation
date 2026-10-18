@@ -486,10 +486,105 @@
     }
     function updateLivePreview() {
       const data = getFormState();
+      
+      // Update visual URL preview elements
       document.getElementById('coupleSlugPreview').textContent = data.coupleSlug;
       document.getElementById('slugPreview').textContent = data.slug;
       document.getElementById('previewBrowserUrl').textContent = data.fullUrl.replace(/^https?:\/\//, '');
-      document.getElementById('mobilePreviewViewport').innerHTML = `<div class="text-center font-serif text-xl font-bold mt-10">${escapeHtml(data.name)}<br><span class="text-sm text-slate-500">Preview dynamically renders here</span></div>`;
+
+      const viewport = document.getElementById('mobilePreviewViewport');
+      const rsvpText = `Hi! I (${data.name}) happily confirm my attendance for ${data.couple_names}'s wedding!`;
+      const waLink = `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`;
+      const mailLink = `mailto:${encodeURIComponent(data.host_email)}?subject=${encodeURIComponent(`Wedding RSVP - ${data.name}`)}&body=${encodeURIComponent(rsvpText)}`;
+
+      // Render template based on selection
+      if (data.template === 'urlovingly') {
+        viewport.innerHTML = `
+          <div class="min-h-full bg-gradient-to-b from-purple-50/90 via-pink-50/60 to-white p-5 text-center flex flex-col justify-between">
+            <div class="bg-white rounded-[28px] p-6 shadow-md border border-pink-100 relative overflow-hidden">
+              <div class="absolute top-0 inset-x-0 h-1.5 brand-gradient"></div>
+              ${getEnvelopeIconHtml("w-16 h-16")}
+              <span class="inline-block mt-2 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest bg-pink-50 text-brand-pink border border-pink-200">
+                Wedding Invitation
+              </span>
+              <div class="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-purple-50/80 to-pink-50/80 border border-purple-100">
+                <div class="text-[9px] uppercase tracking-widest font-bold text-brand-purple">Exclusively Prepared For</div>
+                <div class="font-serif text-xl font-bold text-brand-navy mt-0.5">${escapeHtml(data.name)}</div>
+              </div>
+              <p class="mt-4 text-[10px] uppercase tracking-widest text-brand-purple font-bold">Together With Their Families</p>
+              <h1 class="font-serif text-3xl font-bold brand-text-gradient my-1">${escapeHtml(data.couple_names)}</h1>
+              <p class="text-xs text-slate-600 italic leading-relaxed my-3">"${escapeHtml(data.custom_note)}"</p>
+              <div class="bg-purple-50/50 rounded-2xl p-3.5 border border-purple-100 text-left space-y-2 text-xs">
+                <div>
+                  <span class="text-[9px] font-bold uppercase text-brand-pink block">Date & Time</span>
+                  <span class="font-semibold text-brand-navy">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</span>
+                </div>
+                <div>
+                  <span class="text-[9px] font-bold uppercase text-brand-pink block">Venue</span>
+                  <span class="font-semibold text-brand-navy">${escapeHtml(data.venue)}</span>
+                </div>
+              </div>
+              <div class="mt-4 space-y-2">
+                <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full py-2.5 rounded-xl bg-purple-50 text-brand-purple font-bold text-xs border border-purple-200">📍 View Venue Map</a>
+                <a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs shadow">💌 RSVP via WhatsApp</a>
+                <a href="${mailLink}" class="block w-full py-2 rounded-xl bg-white text-brand-navy font-semibold text-[11px] border border-pink-200">✉️ RSVP via Email</a>
+              </div>
+              <div class="mt-4 text-[10px] text-slate-400">Created with <strong class="text-brand-pink">URLovingly</strong></div>
+            </div>
+          </div>
+        `;
+      } else if (data.template === 'royal') {
+        viewport.innerHTML = `
+          <div class="min-h-full bg-gradient-to-b from-[#151438] via-[#2b124c] to-[#151438] text-white p-5 text-center flex flex-col justify-between">
+            <div class="border border-pink-400/30 rounded-[28px] p-5 bg-white/5 backdrop-blur-sm">
+              ${getEnvelopeIconHtml("w-14 h-14")}
+              <div class="mt-2 text-[10px] uppercase tracking-widest text-pink-300 font-bold">Royal Celebration</div>
+              <div class="mt-3 p-3 rounded-2xl bg-white/10 border border-pink-300/20">
+                <div class="text-[9px] uppercase tracking-widest text-pink-200">Honored Guest</div>
+                <div class="font-serif text-xl font-bold text-white mt-0.5">${escapeHtml(data.name)}</div>
+              </div>
+              <h1 class="font-serif text-3xl font-bold text-pink-300 my-4">${escapeHtml(data.couple_names)}</h1>
+              <p class="text-xs text-purple-100/90 italic mb-4">"${escapeHtml(data.custom_note)}"</p>
+              <div class="bg-black/25 rounded-2xl p-3.5 text-xs space-y-2 border border-white/10">
+                <div class="text-pink-200 font-semibold">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</div>
+                <div class="text-white/90">${escapeHtml(data.venue)}</div>
+              </div>
+              <div class="mt-4 space-y-2">
+                <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full py-2 rounded-xl bg-white/10 text-pink-200 font-bold text-xs">📍 Location Map</a>
+                <a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs">💌 WhatsApp RSVP</a>
+                <a href="${mailLink}" class="block w-full py-2 rounded-xl border border-pink-300/30 text-pink-100 text-[11px]">✉️ Email RSVP</a>
+              </div>
+              <div class="mt-4 text-[10px] text-purple-300">URLovingly Digital Invites</div>
+            </div>
+          </div>
+        `;
+      } else {
+        viewport.innerHTML = `
+          <div class="min-h-full bg-white p-6 text-left flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-pink-100 pb-3">
+                <span class="font-serif font-bold text-base text-brand-navy">UR<span class="text-brand-pink">Lovingly</span></span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-brand-purple">Wedding Invite</span>
+              </div>
+              <div class="mt-5">
+                <div class="text-[10px] font-bold uppercase tracking-widest text-brand-purple">Personal Invitation For</div>
+                <div class="font-serif text-2xl font-bold text-brand-navy mt-0.5">${escapeHtml(data.name)}</div>
+              </div>
+              <h1 class="font-serif text-4xl font-bold text-brand-pink my-4 leading-tight">${escapeHtml(data.couple_names)}</h1>
+              <p class="text-xs text-slate-600 italic leading-relaxed mb-5">"${escapeHtml(data.custom_note)}"</p>
+              <div class="border-l-2 border-brand-pink pl-3.5 space-y-2 text-xs">
+                <div class="font-bold text-brand-navy">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</div>
+                <div class="text-slate-600">${escapeHtml(data.venue)}</div>
+              </div>
+            </div>
+            <div class="space-y-2 pt-6">
+              <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full text-center py-2.5 rounded-xl bg-purple-50 text-brand-purple font-bold text-xs">📍 Open Venue Map</a>
+              <a href="${waLink}" target="_blank" class="block w-full text-center py-2.5 rounded-xl bg-brand-navy text-white font-bold text-xs">💌 Confirm on WhatsApp</a>
+              <a href="${mailLink}" class="block w-full text-center py-2 rounded-xl border border-slate-200 text-slate-700 font-semibold text-[11px]">✉️ Confirm via Email</a>
+            </div>
+          </div>
+        `;
+      }
     }
   </script>
 </body>
