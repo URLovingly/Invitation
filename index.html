@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>URLovingly — Personalized Digital Wedding Invites</title>
+  <!-- Added the favicon link here -->
+  <link rel="icon" href="URLovingly_Icon.jpg" type="image/jpeg">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -90,22 +93,10 @@
   <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-pink-100/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3.5">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-50 via-white to-purple-50 border border-pink-200/70 flex items-center justify-center shadow-sm">
-          <svg class="w-10 h-10" viewBox="0 0 120 120" fill="none">
-            <path d="M14 48L17 53L22 56L17 59L14 64L11 59L6 56L11 53L14 48Z" fill="#F42F6C"/>
-            <path d="M106 52L108.5 56.5L113 59L108.5 61.5L106 66L103.5 61.5L99 59L103.5 56.5L106 52Z" fill="#7E22CE"/>
-            <circle cx="18" cy="36" r="2" fill="#FF6B8B"/>
-            <circle cx="102" cy="40" r="2" fill="#8B5CF6"/>
-            <path d="M22 50L60 18L98 50V95C98 100 94 104 89 104H31C26 104 22 100 22 95V50Z" fill="url(#urlovingly-env-back)"/>
-            <path d="M24 52L60 78L96 52L60 24L24 52Z" fill="#3B0764" fill-opacity="0.45"/>
-            <path d="M60 84C60 84 30 63 30 42C30 31.5 38 24 47.5 24C53.5 24 57.8 27.2 60 31.5C62.2 27.2 66.5 24 72.5 24C82 24 90 31.5 90 42C90 63 60 84 60 84Z" fill="url(#urlovingly-heart)"/>
-            <path d="M87 52C82 55 77 54 75 50C79 60 72 68 65 73C75 68 84 60 87 52Z" fill="#FFFFFF" fill-opacity="0.9"/>
-            <path d="M22 51L55 78L22 101V51Z" fill="#E11D48" fill-opacity="0.65"/>
-            <path d="M98 51L65 78L98 101V51Z" fill="#5B21B6" fill-opacity="0.75"/>
-            <path d="M23 102L60 69L97 102C95 103.5 92 104 89 104H31C28 104 25 103.5 23 102Z" fill="url(#urlovingly-flap)"/>
-            <path d="M24 101L60 70L96 101" stroke="#FFB4C6" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </div>
+        
+        <!-- Replaced SVG with your custom image -->
+        <img src="URLovingly_Icon.jpg" alt="URLovingly Logo" class="w-12 h-12 rounded-2xl object-cover shadow-sm border border-pink-200/70">
+        
         <div>
           <div class="flex items-baseline tracking-tight">
             <span class="font-serif text-3xl font-bold text-brand-navy">UR</span>
@@ -217,6 +208,8 @@
                 <p class="text-xs text-slate-500">Customize the greeting and theme for your guest</p>
               </div>
             </div>
+            
+            <!-- Updated URL Preview structure to show couple slug -->
             <div class="px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-mono font-bold text-brand-pink">
               /<span id="coupleSlugPreview">aarav-and-priya</span>/to/<span id="slugPreview">rahul-sharma-and-family</span>
             </div>
@@ -406,12 +399,6 @@
   </main>
 
   <script>
-    // ============================================================================
-    // DEFAULT HARDCODED CLOUDFLARE WORKER & HOSTED DOMAIN CONFIGURATION
-    // Replace these two URLs with your own Cloudflare Worker URL and GitHub Pages URL
-    // ============================================================================
-    
-    // FIXED: Updated to match your active Cloudflare Worker endpoint
     const CLOUDFLARE_WORKER_URL = "https://invite-guests.urlovingly-comp.workers.dev/";
     const BASE_HOSTED_DOMAIN    = "https://urlovingly.github.io/Invitation/";
 
@@ -472,6 +459,7 @@
       `;
     }
 
+    // Updated to include coupleSlug logic
     function getFormState() {
       const guestName = document.getElementById('guestName').value || 'Valued Guest';
       const coupleNames = document.getElementById('coupleNames').value || 'Aarav & Priya';
@@ -501,11 +489,11 @@
     function updateLivePreview() {
       const data = getFormState();
       
-      // Update the visual preview bar text
+      // Update visual URL preview
       document.getElementById('coupleSlugPreview').textContent = data.coupleSlug;
       document.getElementById('slugPreview').textContent = data.slug;
       document.getElementById('previewBrowserUrl').textContent = data.fullUrl.replace(/^https?:\/\//, '');
-      
+
       const viewport = document.getElementById('mobilePreviewViewport');
       const rsvpText = `Hi! I (${data.name}) happily confirm my attendance for ${data.couple_names}'s wedding!`;
       const waLink = `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`;
