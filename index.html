@@ -470,8 +470,14 @@
       const coupleNames = document.getElementById('coupleNames').value || 'Aarav & Priya';
       const selectedTheme = document.querySelector('input[name="templateType"]:checked');
       const slug = slugify(guestName), coupleSlug = slugify(coupleNames);
+      
+      // Capture the live preview HTML container contents
+      const previewHtml = document.getElementById('mobilePreviewViewport').innerHTML;
+
       return {
-        name: guestName, slug: slug, coupleSlug: coupleSlug,
+        name: guestName, 
+        slug: slug, 
+        coupleSlug: coupleSlug,
         template: selectedTheme ? selectedTheme.value : 'urlovingly',
         couple_names: coupleNames,
         wedding_date: document.getElementById('weddingDate').value,
@@ -481,6 +487,7 @@
         rsvp_phone: document.getElementById('rsvpPhone').value,
         host_email: document.getElementById('hostEmail').value,
         custom_note: getSelectedNote(),
+        rendered_html: previewHtml, // <--- Sends the exact designed template layout
         fullUrl: `${BASE_HOSTED_DOMAIN.replace(/\/+$/, '')}/${coupleSlug}/to/${slug}/`
       };
     }

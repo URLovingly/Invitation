@@ -25,15 +25,8 @@ jobs:
       - name: Execute Python Generator
         env:
           GUEST_NAME: ${{ github.event.client_payload.data.name }}
-          TEMPLATE: ${{ github.event.client_payload.data.template }}
           COUPLE_NAMES: ${{ github.event.client_payload.data.couple_names }}
-          WEDDING_DATE: ${{ github.event.client_payload.data.wedding_date }}
-          WEDDING_TIME: ${{ github.event.client_payload.data.wedding_time }}
-          VENUE: ${{ github.event.client_payload.data.venue }}
-          MAP_URL: ${{ github.event.client_payload.data.map_url }}
-          RSVP_PHONE: ${{ github.event.client_payload.data.rsvp_phone }}
-          HOST_EMAIL: ${{ github.event.client_payload.data.host_email }}
-          CUSTOM_NOTE: ${{ github.event.client_payload.data.custom_note }}
+          RENDERED_HTML: ${{ github.event.client_payload.data.rendered_html }}
         run: python generate.py
 
       - name: Commit and Push to GitHub Pages
