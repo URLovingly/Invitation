@@ -63,12 +63,12 @@
     <div class="glass-card p-10 rounded-3xl text-center max-w-md w-full mx-4">
       <img src="URLovingly_Icon.jpg" alt="URLovingly Logo" class="w-16 h-16 mx-auto rounded-2xl object-cover shadow-sm border border-pink-200/70 mb-4">
       <h2 class="font-serif text-3xl font-bold text-brand-navy mb-2">Welcome to URLovingly</h2>
-      <p class="text-sm text-slate-600 mb-8">Sign in or create an account with your Google email to manage your bespoke wedding invitations.</p>
+      <p class="text-sm text-slate-600 mb-8">Sign in or create an account with your Google email to securely view and manage your function's invitations.</p>
       
       <div class="flex justify-center">
-        <!-- Google Sign-In Button Configuration -->
+        <!-- Replace with your actual Google Client ID -->
         <div id="g_id_onload"
-             data-client_id="412855134600-qku667pr3h0713748chh1o5i7u0nfo9p.apps.googleusercontent.com"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
              data-context="signin"
              data-ux_mode="popup"
              data-callback="handleCredentialResponse"
@@ -194,7 +194,7 @@
               <input type="text" id="guestName" required value="Rahul Sharma & Family" oninput="updateLivePreview()" class="w-full px-4 py-3 rounded-2xl bg-white border border-purple-200 text-sm font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
             </div>
 
-            <!-- Restored Sample Personal Note Options -->
+            <!-- Sample Personal Note Options -->
             <div class="space-y-3">
               <label class="block text-xs font-bold text-brand-navy">Select a Warm Personal Note</label>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="notePresetGroup">
@@ -248,7 +248,7 @@
               </div>
             </div>
 
-            <!-- Restored Template Selector -->
+            <!-- Template Selector -->
             <div>
               <label class="block text-xs font-bold text-brand-navy mb-2.5">Invitation Visual Style</label>
               <div class="grid grid-cols-3 gap-3">
@@ -287,7 +287,7 @@
             </button>
           </form>
 
-          <!-- Result & Share Banner with Progress Bar -->
+          <!-- Result & Share Banner with Live Progress Bar -->
           <div id="resultBanner" class="hidden glass-card rounded-[28px] p-6 border-2 border-brand-pink/40 bg-gradient-to-r from-pink-50/90 via-white to-purple-50/90 space-y-4">
             <div class="flex items-center justify-between">
               <div class="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-brand-pink uppercase tracking-wider">
@@ -406,22 +406,24 @@
       location.reload();
     }
 
+    // Fetches guest history isolated specifically to the signed-in user's email via backend session token
     async function fetchHistory() {
       try {
         const res = await fetch(`${CLOUDFLARE_WORKER_URL}/api/invites`, {
           headers: { "Authorization": `Bearer ${activeSessionToken}` }
         });
+        if (!res.ok) throw new Error("Unauthorized");
         const invites = await res.json();
         renderHistoryTable(invites);
       } catch (err) {
-        console.error("Failed to load history");
+        console.error("Failed to load user history", err);
       }
     }
 
     function renderHistoryTable(invites) {
       const tbody = document.getElementById('guestHistoryBody');
       if (!invites || !invites.length) {
-        tbody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-slate-400">No guest links generated yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-slate-400">No guest links generated for your account yet.</td></tr>`;
         return;
       }
       tbody.innerHTML = invites.map(item => `
@@ -449,16 +451,15 @@
       submitBtn.disabled = true;
       document.getElementById('submitBtnText').textContent = 'Triggering URLovingly Cloud Builder...';
       
-      // Reset banner view
       resultBanner.classList.remove('hidden');
       completedLinkSection.classList.add('hidden');
+      progressBar.style.width = '10%A';
       progressBar.style.width = '10%';
       progressPercent.textContent = '10%';
       statusTitle.textContent = 'Triggering GitHub Action...';
       statusSubtext.textContent = 'Initializing workflow dispatch...';
 
       try {
-        // 1. Trigger Cloudflare Worker -> GitHub Action
         await fetch(`${CLOUDFLARE_WORKER_URL}/generate`, {
           method: 'POST',
           headers: { 
@@ -473,28 +474,25 @@
         statusTitle.textContent = 'Building Invitation...';
         statusSubtext.textContent = 'GitHub Action is compiling and deploying your template (~20-30s)...';
 
-        // 2. Poll GitHub Pages URL until it's live (Status 200)
         let isLive = false;
         let attempts = 0;
-        const maxAttempts = 20; // Try for up to ~80 seconds
+        const maxAttempts = 20;
 
         while (!attempts || (attempts < maxAttempts && !isLive)) {
-          await new Promise(resolve => setTimeout(resolve, 4000)); // wait 4 seconds per poll
+          await new Promise(resolve => setTimeout(resolve, 4000));
           attempts++;
 
-          // Increment progress smoothly up to 90% while waiting
           const currentProgress = Math.min(30 + (attempts * 4), 90);
           progressBar.style.width = `${currentProgress}%`;
           progressPercent.textContent = `${currentProgress}%`;
 
           try {
-            // Check if the target index.html file exists and returns 200 OK
             const checkRes = await fetch(data.fullUrl, { method: 'HEAD' });
             if (checkRes.ok) {
               isLive = true;
             }
           } catch (err) {
-            // CORS or network fetch block during deployment propagation is normal, keep polling
+            // Fetch checks during build propagation can fail intermittently; continue polling
           }
         }
 
@@ -514,8 +512,8 @@
           completedLinkSection.classList.remove('hidden');
           fetchHistory();
         } else {
-          statusTitle.textContent = 'Deployment Taking Longer Than Expected';
-          statusSubtext.textContent = 'The action was triggered, but page verification timed out. Check your GitHub Actions tab.';
+          statusTitle.textContent = 'Deployment Verification Timed Out';
+          statusSubtext.textContent = 'The action was triggered successfully, but page check timed out. Check your GitHub repository.';
         }
 
       } catch (err) {
@@ -528,18 +526,29 @@
       document.getElementById('submitBtnText').textContent = 'Create & Publish Personalized Invite Link';
     }
 
+    function copyGeneratedLink() {
+      const url = document.getElementById('generatedUrlLink').textContent;
+      navigator.clipboard.writeText(url);
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy Link'; }, 1500);
+    }
+
     function slugify(text) { return (text || '').toLowerCase().replace(/&/g, 'and').replace(/[\W_]+/g, '-').replace(/^-+|-+$/g, '') || 'guest'; }
     function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    
     function getSelectedNote() {
       const selected = document.querySelector('input[name="noteOption"]:checked');
-      return selected.value === 'custom' ? document.getElementById('customNoteInput').value.trim() : selected.value;
+      return selected && selected.value === 'custom' ? document.getElementById('customNoteInput').value.trim() : (selected ? selected.value : '');
     }
+
     function handleNoteOptionChange() {
       const selected = document.querySelector('input[name="noteOption"]:checked');
       const customBox = document.getElementById('customNoteContainer');
       selected && selected.value === 'custom' ? customBox.classList.remove('hidden') : customBox.classList.add('hidden');
       updateLivePreview();
     }
+
     function loadDefaults() {
       const d = JSON.parse(localStorage.getItem(STORAGE_KEYS.DEFAULTS) || '{}');
       if (d.coupleNames) document.getElementById('coupleNames').value = d.coupleNames;
@@ -547,6 +556,7 @@
       if (d.weddingTime) document.getElementById('weddingTime').value = d.weddingTime;
       if (d.venueName) document.getElementById('venueName').value = d.venueName;
     }
+
     function saveEventDefaults() {
       localStorage.setItem(STORAGE_KEYS.DEFAULTS, JSON.stringify({
         coupleNames: document.getElementById('coupleNames').value,
@@ -554,14 +564,30 @@
         weddingTime: document.getElementById('weddingTime').value,
         venueName: document.getElementById('venueName').value
       }));
+      const btn = document.getElementById('saveDefaultsBtn');
+      btn.textContent = '✓ Saved';
+      setTimeout(() => { btn.textContent = 'Save Defaults'; }, 1800);
     }
+
+    function getEnvelopeIconHtml(sizeClass = "w-14 h-14") {
+      return `
+        <svg class="${sizeClass} mx-auto" viewBox="0 0 120 120" fill="none">
+          <path d="M14 48L17 53L22 56L17 59L14 64L11 59L6 56L11 53L14 48Z" fill="#F42F6C"/>
+          <path d="M106 52L108.5 56.5L113 59L108.5 61.5L106 66L103.5 61.5L99 59L103.5 56.5L106 52Z" fill="#7E22CE"/>
+          <path d="M22 50L60 18L98 50V95C98 100 94 104 89 104H31C26 104 22 100 22 95V50Z" fill="url(#urlovingly-env-back)"/>
+          <path d="M60 84C60 84 30 63 30 42C30 31.5 38 24 47.5 24C53.5 24 57.8 27.2 60 31.5C62.2 27.2 66.5 24 72.5 24C82 24 90 31.5 90 42C90 63 60 84 60 84Z" fill="url(#urlovingly-heart)"/>
+          <path d="M87 52C82 55 77 54 75 50C79 60 72 68 65 73C75 68 84 60 87 52Z" fill="#FFFFFF" fill-opacity="0.9"/>
+          <path d="M23 102L60 69L97 102C95 103.5 92 104 89 104H31C28 104 25 103.5 23 102Z" fill="url(#urlovingly-flap)"/>
+        </svg>
+      `;
+    }
+
     function getFormState() {
       const guestName = document.getElementById('guestName').value || 'Valued Guest';
       const coupleNames = document.getElementById('coupleNames').value || 'Aarav & Priya';
       const selectedTheme = document.querySelector('input[name="templateType"]:checked');
       const slug = slugify(guestName), coupleSlug = slugify(coupleNames);
       
-      // Capture the live preview HTML container contents
       const previewHtml = document.getElementById('mobilePreviewViewport').innerHTML;
 
       return {
@@ -577,14 +603,13 @@
         rsvp_phone: document.getElementById('rsvpPhone').value,
         host_email: document.getElementById('hostEmail').value,
         custom_note: getSelectedNote(),
-        rendered_html: previewHtml, // <--- Sends the exact designed template layout
+        rendered_html: previewHtml,
         fullUrl: `${BASE_HOSTED_DOMAIN.replace(/\/+$/, '')}/${coupleSlug}/to/${slug}/`
       };
     }
+
     function updateLivePreview() {
       const data = getFormState();
-      
-      // Update visual URL preview elements
       document.getElementById('coupleSlugPreview').textContent = data.coupleSlug;
       document.getElementById('slugPreview').textContent = data.slug;
       document.getElementById('previewBrowserUrl').textContent = data.fullUrl.replace(/^https?:\/\//, '');
@@ -594,7 +619,6 @@
       const waLink = `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`;
       const mailLink = `mailto:${encodeURIComponent(data.host_email)}?subject=${encodeURIComponent(`Wedding RSVP - ${data.name}`)}&body=${encodeURIComponent(rsvpText)}`;
 
-      // Render template based on selection
       if (data.template === 'urlovingly') {
         viewport.innerHTML = `
           <div class="min-h-full bg-gradient-to-b from-purple-50/90 via-pink-50/60 to-white p-5 text-center flex flex-col justify-between">
