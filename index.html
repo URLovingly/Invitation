@@ -145,11 +145,11 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="sm:col-span-2">
                 <label class="block text-xs font-bold text-brand-navy mb-1.5">Couple Names</label>
-                <input type="text" id="coupleNames" value="Aarav & Priya" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                <input type="text" id="coupleNames" value="Groom & Bride" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
               </div>
               <div>
                 <label class="block text-xs font-bold text-brand-navy mb-1.5">Wedding Date</label>
-                <input type="text" id="weddingDate" value="December 18, 2026" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                <input type="text" id="weddingDate" value="December 25, 2026" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
               </div>
               <div>
                 <label class="block text-xs font-bold text-brand-navy mb-1.5">Ceremony Time</label>
@@ -185,13 +185,23 @@
                 </div>
               </div>
               <div class="px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-mono font-bold text-brand-pink">
-                /<span id="coupleSlugPreview">aarav-and-priya</span>/to/<span id="slugPreview">rahul-sharma-and-family</span>
+                /<span id="coupleSlugPreview">Groom-and-Bride</span>/to/<span id="slugPreview">guest-name-and-family</span>
               </div>
             </div>
 
             <div>
               <label class="block text-xs font-bold text-brand-navy mb-1.5">Guest or Family Name <span class="text-brand-pink">*</span></label>
-              <input type="text" id="guestName" required value="Rahul Sharma & Family" oninput="updateLivePreview()" class="w-full px-4 py-3 rounded-2xl bg-white border border-purple-200 text-sm font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              <input type="text" id="guestName" required value="Guest Name & Family" oninput="updateLivePreview()" class="w-full px-4 py-3 rounded-2xl bg-white border border-purple-200 text-sm font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-3">
+                <label for="invitePhotoInput" class="block text-xs font-bold text-brand-navy">Photos for the invitation <span class="font-medium text-slate-400">Optional</span></label>
+                <span class="text-[10px] text-slate-500">Up to 3</span>
+              </div>
+              <input type="file" id="invitePhotoInput" accept="image/*" multiple onchange="handlePhotoUploadChange(event)" class="block w-full text-xs text-slate-600 file:mr-3 file:rounded-xl file:border-0 file:bg-purple-50 file:px-3 file:py-2 file:text-xs file:font-bold file:text-brand-purple hover:file:bg-purple-100">
+              <div class="flex items-center justify-between gap-2"><p id="invitePhotoStatus" class="text-[10px] text-slate-500">Photos are resized to fit the shareable invitation.</p><button type="button" id="clearInvitePhotos" onclick="clearInvitePhotos()" class="hidden shrink-0 text-[10px] font-bold text-brand-purple underline">Clear photos</button></div>
+              <div id="invitePhotoPreview" class="hidden grid grid-cols-3 gap-2"></div>
             </div>
 
             <!-- Restored Sample Personal Note Options -->
@@ -244,7 +254,7 @@
               <div id="customNoteContainer" class="hidden pt-1">
                 <textarea id="customNoteInput" rows="2" oninput="updateLivePreview()"
                   placeholder="Write your personal message for this guest..."
-                  class="w-full px-4 py-2.5 rounded-2xl bg-white border border-brand-pink text-sm text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Dear Rahul & Family, we have shared so many wonderful memories together and can't wait to celebrate with you!</textarea>
+                  class="w-full px-4 py-2.5 rounded-2xl bg-white border border-brand-pink text-sm text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Dear Guest & Family, we have shared so many wonderful memories together and can't wait to celebrate with you!</textarea>
               </div>
             </div>
 
@@ -457,6 +467,11 @@
     const invitationTemplateCache = new Map();
     const previewIntroShown = new Set();
     let lastPreviewSelection = '';
+    let uploadedInvitePhotos = [];
+    let photoUploadRequestId = 0;
+    const MAX_INVITE_PHOTOS = 3;
+    const MAX_PHOTO_DATA_URL_LENGTH = 9000;
+    const MAX_DISPATCH_PAYLOAD_BYTES = 60 * 1024;
 
     window.addEventListener('DOMContentLoaded', () => {
       if (activeSessionToken) {
@@ -536,6 +551,13 @@
       await previewRenderPromise;
       if (!activeTemplateLoaded) return alert("The selected invitation style could not be loaded. Please try another style.");
       const data = getFormState();
+      const buildId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const buildMarker = `<!-- urlovingly-build:${buildId} -->`;
+      data.rendered_html += `\n${buildMarker}`;
+      const requestBody = JSON.stringify(data);
+      if (new Blob([requestBody]).size > MAX_DISPATCH_PAYLOAD_BYTES) {
+        return alert('This invitation is too large to publish. Remove a photo and try again.');
+      }
       const submitBtn = document.getElementById('submitBtn');
       const resultBanner = document.getElementById('resultBanner');
       const progressBar = document.getElementById('progressBar');
@@ -557,14 +579,15 @@
 
       try {
         // 1. Trigger Cloudflare Worker -> GitHub Action
-        await fetch(`${CLOUDFLARE_WORKER_URL}/generate`, {
+        const dispatchResponse = await fetch(`${CLOUDFLARE_WORKER_URL}/generate`, {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${activeSessionToken}` 
           },
-          body: JSON.stringify(data)
+          body: requestBody
         });
+        if (!dispatchResponse.ok) throw new Error('The invitation builder rejected this request. Please try again.');
 
         progressBar.style.width = '30%';
         progressPercent.textContent = '30%';
@@ -575,6 +598,8 @@
         let isLive = false;
         let attempts = 0;
         const maxAttempts = 20; // Try for up to ~80 seconds
+        const verificationUrl = new URL(data.fullUrl);
+        verificationUrl.searchParams.set('_urlovingly_build', buildId);
 
         while (!attempts || (attempts < maxAttempts && !isLive)) {
           await new Promise(resolve => setTimeout(resolve, 4000)); // wait 4 seconds per poll
@@ -586,13 +611,10 @@
           progressPercent.textContent = `${currentProgress}%`;
 
           try {
-            // Check if the target index.html file exists and returns 200 OK
-            const checkRes = await fetch(data.fullUrl, { method: 'HEAD' });
-            if (checkRes.ok) {
-              isLive = true;
-            }
+            const checkRes = await fetch(verificationUrl.toString(), { cache: 'no-store' });
+            if (checkRes.ok) isLive = (await checkRes.text()).includes(buildMarker);
           } catch (err) {
-            // CORS or network fetch block during deployment propagation is normal, keep polling
+            // Cross-origin or deployment propagation failures are normal while the build is running.
           }
         }
 
@@ -638,6 +660,92 @@
       selected && selected.value === 'custom' ? customBox.classList.remove('hidden') : customBox.classList.add('hidden');
       updateLivePreview();
     }
+    function compressInvitePhoto(file) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        const objectUrl = URL.createObjectURL(file);
+        image.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          const maxDimensions = [640, 480, 360, 280, 220];
+          const qualities = [0.72, 0.6, 0.48, 0.38];
+          for (const maxDimension of maxDimensions) {
+            const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
+            canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+            canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+            context.fillStyle = '#fff';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+            for (const quality of qualities) {
+              const dataUrl = canvas.toDataURL('image/jpeg', quality);
+              if (dataUrl.length <= MAX_PHOTO_DATA_URL_LENGTH) {
+                resolve({ src: dataUrl, alt: file.name });
+                return;
+              }
+            }
+          }
+          reject(new Error(`${file.name} is too detailed to fit the invitation. Choose another photo.`));
+        };
+        image.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          reject(new Error(`${file.name} could not be opened as an image.`));
+        };
+        image.src = objectUrl;
+      });
+    }
+    async function handlePhotoUploadChange(event) {
+      const files = Array.from(event.target.files || []);
+      const status = document.getElementById('invitePhotoStatus');
+      if (files.length > MAX_INVITE_PHOTOS) {
+        event.target.value = '';
+        status.textContent = `Choose ${MAX_INVITE_PHOTOS} photos or fewer.`;
+        return;
+      }
+      const requestId = ++photoUploadRequestId;
+      status.textContent = files.length ? 'Preparing photos…' : 'Photos are resized to fit the shareable invitation.';
+      try {
+        const photos = await Promise.all(files.map(compressInvitePhoto));
+        if (requestId !== photoUploadRequestId) return;
+        uploadedInvitePhotos = photos;
+        renderInvitePhotoPreviews();
+        status.textContent = photos.length ? `${photos.length} photo${photos.length === 1 ? '' : 's'} ready for the invitation.` : 'Photos are resized to fit the shareable invitation.';
+        updateLivePreview();
+      } catch (error) {
+        if (requestId !== photoUploadRequestId) return;
+        event.target.value = '';
+        uploadedInvitePhotos = [];
+        renderInvitePhotoPreviews();
+        status.textContent = error.message;
+        updateLivePreview();
+      }
+    }
+    function clearInvitePhotos() {
+      photoUploadRequestId++;
+      uploadedInvitePhotos = [];
+      document.getElementById('invitePhotoInput').value = '';
+      document.getElementById('invitePhotoStatus').textContent = 'Photos are resized to fit the shareable invitation.';
+      renderInvitePhotoPreviews();
+      updateLivePreview();
+    }
+    function renderInvitePhotoPreviews() {
+      const preview = document.getElementById('invitePhotoPreview');
+      preview.replaceChildren();
+      preview.classList.toggle('hidden', uploadedInvitePhotos.length === 0);
+      document.getElementById('clearInvitePhotos').classList.toggle('hidden', uploadedInvitePhotos.length === 0);
+      uploadedInvitePhotos.forEach((photo, index) => {
+        const image = document.createElement('img');
+        image.src = photo.src;
+        image.alt = photo.alt;
+        image.className = 'aspect-square w-full rounded-xl border border-purple-100 object-cover';
+        preview.append(image);
+      });
+    }
+    function buildInvitePhotoGallery() {
+      if (!uploadedInvitePhotos.length) return '';
+      const images = uploadedInvitePhotos.map(photo => `<img src="${photo.src}" alt="${escapeHtml(photo.alt)}" loading="lazy">`).join('');
+      return `<section class="invite-gallery" aria-label="Wedding photo gallery"><h2>Our story in photos</h2><div class="invite-gallery-grid">${images}</div></section>`;
+    }
     function loadDefaults() {
       const d = JSON.parse(localStorage.getItem(STORAGE_KEYS.DEFAULTS) || '{}');
       if (d.coupleNames) document.getElementById('coupleNames').value = d.coupleNames;
@@ -652,6 +760,16 @@
         weddingTime: document.getElementById('weddingTime').value,
         venueName: document.getElementById('venueName').value
       }));
+    }
+    function buildMapEmbedMarkup(venueName, mapUrl) {
+      const venue = String(venueName || 'Wedding venue').trim() || 'Wedding venue';
+      let safeMapUrl = 'https://www.google.com/maps';
+      try {
+        const parsedUrl = new URL(mapUrl);
+        if (parsedUrl.protocol === 'https:' || parsedUrl.protocol === 'http:') safeMapUrl = parsedUrl.href;
+      } catch (error) {}
+      const safeVenue = escapeHtml(venue);
+      return `<section class="invite-map" aria-label="Map to ${safeVenue}"><div class="invite-map-heading"><span class="invite-map-kicker">Location</span><a class="invite-map-location" href="${escapeHtml(safeMapUrl)}" target="_blank" rel="noopener">${safeVenue}</a></div><iframe src="https://www.google.com/maps?q=${encodeURIComponent(venue)}&amp;output=embed" title="Map showing ${safeVenue}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></section>`;
     }
     function buildFullPageHtml(guestName, coupleNames, renderedHtml, showArrival = true, mailAnimation = 'velvet') {
       const mailStyles = {
@@ -697,6 +815,28 @@
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fcfaff; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
     .invite-container { width: 100%; max-width: 420px; min-height: 100vh; background: white; box-shadow: 0 0 40px rgba(0,0,0,0.05); }
+    .invite-gallery, .invite-map { width: 100%; margin: 1.25rem 0; text-align: left; }
+    .invite-gallery h2 { margin: 0 0 .65rem; font: 600 1.15rem 'Cormorant Garamond',serif; }
+    .invite-gallery-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(100px,1fr)); gap: .5rem; }
+    .invite-gallery-grid img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; }
+    .invite-map-heading { display: grid; gap: .15rem; margin-bottom: .5rem; }
+    .invite-map-kicker { font: 700 .62rem 'Plus Jakarta Sans',sans-serif; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+    .invite-map-location { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+    .invite-map iframe { display: block; width: 100%; min-height: 180px; aspect-ratio: 16 / 10; border: 0; border-radius: 6px; }
+    .invite-event-date { display: grid; justify-items: center; gap: .35rem; margin: .55rem 0 .85rem; }
+    .invite-date-scratch { position: relative; display: inline-grid; place-items: center; min-width: min(100%,180px); max-width: 100%; min-height: 2.35em; padding: .35em .75em; box-sizing: border-box; vertical-align: middle; }
+    .invite-scratch-cover { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 4px; cursor: crosshair; touch-action: none; transition: opacity .4s ease; }
+    .invite-event-date.is-revealed .invite-scratch-cover { opacity: 0; pointer-events: none; }
+    .invite-countdown { display: flex; justify-content: center; gap: .45rem; width: 100%; margin-top: .2rem; }
+    .invite-countdown[hidden] { display: none !important; }
+    .invite-countdown-unit { display: grid; min-width: 3.1rem; padding: .45rem .35rem; border: 1px solid currentColor; border-radius: 6px; text-align: center; }
+    .invite-countdown-unit strong { font: 700 1rem 'Plus Jakarta Sans',sans-serif; line-height: 1.15; }
+    .invite-countdown-unit span { margin-top: .2rem; font: 600 .55rem 'Plus Jakarta Sans',sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+    .invite-countdown-past { font-size: .75rem; font-weight: 700; }
+    .invite-letter-char { display: inline-block; opacity: 0; transform: translateY(.38em); }
+    .invite-letter-block.is-visible .invite-letter-char { animation: invite-letter-in .48s cubic-bezier(.2,.75,.25,1) both; animation-delay: var(--letter-delay,0ms); }
+    @keyframes invite-letter-in { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .invite-letter-char { opacity: 1; transform: none; animation: none !important; } .invite-scratch-cover { transition: none; } }
     .arrival { --arrival-scene: radial-gradient(ellipse at 50% 42%, #63304f 0, #321e38 42%, #17141f 100%); --arrival-orbit: rgba(222,189,124,.17); --arrival-envelope: linear-gradient(135deg,#70294f,#a43b68 48%,#462448); --arrival-border: #d8b777; --arrival-shadow: 0 28px 75px rgba(0,0,0,.48),0 0 0 5px rgba(222,189,124,.12),inset 0 0 32px rgba(255,234,191,.12); --arrival-paper: linear-gradient(145deg,#fffdf5,#f3e4ca); --arrival-paper-ink: #53384a; --arrival-accent: #ae8150; --arrival-flap: linear-gradient(145deg,#87335d,#c35a78 55%,#7a3158); --arrival-front: linear-gradient(145deg,#552244,#a03b65 52%,#472040); --arrival-address: #ffeac4; --arrival-address-secondary: #f4d5b4; --arrival-seal: radial-gradient(circle at 35% 30%,#d5a65d,#8b3b62 75%); --arrival-seal-border: #f0d798; --arrival-seal-ink: #fff0ca; --arrival-smoke: radial-gradient(circle,rgba(255,249,232,.76),rgba(228,208,224,.32) 34%,transparent 72%); position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; overflow: hidden; color: #fff9ed; background: var(--arrival-scene); }
     .arrival::before, .arrival::after { content: ''; position: absolute; width: min(84vw, 440px); aspect-ratio: 1; border: 1px solid var(--arrival-orbit); border-radius: 50%; animation: arrival-orbit 24s linear infinite; }
     .arrival::after { width: min(70vw, 360px); animation-direction: reverse; }
@@ -754,13 +894,187 @@
   <div class="invite-container">
     ${renderedHtml}
   </div>
+  <script>
+    (() => {
+      const invite = document.querySelector('.invite-container');
+      if (!invite) return;
+
+      const initializeCountdown = eventBlock => {
+        const dateText = eventBlock.querySelector('.invite-date-scratch').textContent.trim();
+        const timeText = eventBlock.querySelector('.invite-time').textContent;
+        const countdown = eventBlock.querySelector('.invite-countdown');
+        const target = new Date(dateText);
+        const timeMatch = timeText.match(/\\b(\\d{1,2})(?::(\\d{2}))?\\s*(AM|PM)\\b/i);
+        if (timeMatch && !Number.isNaN(target.getTime())) {
+          let hours = Number(timeMatch[1]) % 12;
+          if (timeMatch[3].toUpperCase() === 'PM') hours += 12;
+          target.setHours(hours, Number(timeMatch[2] || 0), 0, 0);
+        }
+        countdown.replaceChildren();
+        if (Number.isNaN(target.getTime())) {
+          countdown.textContent = 'Add a valid wedding date to start the countdown.';
+          countdown.classList.add('invite-countdown-past');
+          countdown.hidden = false;
+          return;
+        }
+        const values = ['Days', 'Hours', 'Minutes', 'Seconds'].map(label => {
+          const unit = document.createElement('span');
+          unit.className = 'invite-countdown-unit';
+          const value = document.createElement('strong');
+          const caption = document.createElement('span');
+          caption.textContent = label;
+          unit.append(value, caption);
+          countdown.append(unit);
+          return value;
+        });
+        let timer = null;
+        const update = () => {
+          const remaining = target.getTime() - Date.now();
+          if (remaining <= 0) {
+            countdown.replaceChildren();
+            countdown.textContent = 'The celebration has begun.';
+            countdown.classList.add('invite-countdown-past');
+            if (timer) clearInterval(timer);
+            return;
+          }
+          let seconds = Math.floor(remaining / 1000);
+          const days = Math.floor(seconds / 86400);
+          seconds %= 86400;
+          const hours = Math.floor(seconds / 3600);
+          seconds %= 3600;
+          const minutes = Math.floor(seconds / 60);
+          seconds %= 60;
+          [days, hours, minutes, seconds].forEach((value, index) => { values[index].textContent = String(value).padStart(2, '0'); });
+        };
+        update();
+        timer = setInterval(update, 1000);
+        countdown.hidden = false;
+      };
+
+      invite.querySelectorAll('.invite-date-scratch').forEach(dateElement => {
+        const eventBlock = dateElement.closest('.invite-event-date');
+        const cover = document.createElement('canvas');
+        const context = cover.getContext('2d', { willReadFrequently: true });
+        cover.className = 'invite-scratch-cover';
+        cover.setAttribute('role', 'button');
+        cover.tabIndex = 0;
+        cover.setAttribute('aria-label', 'Scratch to reveal the wedding date');
+        dateElement.append(cover);
+        const countdown = eventBlock.querySelector('.invite-countdown');
+        countdown.hidden = true;
+        let moves = 0;
+        let revealed = false;
+        let scratching = false;
+        const drawCover = () => {
+          const bounds = cover.getBoundingClientRect();
+          if (!bounds.width || !bounds.height) return;
+          const ratio = window.devicePixelRatio || 1;
+          cover.width = Math.round(bounds.width * ratio);
+          cover.height = Math.round(bounds.height * ratio);
+          context.setTransform(ratio, 0, 0, ratio, 0, 0);
+          const gradient = context.createLinearGradient(0, 0, bounds.width, bounds.height);
+          gradient.addColorStop(0, '#eee9dd');
+          gradient.addColorStop(.5, '#c6c0b4');
+          gradient.addColorStop(1, '#f5f0e6');
+          context.fillStyle = gradient;
+          context.fillRect(0, 0, bounds.width, bounds.height);
+          context.strokeStyle = 'rgba(255,255,255,.34)';
+          context.lineWidth = 1;
+          for (let line = -bounds.height; line < bounds.width + bounds.height; line += 9) {
+            context.beginPath();
+            context.moveTo(line, 0);
+            context.lineTo(line + bounds.height, bounds.height);
+            context.stroke();
+          }
+          context.fillStyle = '#4d493f';
+          context.font = '700 9px Plus Jakarta Sans, sans-serif';
+          context.textAlign = 'center';
+          context.textBaseline = 'middle';
+          context.fillText('SCRATCH TO REVEAL', bounds.width / 2, bounds.height / 2, bounds.width - 12);
+        };
+        const revealDate = () => {
+          if (revealed) return;
+          revealed = true;
+          eventBlock.classList.add('is-revealed');
+          cover.setAttribute('aria-label', 'Wedding date revealed');
+          initializeCountdown(eventBlock);
+          window.setTimeout(() => cover.remove(), 450);
+        };
+        const erasePoint = event => {
+          const bounds = cover.getBoundingClientRect();
+          const x = event.clientX - bounds.left;
+          const y = event.clientY - bounds.top;
+          context.globalCompositeOperation = 'destination-out';
+          context.beginPath();
+          context.arc(x, y, 16, 0, Math.PI * 2);
+          context.fill();
+          moves++;
+          if (moves % 5) return;
+          const pixels = context.getImageData(0, 0, cover.width, cover.height).data;
+          let clearCount = 0;
+          let sampleCount = 0;
+          const step = 4 * Math.max(1, Math.floor(cover.width / 80));
+          for (let pixel = 3; pixel < pixels.length; pixel += step) {
+            sampleCount++;
+            if (pixels[pixel] < 32) clearCount++;
+          }
+          if (sampleCount && clearCount / sampleCount > .38) revealDate();
+        };
+        cover.addEventListener('pointerdown', event => {
+          event.preventDefault();
+          scratching = true;
+          cover.setPointerCapture(event.pointerId);
+          erasePoint(event);
+        });
+        cover.addEventListener('pointermove', event => { if (scratching) erasePoint(event); });
+        cover.addEventListener('pointerup', () => { scratching = false; });
+        cover.addEventListener('pointercancel', () => { scratching = false; });
+        cover.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); revealDate(); }
+        });
+        new ResizeObserver(drawCover).observe(dateElement);
+        drawCover();
+      });
+
+      const letterObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          letterObserver.unobserve(entry.target);
+        });
+      }, { threshold: .15, rootMargin: '0px 0px -6% 0px' }) : null;
+      invite.querySelectorAll('h1,h2,h3,p,[class$="-guest"]').forEach(block => {
+        if (block.children.length && !block.matches('[class$="-guest"]')) return;
+        const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+        const textNodes = [];
+        while (walker.nextNode()) if (walker.currentNode.textContent.trim()) textNodes.push(walker.currentNode);
+        if (!textNodes.length) return;
+        block.classList.add('invite-letter-block');
+        let letterIndex = 0;
+        textNodes.forEach(textNode => {
+          const fragment = document.createDocumentFragment();
+          Array.from(textNode.textContent).forEach(character => {
+            const letter = document.createElement('span');
+            letter.className = 'invite-letter-char';
+            letter.style.setProperty('--letter-delay', Math.min(letterIndex * 18, 540) + 'ms');
+            letter.textContent = character === ' ' ? '\\u00a0' : character;
+            fragment.append(letter);
+            letterIndex++;
+          });
+          textNode.replaceWith(fragment);
+        });
+        if (letterObserver) letterObserver.observe(block);
+        else block.classList.add('is-visible');
+      });
+    })();
+  <\/script>
 </body>
 </html>`;
     }
 
     function getFormState() {
       const guestName = document.getElementById('guestName').value || 'Valued Guest';
-      const coupleNames = document.getElementById('coupleNames').value || 'Aarav & Priya';
+      const coupleNames = document.getElementById('coupleNames').value || 'Groom & Bride';
       const selectedTheme = document.querySelector('input[name="templateType"]:checked');
       const selectedMailAnimation = document.querySelector('input[name="mailAnimationType"]:checked');
       const slug = slugify(guestName), coupleSlug = slugify(coupleNames);
@@ -823,13 +1137,16 @@
             wedding_time: data.wedding_time,
             venue: data.venue,
             custom_note: data.custom_note,
+            photo_gallery: buildInvitePhotoGallery(),
+            map_embed: buildMapEmbedMarkup(data.venue, data.map_url),
             map_url: data.map_url,
             rsvp_phone: data.rsvp_phone,
             host_email: data.host_email,
             wa_url: `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`,
             email_url: `mailto:${encodeURIComponent(data.host_email)}?subject=${encodeURIComponent(`Wedding RSVP - ${data.name}`)}&body=${encodeURIComponent(rsvpText)}`
           };
-          const renderedMarkup = templateMarkup.replace(/\{\{\s*(guest_name|couple_names|wedding_date|wedding_time|venue|custom_note|map_url|rsvp_phone|host_email|wa_url|email_url)(?:\s*\|\s*(urlencode))?\s*\}\}/g, (match, key, encoded) => {
+          const renderedMarkup = templateMarkup.replace(/\{\{\s*(guest_name|couple_names|wedding_date|wedding_time|venue|custom_note|photo_gallery|map_embed|map_url|rsvp_phone|host_email|wa_url|email_url)(?:\s*\|\s*(urlencode))?\s*\}\}/g, (match, key, encoded) => {
+            if (key === 'photo_gallery' || key === 'map_embed') return values[key];
             return encoded ? encodeURIComponent(values[key]) : escapeHtml(values[key]);
           });
           const templateDocument = new DOMParser().parseFromString(renderedMarkup, 'text/html');
