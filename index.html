@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>URLovingly — Personalized Digital Wedding Invites</title>
+  <title>URLovingly — Personalized Digital Event Invites</title>
   
   <link rel="icon" href="URLovingly_Icon.jpg" type="image/jpeg">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -63,7 +63,7 @@
     <div class="glass-card p-10 rounded-3xl text-center max-w-md w-full mx-4">
       <img src="URLovingly_Icon.jpg" alt="URLovingly Logo" class="w-16 h-16 mx-auto rounded-2xl object-cover shadow-sm border border-pink-200/70 mb-4">
       <h2 class="font-serif text-3xl font-bold text-brand-navy mb-2">Welcome to URLovingly</h2>
-      <p class="text-sm text-slate-600 mb-8">Sign in or create an account with your Google email to manage your bespoke wedding invitations.</p>
+      <p class="text-sm text-slate-600 mb-8">Sign in or create an account with your Google email to manage your bespoke digital invitations.</p>
       
       <div class="flex justify-center">
         <!-- Google Sign-In Button Configuration -->
@@ -111,11 +111,11 @@
             ✨ Crafted with Love
           </span>
           <h1 class="font-serif text-3xl sm:text-4xl font-bold text-brand-navy mt-2">
-            Create Bespoke Wedding Invitations
+            Create Bespoke Event Invitations
           </h1>
         </div>
         <p class="text-xs sm:text-sm text-slate-600 max-w-md">
-          Enter your wedding details and personalize each guest's invitation with a dedicated URL ready to share over WhatsApp or Email.
+          Enter your celebration details and personalize each guest's invitation with a dedicated URL ready to share over WhatsApp or Email.
         </p>
       </div>
     </section>
@@ -127,61 +127,168 @@
         <!-- LEFT COLUMN: Creation Studio Forms (7 cols) -->
         <div class="lg:col-span-7 space-y-6">
 
-          <!-- Card 1: Event & Couple Details -->
+          <!-- Card 1: Event Selection -->
           <div class="glass-card rounded-[28px] p-6 sm:p-7">
             <div class="flex items-center justify-between mb-5">
               <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-2xl bg-pink-50 border border-pink-200 text-brand-pink flex items-center justify-center text-xs font-extrabold">01</div>
                 <div>
-                  <h2 class="text-base font-bold text-brand-navy">Event & Couple Details</h2>
-                  <p class="text-xs text-slate-500">Set your celebration details once for all guests</p>
+                  <h2 class="text-base font-bold text-brand-navy">Event Type & Ceremonies</h2>
+                  <p class="text-xs text-slate-500">Choose the celebration and any related ceremonies</p>
                 </div>
               </div>
-              <button type="button" onclick="saveEventDefaults()" id="saveDefaultsBtn" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-brand-purple text-xs font-bold transition flex items-center gap-1.5">
-                <span>Save Defaults</span>
-              </button>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="sm:col-span-2">
-                <label class="block text-xs font-bold text-brand-navy mb-1.5">Couple Names</label>
-                <input type="text" id="coupleNames" value="Groom & Bride" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
+            <div class="space-y-5">
               <div>
-                <label class="block text-xs font-bold text-brand-navy mb-1.5">Wedding Date</label>
-                <input type="text" id="weddingDate" value="December 25, 2026" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                <label for="eventType" class="block text-xs font-bold text-brand-navy mb-1.5">Event Type</label>
+                <select id="eventType" onchange="handleEventTypeChange()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                  <option>Wedding</option>
+                  <option>Birthday</option>
+                  <option>First Birthday</option>
+                  <option>Naming Ceremony (Namakaran)</option>
+                  <option>First Rice Feeding Ceremony (Annaprashan)</option>
+                  <option>60th Birthday Celebration (Shashti Poorthi)</option>
+                  <option>70th Birthday Celebration (Bhimarathi Shanthi)</option>
+                  <option>Silver Wedding Anniversary (25th)</option>
+                  <option>Golden Anniversary (50th)</option>
+                  <option>Wedding Anniversary</option>
+                  <option>House Warming (Griha Pravesh)</option>
+                  <option>Coming of Age</option>
+                  <option>Baptism</option>
+                  <option>Holy Communion</option>
+                  <option>Sacrament of Confirmation</option>
+                </select>
               </div>
-              <div>
-                <label class="block text-xs font-bold text-brand-navy mb-1.5">Ceremony Time</label>
-                <input type="text" id="weddingTime" value="5:30 PM Onwards" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="sm:col-span-2">
-                <label class="block text-xs font-bold text-brand-navy mb-1.5">Venue Name & Address</label>
-                <input type="text" id="venueName" value="The Grand Ballroom, Taj Lands End, Mumbai" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-brand-navy mb-1.5">Host WhatsApp Number</label>
-                <input type="text" id="rsvpPhone" value="919876543210" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-brand-navy mb-1.5">Host Email ID</label>
-                <input type="email" id="hostEmail" value="rsvp@urlovingly.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="sm:col-span-2">
-                <label class="block text-xs font-bold text-brand-navy mb-1.5">Google Maps Location URL</label>
-                <input type="url" id="mapUrl" value="https://maps.google.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
+
+              <fieldset>
+                <legend class="block text-xs font-bold text-brand-navy mb-2">Ceremonies <span class="font-medium text-slate-400">Optional · select all that apply</span></legend>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Engagement / Ring Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Engagement / Ring Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Roka / Thakaana / Churni Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Roka / Thakaana / Churni Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Haldi Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Haldi Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Mehendi Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Mehendi Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Sangeet / Cocktail Party" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Sangeet / Cocktail Party</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Tilak / Sagan Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Tilak / Sagan Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Baraat & Wedding Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Baraat &amp; Wedding Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Wedding Reception / Valima" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Wedding Reception / Valima</span></label>
+                </div>
+              </fieldset>
             </div>
           </div>
 
-          <!-- Card 2: Guest Personalization -->
+          <!-- Card 2: Event Details -->
+          <section class="glass-card rounded-[28px] p-6 sm:p-7" aria-labelledby="eventDetailsHeading">
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-2xl bg-pink-50 border border-pink-200 text-brand-pink flex items-center justify-center text-xs font-extrabold">02</div>
+                <div>
+                  <h2 id="eventDetailsHeading" class="text-base font-bold text-brand-navy">Event Details</h2>
+                  <p class="text-xs text-slate-500">Add the people, schedule and venue information</p>
+                </div>
+              </div>
+              <button type="button" onclick="saveEventDefaults()" id="saveDefaultsBtn" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-brand-purple text-xs font-bold transition">Save Details</button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div id="celebrantNamesField" class="sm:col-span-2 hidden">
+                <label for="celebrantNames" class="block text-xs font-bold text-brand-navy mb-1.5">Name(s) being celebrated</label>
+                <input type="text" id="celebrantNames" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+
+              <div class="wedding-only sm:col-span-2">
+                <label for="groomFullName" class="block text-xs font-bold text-brand-navy mb-1.5">Groom full name and professional title</label>
+                <input type="text" id="groomFullName" value="Groom" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only sm:col-span-2">
+                <label for="brideFullName" class="block text-xs font-bold text-brand-navy mb-1.5">Bride full name and professional title</label>
+                <input type="text" id="brideFullName" value="Bride" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="groomParents" class="block text-xs font-bold text-brand-navy mb-1.5">Groom's father and mother</label>
+                <input type="text" id="groomParents" oninput="updateLivePreview()" placeholder="Names of parents" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="groomFamilyName" class="block text-xs font-bold text-brand-navy mb-1.5">Groom's family name <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="groomFamilyName" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="brideParents" class="block text-xs font-bold text-brand-navy mb-1.5">Bride's father and mother</label>
+                <input type="text" id="brideParents" oninput="updateLivePreview()" placeholder="Names of parents" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="brideFamilyName" class="block text-xs font-bold text-brand-navy mb-1.5">Bride's family name <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="brideFamilyName" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only sm:col-span-2">
+                <label for="closeRelatives" class="block text-xs font-bold text-brand-navy mb-1.5">Siblings, grandparents, guardians or other relatives <span class="font-medium text-slate-400">Optional</span></label>
+                <textarea id="closeRelatives" rows="2" oninput="updateLivePreview()" placeholder="Names and how they would like to be mentioned" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition"></textarea>
+              </div>
+
+              <div>
+                <label id="eventDateLabel" for="weddingDate" class="block text-xs font-bold text-brand-navy mb-1.5">Wedding date</label>
+                <input type="text" id="weddingDate" value="December 25, 2026" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div>
+                <label id="eventTimeLabel" for="weddingTime" class="block text-xs font-bold text-brand-navy mb-1.5">Wedding time</label>
+                <input type="text" id="weddingTime" value="5:30 PM Onwards" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only sm:col-span-2">
+                <label for="muhurthamTime" class="block text-xs font-bold text-brand-navy mb-1.5">Muhurtham or auspicious time <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="muhurthamTime" oninput="updateLivePreview()" placeholder="e.g. 10:30 AM" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="sm:col-span-2">
+                <label for="guestArrivalTime" class="block text-xs font-bold text-brand-navy mb-1.5">Time guests should arrive <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="guestArrivalTime" oninput="updateLivePreview()" placeholder="e.g. 5:00 PM" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="sm:col-span-2">
+                <label for="venueName" class="block text-xs font-bold text-brand-navy mb-1.5">Name of venue / auditorium / church / temple / mosque</label>
+                <input type="text" id="venueName" value="The Grand Ballroom, Taj Lands End" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="sm:col-span-2">
+                <label for="venueAddress" class="block text-xs font-bold text-brand-navy mb-1.5">Full venue address</label>
+                <textarea id="venueAddress" rows="2" oninput="updateLivePreview()" placeholder="Street, city, state and postal code" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">Mumbai, Maharashtra</textarea>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="mapUrl" class="block text-xs font-bold text-brand-navy mb-1.5">Google Maps location URL <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="url" id="mapUrl" value="https://maps.google.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="sm:col-span-2">
+                <label for="parkingTransport" class="block text-xs font-bold text-brand-navy mb-1.5">Parking and transportation <span class="font-medium text-slate-400">Optional</span></label>
+                <textarea id="parkingTransport" rows="2" oninput="updateLivePreview()" placeholder="Parking, shuttle or public transit details" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition"></textarea>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="mealDetails" class="block text-xs font-bold text-brand-navy mb-1.5">Meal or wedding feast <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="mealDetails" oninput="updateLivePreview()" placeholder="e.g. Lunch, dinner or sadhya" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="receptionDateTime" class="block text-xs font-bold text-brand-navy mb-1.5">Separate reception date and time <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="receptionDateTime" oninput="updateLivePreview()" placeholder="Date and time" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="receptionVenue" class="block text-xs font-bold text-brand-navy mb-1.5">Reception venue <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="receptionVenue" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div>
+                <label for="rsvpPhone" class="block text-xs font-bold text-brand-navy mb-1.5">Host WhatsApp number</label>
+                <input type="text" id="rsvpPhone" value="919876543210" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div>
+                <label for="hostEmail" class="block text-xs font-bold text-brand-navy mb-1.5">Host email</label>
+                <input type="email" id="hostEmail" value="rsvp@urlovingly.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+            </div>
+            <div id="ceremonyDetailsContainer" class="hidden mt-5 space-y-3"></div>
+          </section>
+
+          <!-- Card 3: Guest, Message & Website Template -->
           <form id="inviteForm" onsubmit="handleGenerateSubmit(event)" class="glass-card rounded-[28px] p-6 sm:p-7 space-y-5">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-2xl brand-gradient text-white flex items-center justify-center text-xs font-extrabold shadow-sm">02</div>
+                <div class="w-8 h-8 rounded-2xl brand-gradient text-white flex items-center justify-center text-xs font-extrabold shadow-sm">03</div>
                 <div>
-                  <h2 class="text-base font-bold text-brand-navy">Personalize Guest Invitation</h2>
-                  <p class="text-xs text-slate-500">Customize the greeting and theme for your guest</p>
+                  <h2 class="text-base font-bold text-brand-navy">Guest Details & Website Template</h2>
+                  <p class="text-xs text-slate-500">Personalize this guest's message and choose the invitation design</p>
                 </div>
               </div>
               <div class="px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-mono font-bold text-brand-pink">
@@ -210,32 +317,32 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="notePresetGroup">
                 
                 <label class="cursor-pointer">
-                  <input type="radio" name="noteOption" value="We are so excited to invite you to celebrate the beginning of our new chapter together!" checked onchange="handleNoteOptionChange()" class="sr-only peer">
+                  <input type="radio" name="noteOption" value="We are so excited to invite you to celebrate this special day with us!" checked onchange="handleNoteOptionChange()" class="sr-only peer">
                   <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
                     <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
-                      <span>✨ Joyful New Chapter</span>
+                      <span>✨ A Special Day</span>
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"We are so excited to invite you to celebrate the beginning of our new chapter together!"</p>
+                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"We are so excited to invite you to celebrate this special day with us!"</p>
                   </div>
                 </label>
 
                 <label class="cursor-pointer">
-                  <input type="radio" name="noteOption" value="Your presence and blessings mean the world to us as we tie the knot and begin our forever." onchange="handleNoteOptionChange()" class="sr-only peer">
+                  <input type="radio" name="noteOption" value="Your presence and blessings mean the world to us as we celebrate together." onchange="handleNoteOptionChange()" class="sr-only peer">
                   <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
                     <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
                       <span>🙏 Traditional & Heartfelt</span>
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"Your presence and blessings mean the world to us as we tie the knot and begin our forever."</p>
+                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"Your presence and blessings mean the world to us as we celebrate together."</p>
                   </div>
                 </label>
 
                 <label class="cursor-pointer">
-                  <input type="radio" name="noteOption" value="Our wedding simply wouldn't be complete without you by our side! Come ready to dance and celebrate." onchange="handleNoteOptionChange()" class="sr-only peer">
+                  <input type="radio" name="noteOption" value="This celebration wouldn't be complete without you by our side! Come ready to celebrate." onchange="handleNoteOptionChange()" class="sr-only peer">
                   <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
                     <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
                       <span>🥂 Warm & Festive</span>
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"Our wedding simply wouldn't be complete without you by our side! Come ready to dance and celebrate."</p>
+                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"This celebration wouldn't be complete without you by our side! Come ready to celebrate."</p>
                   </div>
                 </label>
 
@@ -507,7 +614,7 @@
       document.getElementById("userEmailDisplay").textContent = localStorage.getItem("urlovingly_email");
       
       loadDefaults();
-      updateLivePreview();
+      handleEventTypeChange();
       fetchHistory();
     }
 
@@ -628,7 +735,7 @@
           linkEl.textContent = data.fullUrl;
           linkEl.href = data.fullUrl;
 
-          const shareMsg = `Hi ${data.name}! Here is your personalized wedding invitation from ${data.couple_names}: ${data.fullUrl}`;
+          const shareMsg = `Hi ${data.name}! Here is your personalized ${data.event_type.toLowerCase()} invitation from ${data.couple_names}: ${data.fullUrl}`;
           document.getElementById('whatsappShareBtn').href = `https://wa.me/?text=${encodeURIComponent(shareMsg)}`;
           
           completedLinkSection.classList.remove('hidden');
@@ -658,6 +765,28 @@
       const selected = document.querySelector('input[name="noteOption"]:checked');
       const customBox = document.getElementById('customNoteContainer');
       selected && selected.value === 'custom' ? customBox.classList.remove('hidden') : customBox.classList.add('hidden');
+      updateLivePreview();
+    }
+    function handleEventTypeChange() {
+      const isWedding = document.getElementById('eventType').value === 'Wedding';
+      document.querySelectorAll('.wedding-only').forEach(field => field.classList.toggle('hidden', !isWedding));
+      document.getElementById('celebrantNamesField').classList.toggle('hidden', isWedding);
+      document.getElementById('eventDateLabel').textContent = isWedding ? 'Wedding date' : 'Event date';
+      document.getElementById('eventTimeLabel').textContent = isWedding ? 'Wedding time' : 'Event time';
+      updateLivePreview();
+    }
+    function handleCeremoniesChange() {
+      const container = document.getElementById('ceremonyDetailsContainer');
+      const previous = new Map(Array.from(container.querySelectorAll('[data-ceremony-name]'), card => [
+        card.dataset.ceremonyName,
+        Object.fromEntries(Array.from(card.querySelectorAll('[data-ceremony-field]'), input => [input.dataset.ceremonyField, input.value]))
+      ]));
+      const selected = Array.from(document.querySelectorAll('input[name="ceremonies"]:checked'), input => input.value);
+      container.innerHTML = selected.map(name => {
+        const saved = previous.get(name) || {};
+        return `<fieldset data-ceremony-name="${escapeHtml(name)}" class="rounded-2xl border border-purple-100 bg-white/70 p-4"><legend class="px-1 text-xs font-bold text-brand-navy">${escapeHtml(name)} details</legend><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><label class="text-[11px] font-semibold text-slate-600">Date<input data-ceremony-field="date" type="text" value="${escapeHtml(saved.date || '')}" placeholder="Date" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="text-[11px] font-semibold text-slate-600">Time<input data-ceremony-field="time" type="text" value="${escapeHtml(saved.time || '')}" placeholder="Start time" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="text-[11px] font-semibold text-slate-600">Venue<input data-ceremony-field="venue" type="text" value="${escapeHtml(saved.venue || '')}" placeholder="Venue name" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="text-[11px] font-semibold text-slate-600">Address<input data-ceremony-field="address" type="text" value="${escapeHtml(saved.address || '')}" placeholder="Venue address" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="sm:col-span-2 text-[11px] font-semibold text-slate-600">Google Maps URL<input data-ceremony-field="map_url" type="url" value="${escapeHtml(saved.map_url || '')}" placeholder="https://maps.google.com/..." oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="sm:col-span-2 text-[11px] font-semibold text-slate-600">Notes<textarea data-ceremony-field="notes" rows="2" oninput="updateLivePreview()" placeholder="Dress code, customs or other details" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm">${escapeHtml(saved.notes || '')}</textarea></label></div></fieldset>`;
+      }).join('');
+      container.classList.toggle('hidden', selected.length === 0);
       updateLivePreview();
     }
     function compressInvitePhoto(file) {
@@ -744,34 +873,121 @@
     function buildInvitePhotoGallery() {
       if (!uploadedInvitePhotos.length) return '';
       const images = uploadedInvitePhotos.map(photo => `<img src="${photo.src}" alt="${escapeHtml(photo.alt)}" loading="lazy">`).join('');
-      return `<section class="invite-gallery" aria-label="Wedding photo gallery"><h2>Our story in photos</h2><div class="invite-gallery-grid">${images}</div></section>`;
+      return `<section class="invite-gallery" aria-label="Invitation photo gallery"><h2>Our story in photos</h2><div class="invite-gallery-grid">${images}</div></section>`;
     }
     function loadDefaults() {
       const d = JSON.parse(localStorage.getItem(STORAGE_KEYS.DEFAULTS) || '{}');
-      if (d.coupleNames) document.getElementById('coupleNames').value = d.coupleNames;
-      if (d.weddingDate) document.getElementById('weddingDate').value = d.weddingDate;
-      if (d.weddingTime) document.getElementById('weddingTime').value = d.weddingTime;
-      if (d.venueName) document.getElementById('venueName').value = d.venueName;
+      const defaultFields = ['eventType', 'celebrantNames', 'groomFullName', 'brideFullName', 'groomParents', 'groomFamilyName', 'brideParents', 'brideFamilyName', 'closeRelatives', 'weddingDate', 'weddingTime', 'muhurthamTime', 'guestArrivalTime', 'venueName', 'venueAddress', 'mapUrl', 'parkingTransport', 'mealDetails', 'receptionDateTime', 'receptionVenue', 'rsvpPhone', 'hostEmail'];
+      defaultFields.forEach(id => {
+        if (d[id] !== undefined && document.getElementById(id)) document.getElementById(id).value = d[id];
+      });
+      if (Array.isArray(d.ceremonies)) {
+        const selectedCeremonies = new Set(d.ceremonies);
+        document.querySelectorAll('input[name="ceremonies"]').forEach(input => { input.checked = selectedCeremonies.has(input.value); });
+        handleCeremoniesChange();
+        (d.ceremonyDetails || []).forEach(saved => {
+          const card = Array.from(document.querySelectorAll('[data-ceremony-name]')).find(item => item.dataset.ceremonyName === saved.name);
+          if (!card) return;
+          Object.entries(saved).forEach(([field, value]) => {
+            const input = card.querySelector(`[data-ceremony-field="${field}"]`);
+            if (input) input.value = value;
+          });
+        });
+      }
     }
     function saveEventDefaults() {
-      localStorage.setItem(STORAGE_KEYS.DEFAULTS, JSON.stringify({
-        coupleNames: document.getElementById('coupleNames').value,
-        weddingDate: document.getElementById('weddingDate').value,
-        weddingTime: document.getElementById('weddingTime').value,
-        venueName: document.getElementById('venueName').value
-      }));
+      const defaultFields = ['eventType', 'celebrantNames', 'groomFullName', 'brideFullName', 'groomParents', 'groomFamilyName', 'brideParents', 'brideFamilyName', 'closeRelatives', 'weddingDate', 'weddingTime', 'muhurthamTime', 'guestArrivalTime', 'venueName', 'venueAddress', 'mapUrl', 'parkingTransport', 'mealDetails', 'receptionDateTime', 'receptionVenue', 'rsvpPhone', 'hostEmail'];
+      const defaults = Object.fromEntries(defaultFields.map(id => [id, document.getElementById(id).value]));
+      defaults.ceremonies = Array.from(document.querySelectorAll('input[name="ceremonies"]:checked'), input => input.value);
+      defaults.ceremonyDetails = collectEventDetails().ceremonies;
+      localStorage.setItem(STORAGE_KEYS.DEFAULTS, JSON.stringify(defaults));
     }
-    function buildMapEmbedMarkup(venueName, mapUrl) {
-      const venue = String(venueName || 'Wedding venue').trim() || 'Wedding venue';
+    function collectEventDetails() {
+      const value = id => document.getElementById(id).value.trim();
+      const ceremonies = Array.from(document.querySelectorAll('[data-ceremony-name]'), card => ({
+        name: card.dataset.ceremonyName,
+        date: card.querySelector('[data-ceremony-field="date"]').value.trim(),
+        time: card.querySelector('[data-ceremony-field="time"]').value.trim(),
+        venue: card.querySelector('[data-ceremony-field="venue"]').value.trim(),
+        address: card.querySelector('[data-ceremony-field="address"]').value.trim(),
+        map_url: card.querySelector('[data-ceremony-field="map_url"]').value.trim(),
+        notes: card.querySelector('[data-ceremony-field="notes"]').value.trim()
+      }));
+      return {
+        event_type: document.getElementById('eventType').value,
+        celebrants: value('celebrantNames'),
+        groom: value('groomFullName'),
+        bride: value('brideFullName'),
+        groom_parents: value('groomParents'),
+        groom_family: value('groomFamilyName'),
+        bride_parents: value('brideParents'),
+        bride_family: value('brideFamilyName'),
+        close_relatives: value('closeRelatives'),
+        date: value('weddingDate'),
+        time: value('weddingTime'),
+        muhurtham: value('muhurthamTime'),
+        guest_arrival: value('guestArrivalTime'),
+        venue: value('venueName'),
+        venue_address: value('venueAddress'),
+        map_url: value('mapUrl'),
+        parking_transport: value('parkingTransport'),
+        meal: value('mealDetails'),
+        reception_date_time: value('receptionDateTime'),
+        reception_venue: value('receptionVenue'),
+        ceremonies
+      };
+    }
+    function buildEventDetailsMarkup(details) {
+      const isWedding = details.event_type === 'Wedding';
+      const sections = [];
+      const addSection = (heading, rows) => {
+        const visibleRows = rows.filter(([, value]) => value);
+        if (!visibleRows.length) return;
+        sections.push(`<div class="invite-event-extra-section"><h3>${escapeHtml(heading)}</h3><dl>${visibleRows.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl></div>`);
+      };
+      addSection('Celebration details', [
+        ['Event', details.event_type],
+        ['Celebrating', isWedding ? '' : details.celebrants],
+        ['Guest arrival', details.guest_arrival],
+        ['Venue address', details.venue_address],
+        ['Parking and transportation', details.parking_transport],
+        ['Meal', details.meal]
+      ]);
+      if (isWedding) {
+        addSection('With our families', [
+          ['Groom', details.groom],
+          ['Groom’s family', details.groom_family],
+          ['Groom’s parents', details.groom_parents],
+          ['Bride', details.bride],
+          ['Bride’s family', details.bride_family],
+          ['Bride’s parents', details.bride_parents],
+          ['Siblings, grandparents and loved ones', details.close_relatives]
+        ]);
+        addSection('Wedding schedule', [
+          ['Muhurtham / auspicious time', details.muhurtham],
+          ['Reception', details.reception_date_time],
+          ['Reception venue', details.reception_venue]
+        ]);
+      }
+      details.ceremonies.forEach(ceremony => addSection(ceremony.name, [
+        ['Date', ceremony.date], ['Time', ceremony.time], ['Venue', ceremony.venue],
+        ['Address', ceremony.address], ['Map location', ceremony.map_url], ['Notes', ceremony.notes]
+      ]));
+      if (!sections.length) return '';
+      return `<section class="invite-event-extra" aria-label="Additional event details"><h2>More details</h2>${sections.join('')}</section>`;
+    }
+    function buildMapEmbedMarkup(venueName, mapUrl, venueAddress = '') {
+      const venue = String(venueName || 'Event venue').trim() || 'Event venue';
+      const mapLocation = [venue, venueAddress].filter(Boolean).join(', ');
       let safeMapUrl = 'https://www.google.com/maps';
       try {
         const parsedUrl = new URL(mapUrl);
         if (parsedUrl.protocol === 'https:' || parsedUrl.protocol === 'http:') safeMapUrl = parsedUrl.href;
       } catch (error) {}
       const safeVenue = escapeHtml(venue);
-      return `<section class="invite-map" aria-label="Map to ${safeVenue}"><div class="invite-map-heading"><span class="invite-map-kicker">Location</span><a class="invite-map-location" href="${escapeHtml(safeMapUrl)}" target="_blank" rel="noopener">${safeVenue}</a></div><iframe src="https://www.google.com/maps?q=${encodeURIComponent(venue)}&amp;output=embed" title="Map showing ${safeVenue}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></section>`;
+      return `<section class="invite-map" aria-label="Map to ${safeVenue}"><div class="invite-map-heading"><span class="invite-map-kicker">Location</span><a class="invite-map-location" href="${escapeHtml(safeMapUrl)}" target="_blank" rel="noopener">${safeVenue}</a></div><iframe src="https://www.google.com/maps?q=${encodeURIComponent(mapLocation)}&amp;output=embed" title="Map showing ${safeVenue}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></section>`;
     }
-    function buildFullPageHtml(guestName, coupleNames, renderedHtml, showArrival = true, mailAnimation = 'velvet') {
+    function buildFullPageHtml(guestName, coupleNames, renderedHtml, showArrival = true, mailAnimation = 'velvet', eventType = 'Wedding') {
       const mailStyles = {
         velvet: { className: 'arrival--velvet', seal: '&amp;' },
         'rose-gold': { className: 'arrival--rose-gold', seal: '&#10084;' },
@@ -779,12 +995,13 @@
         celestial: { className: 'arrival--celestial', seal: '&#10022;' }
       };
       const selectedMailStyle = mailStyles[mailAnimation] || mailStyles.velvet;
+        const eventLabel = escapeHtml(eventType || 'Celebration');
       const arrivalMarkup = showArrival ? `
-  <div class="arrival ${selectedMailStyle.className}" role="status" aria-label="A wedding invitation is being delivered">
+      <div class="arrival ${selectedMailStyle.className}" role="status" aria-label="A ${eventLabel.toLowerCase()} invitation is being delivered">
     <div class="arrival-stage">
       <div class="arrival-heading">Delivered with love</div>
       <div class="arrival-flight">
-        <div class="arrival-envelope" role="button" tabindex="0" aria-label="Open the wedding invitation for ${escapeHtml(guestName)}" onclick="const arrival=this.closest('.arrival');arrival.classList.add('arrival--opened');window.setTimeout(()=>arrival.remove(),1400)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
+        <div class="arrival-envelope" role="button" tabindex="0" aria-label="Open the ${eventLabel.toLowerCase()} invitation for ${escapeHtml(guestName)}" onclick="const arrival=this.closest('.arrival');arrival.classList.add('arrival--opened');window.setTimeout(()=>arrival.remove(),1400)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
           <div class="arrival-letter">
             <div class="arrival-letter-label">You are warmly invited</div>
             <div class="arrival-letter-couple">${escapeHtml(coupleNames)}</div>
@@ -809,7 +1026,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wedding Invitation for ${escapeHtml(guestName)}</title>
+  <title>${eventLabel} Invitation for ${escapeHtml(guestName)}</title>
   <script src="https://cdn.tailwindcss.com"><\/script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -819,6 +1036,14 @@
     .invite-gallery h2 { margin: 0 0 .65rem; font: 600 1.15rem 'Cormorant Garamond',serif; }
     .invite-gallery-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(100px,1fr)); gap: .5rem; }
     .invite-gallery-grid img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; }
+    .invite-event-extra { width: 100%; margin: 1.25rem 0; padding: 1rem 0; border-top: 1px solid currentColor; text-align: left; opacity: .9; }
+    .invite-event-extra > h2 { margin: 0 0 .8rem; font: 600 1.15rem 'Cormorant Garamond',serif; }
+    .invite-event-extra-section + .invite-event-extra-section { margin-top: .85rem; }
+    .invite-event-extra-section h3 { margin: 0 0 .35rem; font: 700 .72rem 'Plus Jakarta Sans',sans-serif; }
+    .invite-event-extra-section dl { display: grid; gap: .35rem; margin: 0; font-size: .72rem; line-height: 1.5; }
+    .invite-event-extra-section dl > div { display: grid; grid-template-columns: minmax(6rem, .8fr) minmax(0, 1.4fr); gap: .5rem; }
+    .invite-event-extra-section dt { font-weight: 700; }
+    .invite-event-extra-section dd { margin: 0; overflow-wrap: anywhere; white-space: pre-line; }
     .invite-map-heading { display: grid; gap: .15rem; margin-bottom: .5rem; }
     .invite-map-kicker { font: 700 .62rem 'Plus Jakarta Sans',sans-serif; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
     .invite-map-location { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
@@ -912,7 +1137,7 @@
         }
         countdown.replaceChildren();
         if (Number.isNaN(target.getTime())) {
-          countdown.textContent = 'Add a valid wedding date to start the countdown.';
+          countdown.textContent = 'Add a valid event date to start the countdown.';
           countdown.classList.add('invite-countdown-past');
           countdown.hidden = false;
           return;
@@ -958,7 +1183,7 @@
         cover.className = 'invite-scratch-cover';
         cover.setAttribute('role', 'button');
         cover.tabIndex = 0;
-        cover.setAttribute('aria-label', 'Scratch to reveal the wedding date');
+        cover.setAttribute('aria-label', 'Scratch to reveal the event date');
         dateElement.append(cover);
         const countdown = eventBlock.querySelector('.invite-countdown');
         countdown.hidden = true;
@@ -996,7 +1221,7 @@
           if (revealed) return;
           revealed = true;
           eventBlock.classList.add('is-revealed');
-          cover.setAttribute('aria-label', 'Wedding date revealed');
+          cover.setAttribute('aria-label', 'Event date revealed');
           initializeCountdown(eventBlock);
           window.setTimeout(() => cover.remove(), 450);
         };
@@ -1074,7 +1299,10 @@
 
     function getFormState() {
       const guestName = document.getElementById('guestName').value || 'Valued Guest';
-      const coupleNames = document.getElementById('coupleNames').value || 'Groom & Bride';
+      const eventDetails = collectEventDetails();
+      const coupleNames = eventDetails.event_type === 'Wedding'
+        ? [eventDetails.groom, eventDetails.bride].filter(Boolean).join(' & ') || 'Wedding Couple'
+        : eventDetails.celebrants || eventDetails.event_type;
       const selectedTheme = document.querySelector('input[name="templateType"]:checked');
       const selectedMailAnimation = document.querySelector('input[name="mailAnimationType"]:checked');
       const slug = slugify(guestName), coupleSlug = slugify(coupleNames);
@@ -1085,15 +1313,18 @@
         coupleSlug: coupleSlug,
         template: selectedTheme ? selectedTheme.value : 'urlovingly',
         mail_animation: selectedMailAnimation ? selectedMailAnimation.value : 'velvet',
+        event_type: eventDetails.event_type,
+        event_details: eventDetails,
+        ceremonies: eventDetails.ceremonies.map(ceremony => ceremony.name),
         couple_names: coupleNames,
-        wedding_date: document.getElementById('weddingDate').value,
-        wedding_time: document.getElementById('weddingTime').value,
-        venue: document.getElementById('venueName').value,
-        map_url: document.getElementById('mapUrl').value,
+        wedding_date: eventDetails.date,
+        wedding_time: eventDetails.time,
+        venue: eventDetails.venue,
+        map_url: eventDetails.map_url,
         rsvp_phone: document.getElementById('rsvpPhone').value,
         host_email: document.getElementById('hostEmail').value,
         custom_note: getSelectedNote(),
-        rendered_html: buildFullPageHtml(guestName, coupleNames, renderedInvitationFragment, true, selectedMailAnimation ? selectedMailAnimation.value : 'velvet'),
+        rendered_html: buildFullPageHtml(guestName, coupleNames, renderedInvitationFragment, true, selectedMailAnimation ? selectedMailAnimation.value : 'velvet', eventDetails.event_type),
         fullUrl: `${BASE_HOSTED_DOMAIN.replace(/\/+$/, '')}/${coupleSlug}/to/${slug}/`
       };
     }
@@ -1101,7 +1332,7 @@
       await previewRenderPromise;
       if (!activeTemplateLoaded) return;
       const data = getFormState();
-      document.getElementById('mobilePreviewViewport').srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, true, data.mail_animation);
+      document.getElementById('mobilePreviewViewport').srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, true, data.mail_animation, data.event_type);
     }
     function updateLivePreview() {
       const data = getFormState();
@@ -1129,7 +1360,7 @@
       previewRenderPromise = templateRequest
         .then(templateMarkup => {
           if (renderId !== previewRenderId) return;
-          const rsvpText = `Hi! I (${data.name}) happily confirm my attendance for ${data.couple_names}'s wedding!`;
+          const rsvpText = `Hi! I (${data.name}) happily confirm my attendance for ${data.couple_names}'s ${data.event_type.toLowerCase()}!`;
           const values = {
             guest_name: data.name,
             couple_names: data.couple_names,
@@ -1138,22 +1369,31 @@
             venue: data.venue,
             custom_note: data.custom_note,
             photo_gallery: buildInvitePhotoGallery(),
-            map_embed: buildMapEmbedMarkup(data.venue, data.map_url),
+            map_embed: buildMapEmbedMarkup(data.venue, data.map_url, data.event_details.venue_address),
             map_url: data.map_url,
             rsvp_phone: data.rsvp_phone,
             host_email: data.host_email,
             wa_url: `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`,
-            email_url: `mailto:${encodeURIComponent(data.host_email)}?subject=${encodeURIComponent(`Wedding RSVP - ${data.name}`)}&body=${encodeURIComponent(rsvpText)}`
+            email_url: `mailto:${encodeURIComponent(data.host_email)}?subject=${encodeURIComponent(`${data.event_type} RSVP - ${data.name}`)}&body=${encodeURIComponent(rsvpText)}`
           };
           const renderedMarkup = templateMarkup.replace(/\{\{\s*(guest_name|couple_names|wedding_date|wedding_time|venue|custom_note|photo_gallery|map_embed|map_url|rsvp_phone|host_email|wa_url|email_url)(?:\s*\|\s*(urlencode))?\s*\}\}/g, (match, key, encoded) => {
             if (key === 'photo_gallery' || key === 'map_embed') return values[key];
             return encoded ? encodeURIComponent(values[key]) : escapeHtml(values[key]);
           });
           const templateDocument = new DOMParser().parseFromString(renderedMarkup, 'text/html');
+          const signatureIntro = templateDocument.querySelector('.signature .signature-card > .signature-kicker');
+          if (signatureIntro && data.event_type !== 'Wedding') signatureIntro.textContent = `A personal ${data.event_type.toLowerCase()} invitation`;
+          templateDocument.querySelectorAll('.invite-countdown').forEach(countdown => countdown.setAttribute('aria-label', `Countdown to ${data.event_type}`));
+          const eventDetailsMarkup = buildEventDetailsMarkup(data.event_details);
+          if (eventDetailsMarkup) {
+            const eventAnchor = templateDocument.querySelector('.invite-event-date') || templateDocument.body.lastElementChild;
+            if (eventAnchor) eventAnchor.insertAdjacentHTML('afterend', eventDetailsMarkup);
+            else templateDocument.body.insertAdjacentHTML('beforeend', eventDetailsMarkup);
+          }
           const styles = Array.from(templateDocument.head.querySelectorAll('style')).map(style => style.outerHTML).join('');
           const stylesheets = Array.from(templateDocument.head.querySelectorAll('link[rel="stylesheet"]')).map(link => link.outerHTML).join('');
           renderedInvitationFragment = stylesheets + styles + templateDocument.body.innerHTML;
-          viewport.srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, showArrival, data.mail_animation);
+          viewport.srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, showArrival, data.mail_animation, data.event_type);
           previewIntroShown.add(data.mail_animation);
           activeTemplateLoaded = true;
         })
@@ -1161,7 +1401,7 @@
           if (renderId !== previewRenderId) return;
           console.error('Invitation template could not be loaded:', error);
           renderedInvitationFragment = '<p>This invitation style could not be loaded.</p>';
-          viewport.srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, false, data.mail_animation);
+          viewport.srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, false, data.mail_animation, data.event_type);
           activeTemplateLoaded = false;
         });
     }
