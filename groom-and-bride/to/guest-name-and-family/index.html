@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Invitation for Guest Name &amp; Family</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fcfaff; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .invite-container { width: 100%; max-width: 420px; min-height: 100vh; background: white; box-shadow: 0 0 40px rgba(0,0,0,0.05); }
+    .invite-gallery, .invite-map { width: 100%; margin: 1.25rem 0; text-align: left; }
+    .invite-gallery h2 { margin: 0 0 .65rem; font: 600 1.15rem 'Cormorant Garamond',serif; }
+    .invite-gallery-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(100px,1fr)); gap: .5rem; }
+    .invite-gallery-grid img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; }
+    .invite-event-extra { width: 100%; margin: 1.25rem 0; padding: 1rem 0; border-top: 1px solid currentColor; text-align: left; opacity: .9; }
+    .invite-event-extra > h2 { margin: 0 0 .8rem; font: 600 1.15rem 'Cormorant Garamond',serif; }
+    .invite-event-extra-section + .invite-event-extra-section { margin-top: .85rem; }
+    .invite-event-extra-section h3 { margin: 0 0 .35rem; font: 700 .72rem 'Plus Jakarta Sans',sans-serif; }
+    .invite-event-extra-section dl { display: grid; gap: .35rem; margin: 0; font-size: .72rem; line-height: 1.5; }
+    .invite-event-extra-section dl > div { display: grid; grid-template-columns: minmax(6rem, .8fr) minmax(0, 1.4fr); gap: .5rem; }
+    .invite-event-extra-section dt { font-weight: 700; }
+    .invite-event-extra-section dd { margin: 0; overflow-wrap: anywhere; white-space: pre-line; }
+    .invite-map-heading { display: grid; gap: .15rem; margin-bottom: .5rem; }
+    .invite-map-kicker { font: 700 .62rem 'Plus Jakarta Sans',sans-serif; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+    .invite-map-location { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+    .invite-map iframe { display: block; width: 100%; min-height: 180px; aspect-ratio: 16 / 10; border: 0; border-radius: 6px; }
+    .invite-event-date { display: grid; justify-items: center; gap: .35rem; margin: .55rem 0 .85rem; }
+    .invite-date-scratch { position: relative; display: inline-grid; place-items: center; min-width: min(100%,180px); max-width: 100%; min-height: 2.35em; padding: .35em .75em; box-sizing: border-box; vertical-align: middle; }
+    .invite-scratch-cover { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 4px; cursor: crosshair; touch-action: none; transition: opacity .4s ease; }
+    .invite-event-date.is-revealed .invite-scratch-cover { opacity: 0; pointer-events: none; }
+    .invite-countdown { display: flex; justify-content: center; gap: .45rem; width: 100%; margin-top: .2rem; }
+    .invite-countdown[hidden] { display: none !important; }
+    .invite-countdown-unit { display: grid; min-width: 3.1rem; padding: .45rem .35rem; border: 1px solid currentColor; border-radius: 6px; text-align: center; }
+    .invite-countdown-unit strong { font: 700 1rem 'Plus Jakarta Sans',sans-serif; line-height: 1.15; }
+    .invite-countdown-unit span { margin-top: .2rem; font: 600 .55rem 'Plus Jakarta Sans',sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+    .invite-countdown-past { font-size: .75rem; font-weight: 700; }
+    .invite-letter-char { display: inline-block; opacity: 0; transform: translateY(.38em); }
+    .invite-letter-block.is-visible .invite-letter-char { animation: invite-letter-in .48s cubic-bezier(.2,.75,.25,1) both; animation-delay: var(--letter-delay,0ms); }
+    @keyframes invite-letter-in { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .invite-letter-char { opacity: 1; transform: none; animation: none !important; } .invite-scratch-cover { transition: none; } }
+    .arrival { --arrival-scene: radial-gradient(ellipse at 50% 42%, #63304f 0, #321e38 42%, #17141f 100%); --arrival-orbit: rgba(222,189,124,.17); --arrival-envelope: linear-gradient(135deg,#70294f,#a43b68 48%,#462448); --arrival-border: #d8b777; --arrival-shadow: 0 28px 75px rgba(0,0,0,.48),0 0 0 5px rgba(222,189,124,.12),inset 0 0 32px rgba(255,234,191,.12); --arrival-paper: linear-gradient(145deg,#fffdf5,#f3e4ca); --arrival-paper-ink: #53384a; --arrival-accent: #ae8150; --arrival-flap: linear-gradient(145deg,#87335d,#c35a78 55%,#7a3158); --arrival-front: linear-gradient(145deg,#552244,#a03b65 52%,#472040); --arrival-address: #ffeac4; --arrival-address-secondary: #f4d5b4; --arrival-seal: radial-gradient(circle at 35% 30%,#d5a65d,#8b3b62 75%); --arrival-seal-border: #f0d798; --arrival-seal-ink: #fff0ca; --arrival-smoke: radial-gradient(circle,rgba(255,249,232,.76),rgba(228,208,224,.32) 34%,transparent 72%); position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; overflow: hidden; color: #fff9ed; background: var(--arrival-scene); }
+    .arrival::before, .arrival::after { content: ''; position: absolute; width: min(84vw, 440px); aspect-ratio: 1; border: 1px solid var(--arrival-orbit); border-radius: 50%; animation: arrival-orbit 24s linear infinite; }
+    .arrival::after { width: min(70vw, 360px); animation-direction: reverse; }
+    .arrival--rose-gold { --arrival-scene: radial-gradient(ellipse at 50% 42%,#704351 0,#3c2936 45%,#1c1720 100%); --arrival-orbit: rgba(238,186,161,.22); --arrival-envelope: linear-gradient(135deg,#a5535f,#d28478 48%,#70404c); --arrival-border: #e6b894; --arrival-shadow: 0 28px 75px rgba(0,0,0,.44),0 0 0 5px rgba(230,184,148,.13),inset 0 0 32px rgba(255,239,215,.17); --arrival-paper: linear-gradient(145deg,#fffaf0,#f4dfd2); --arrival-paper-ink: #663c48; --arrival-accent: #b16b61; --arrival-flap: linear-gradient(145deg,#c47a77,#e0a08b 55%,#a25263); --arrival-front: linear-gradient(145deg,#854650,#c47a78 52%,#75404e); --arrival-address: #fff0df; --arrival-address-secondary: #f4d2c0; --arrival-seal: radial-gradient(circle at 35% 30%,#e5b797,#a65a65 75%); --arrival-seal-border: #f4d2b6; --arrival-seal-ink: #fff1df; --arrival-smoke: radial-gradient(circle,rgba(255,231,220,.8),rgba(232,180,183,.36) 34%,transparent 72%); }
+    .arrival--botanical { --arrival-scene: radial-gradient(ellipse at 50% 42%,#315d4b 0,#183b31 47%,#10241f 100%); --arrival-orbit: rgba(203,213,163,.2); --arrival-envelope: linear-gradient(135deg,#285647,#47785d 48%,#173c35); --arrival-border: #c4bd83; --arrival-shadow: 0 28px 75px rgba(0,0,0,.45),0 0 0 5px rgba(196,189,131,.12),inset 0 0 32px rgba(243,246,207,.13); --arrival-paper: linear-gradient(145deg,#fffdf0,#e6ead2); --arrival-paper-ink: #284638; --arrival-accent: #6b8257; --arrival-flap: linear-gradient(145deg,#547b5b,#82966b 55%,#365b4d); --arrival-front: linear-gradient(145deg,#234b40,#52775a 52%,#1d4038); --arrival-address: #f1efcf; --arrival-address-secondary: #d7dfb7; --arrival-seal: radial-gradient(circle at 35% 30%,#c5c27f,#426a51 75%); --arrival-seal-border: #e4dfa7; --arrival-seal-ink: #f6f3d5; --arrival-smoke: radial-gradient(circle,rgba(238,244,212,.75),rgba(179,207,169,.34) 34%,transparent 72%); }
+    .arrival--celestial { --arrival-scene: radial-gradient(ellipse at 50% 42%,#374a74 0,#202c4a 46%,#111725 100%); --arrival-orbit: rgba(178,204,232,.24); --arrival-envelope: linear-gradient(135deg,#26385f,#495b83 48%,#1c2848); --arrival-border: #c4d3e7; --arrival-shadow: 0 28px 75px rgba(0,0,0,.5),0 0 0 5px rgba(176,201,229,.13),inset 0 0 32px rgba(216,234,255,.14); --arrival-paper: linear-gradient(145deg,#fffefa,#e7edf5); --arrival-paper-ink: #354463; --arrival-accent: #7189aa; --arrival-flap: linear-gradient(145deg,#465b86,#788bad 55%,#34466e); --arrival-front: linear-gradient(145deg,#26385f,#50658c 52%,#202f53); --arrival-address: #e8f0ff; --arrival-address-secondary: #c4d4ee; --arrival-seal: radial-gradient(circle at 35% 30%,#c5d6ed,#536b97 75%); --arrival-seal-border: #d9e5f5; --arrival-seal-ink: #f2f7ff; --arrival-smoke: radial-gradient(circle,rgba(231,242,255,.82),rgba(177,197,234,.36) 34%,transparent 72%); }
+    .arrival-stage { position: relative; z-index: 1; width: min(92vw, 480px); height: 390px; display: grid; place-items: center; perspective: 900px; }
+    .arrival-heading { position: absolute; top: 23px; text-align: center; color: var(--arrival-address); font: 500 10px 'Plus Jakarta Sans', sans-serif; letter-spacing: 3px; text-transform: uppercase; animation: arrival-caption 1s .5s both; }
+    .arrival-heading::after { content: '✦'; display: block; margin-top: 11px; color: var(--arrival-address); font-size: 17px; }
+    .arrival-flight { position: relative; width: min(82vw, 380px); aspect-ratio: 1.55; transform-style: preserve-3d; animation: envelope-arrive 3.8s cubic-bezier(.18,.78,.2,1) both; }
+    .arrival-envelope { position: relative; width: 100%; height: 100%; border: 1px solid var(--arrival-border); border-radius: 9px; background: var(--arrival-envelope); box-shadow: var(--arrival-shadow); transform-style: preserve-3d; animation: envelope-sway 5.2s 5.35s ease-in-out infinite; cursor: pointer; }
+    .arrival-envelope:focus-visible { outline: 3px solid var(--arrival-address); outline-offset: 5px; }
+    .arrival-envelope::before { content: ''; position: absolute; inset: 7px; z-index: 5; border: 1px solid rgba(244,220,169,.53); border-radius: 5px; pointer-events: none; }
+    .arrival-letter { position: absolute; top: 5%; left: 7%; z-index: 1; width: 86%; height: 92%; padding: 19px 13px; box-sizing: border-box; text-align: center; color: var(--arrival-paper-ink); background: var(--arrival-paper); border: 1px solid var(--arrival-border); box-shadow: 0 3px 14px rgba(0,0,0,.22); transform: translateY(40%) scale(.94); animation: letter-emerge 1.8s 3.55s cubic-bezier(.2,.75,.25,1) forwards; }
+    .arrival-letter::before { content: '✧  ✦  ✧'; display: block; margin: 0 auto 8px; color: var(--arrival-accent); font-size: 13px; letter-spacing: 4px; }
+    .arrival-letter-label { color: var(--arrival-accent); font: 600 8px 'Plus Jakarta Sans', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+    .arrival-letter-couple { overflow-wrap: anywhere; margin: 5px 0 7px; color: var(--arrival-paper-ink); font: 600 clamp(18px, 5vw, 24px)/1.05 'Cormorant Garamond', serif; }
+    .arrival-letter-guest { overflow-wrap: anywhere; color: var(--arrival-paper-ink); font: italic 13px 'Cormorant Garamond', serif; }
+    .arrival-flap { position: absolute; inset: 0 0 auto; z-index: 4; height: 66%; background: var(--arrival-flap); clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: 50% 0; backface-visibility: hidden; animation: envelope-open 1.5s 3.15s ease-in forwards; filter: drop-shadow(0 3px 3px rgba(20,10,22,.25)); }
+    .arrival-front { position: absolute; inset: 0; z-index: 3; background: var(--arrival-front); clip-path: polygon(0 0, 50% 62%, 100% 0, 100% 100%, 0 100%); }
+    .arrival-front::before { content: ''; position: absolute; inset: 10px; border: 1px solid rgba(235,205,148,.65); clip-path: polygon(0 0, 50% 62%, 100% 0, 100% 100%, 0 100%); }
+    .arrival-address { position: absolute; z-index: 6; right: 9%; bottom: 7%; left: 9%; text-align: center; color: var(--arrival-address); text-shadow: 0 1px 4px rgba(30,10,25,.5); }
+    .arrival-address-label { display: block; font: 600 7px 'Plus Jakarta Sans', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+    .arrival-address-guest { display: block; overflow-wrap: anywhere; margin: 2px 0; font: 600 19px/1.05 'Cormorant Garamond', serif; }
+    .arrival-address-couple { display: block; overflow-wrap: anywhere; font: italic 11px 'Cormorant Garamond', serif; color: var(--arrival-address-secondary); }
+    .arrival-address-action { display: block; margin-top: 4px; font: 600 7px 'Plus Jakarta Sans', sans-serif; letter-spacing: 1.5px; text-transform: uppercase; color: var(--arrival-address-secondary); }
+    .arrival-seal { position: absolute; z-index: 7; top: 50%; left: 50%; width: 32px; aspect-ratio: 1; display: grid; place-items: center; border: 1px solid var(--arrival-seal-border); border-radius: 50%; color: var(--arrival-seal-ink); background: var(--arrival-seal); box-shadow: 0 3px 12px rgba(30,10,25,.4), inset 0 0 0 3px rgba(255,240,202,.16); font: 16px 'Cormorant Garamond', serif; transform: translate(-50%,-50%); animation: seal-glint 1.8s 2.1s ease-in-out infinite; }
+    .arrival-smoke { position: absolute; z-index: 8; left: 50%; top: 49%; width: 80px; aspect-ratio: 1; border-radius: 50%; opacity: 0; pointer-events: none; background: var(--arrival-smoke); filter: blur(10px); animation: smoke-bloom 3s 4.2s ease-out both; }
+    .arrival-smoke:nth-child(4) { --smoke-x: -130px; --smoke-y: -84px; animation-delay: 4.35s; }
+    .arrival-smoke:nth-child(5) { --smoke-x: 135px; --smoke-y: -112px; animation-delay: 4.5s; }
+    .arrival-smoke:nth-child(6) { --smoke-x: -185px; --smoke-y: -18px; animation-delay: 4.65s; }
+    .arrival--opened { pointer-events: none; animation: invitation-unveil 1.35s ease forwards; }
+    .arrival--opened .arrival-smoke { animation: invitation-smoke 1.35s ease-out forwards; }
+    .arrival--rose-gold .arrival-flight { animation-name: rose-gold-arrival; }
+    .arrival--botanical .arrival-flight { animation-name: botanical-arrival; }
+    .arrival--celestial .arrival-flight { animation-name: celestial-arrival; }
+    @keyframes envelope-arrive { 0% { opacity: 0; transform: translate3d(0, 62vh, -500px) rotate(-14deg) scale(.18); } 72% { opacity: 1; transform: translate3d(0, -13px, 0) rotate(2deg) scale(1.04); } 100% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0) scale(1); } }
+    @keyframes rose-gold-arrival { 0% { opacity: 0; transform: translate3d(-62vw, 48vh, -700px) rotate(-28deg) scale(.12); } 72% { opacity: 1; transform: translate3d(8px, -13px, 0) rotate(3deg) scale(1.04); } 100% { opacity: 1; transform: translate3d(0,0,0) rotate(0) scale(1); } }
+    @keyframes botanical-arrival { 0% { opacity: 0; transform: translate3d(58vw, 60vh, -900px) rotateY(28deg) rotate(13deg) scale(.1); } 72% { opacity: 1; transform: translate3d(-7px, -12px, 0) rotateY(-5deg) rotate(-2deg) scale(1.03); } 100% { opacity: 1; transform: translate3d(0,0,0) rotateY(0) rotate(0) scale(1); } }
+    @keyframes celestial-arrival { 0% { opacity: 0; transform: translate3d(0, -68vh, -1000px) rotate(22deg) scale(.12); } 72% { opacity: 1; transform: translate3d(0, 12px, 0) rotate(-3deg) scale(1.05); } 100% { opacity: 1; transform: translate3d(0,0,0) rotate(0) scale(1); } }
+    @keyframes envelope-sway { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-7px) rotate(.5deg); } }
+    @keyframes envelope-open { to { transform: rotateX(180deg); } }
+    @keyframes letter-emerge { to { transform: translateY(-29%) scale(1); } }
+    @keyframes smoke-bloom { 0% { opacity: 0; transform: translate(-50%, 0) scale(.25); } 22% { opacity: .9; } 100% { opacity: 0; transform: translate(calc(-50% + var(--smoke-x, 0px)), var(--smoke-y, -110px)) scale(2.6); } }
+    @keyframes invitation-smoke { 0% { opacity: 0; transform: translate(-50%, 0) scale(.3); } 24% { opacity: .9; } 100% { opacity: 0; transform: translate(calc(-50% + var(--smoke-x, 0px)), var(--smoke-y, -110px)) scale(3.2); } }
+    @keyframes invitation-unveil { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+    @keyframes seal-glint { 50% { box-shadow: 0 0 22px rgba(255,224,164,.7), inset 0 0 0 3px rgba(255,240,202,.25); } }
+    @keyframes arrival-caption { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @keyframes arrival-orbit { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .arrival *, .arrival::before, .arrival::after { animation: none !important; transition: none !important; } .arrival.arrival--opened { display: none; } }
+  </style>
+</head>
+<body>
+  
+      <div class="arrival arrival--velvet" role="status" aria-label="A wedding invitation is being delivered">
+    <div class="arrival-stage">
+      <div class="arrival-heading">Delivered with love</div>
+      <div class="arrival-flight">
+        <div class="arrival-envelope" role="button" tabindex="0" aria-label="Open the wedding invitation for Guest Name &amp; Family" onclick="const arrival=this.closest('.arrival');arrival.classList.add('arrival--opened');window.setTimeout(()=>arrival.remove(),1400)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
+          <div class="arrival-letter">
+            <div class="arrival-letter-label">You are warmly invited</div>
+            <div class="arrival-letter-couple">Groom &amp; Bride</div>
+            <div class="arrival-letter-guest">A celebration prepared for Guest Name &amp; Family</div>
+          </div>
+          <div class="arrival-flap"></div>
+          <div class="arrival-front"></div>
+          <div class="arrival-seal">&amp;</div>
+          <div class="arrival-address">
+            <span class="arrival-address-label">A special invitation for</span>
+            <strong class="arrival-address-guest">Guest Name &amp; Family</strong>
+            <span class="arrival-address-couple">from Groom &amp; Bride</span>
+            <span class="arrival-address-action">Touch to open</span>
+          </div>
+        </div>
+      </div>
+      <div class="arrival-smoke"></div><div class="arrival-smoke"></div><div class="arrival-smoke"></div><div class="arrival-smoke"></div>
+    </div>
+  </div>
+  <div class="invite-container">
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap');
+.royal{min-height:100%;padding:22px;background:radial-gradient(ellipse at 50% 0,#57336c,#21162f 63%);color:#fff7e8;font-family:Manrope,sans-serif;animation:royal-rise .8s cubic-bezier(.2,.75,.25,1) both}.royal-card{padding:23px 18px;text-align:center;border:1px solid #c7a75b;outline:1px solid #80663d;outline-offset:-6px;background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.015));position:relative;overflow:hidden}.royal-card:before{content:'';position:absolute;inset:-50% 30% 55%;background:#c7a75b;opacity:.1;filter:blur(35px);transform:rotate(25deg)}.royal-crown{color:#d5b86c;font-size:24px;animation:royal-crown 2.8s ease-in-out infinite}.royal-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#dfc77e}.royal h1{position:relative;font:500 35px/1.06 'Playfair Display',serif;color:#f1d98c;margin:16px 0}.royal-guest{font:17px 'Playfair Display',serif;margin:17px 0 10px}.royal-note{font:italic 12px/1.7 'Playfair Display',serif;color:#e6d9ee}.royal-seal{width:54px;height:54px;border:1px solid #c7a75b;border-radius:50%;display:grid;place-items:center;margin:18px auto 12px;color:#e0c778;font-size:18px}.royal-details{border-top:1px solid #8e7447;border-bottom:1px solid #8e7447;padding:12px 5px;font-size:11px;line-height:1.8;color:#f7ecd7}.royal-actions{display:grid;gap:8px;margin-top:16px}.royal a{padding:11px;text-decoration:none;background:#c3a45a;color:#251a2d;font-size:10px;font-weight:700;letter-spacing:.7px}.royal a:not(:first-child){background:transparent;color:#f7e6bd;border:1px solid #94794b}@keyframes royal-rise{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}@keyframes royal-crown{50%{transform:translateY(-4px);text-shadow:0 0 16px #e7c66b}}@media(prefers-reduced-motion:reduce){.royal,.royal-crown{animation:none}}
+</style><section class="royal"><article class="royal-card"><div class="royal-crown">♛</div><div class="royal-label">By royal invitation</div><h1>Groom &amp; Bride</h1><div class="royal-label">Request the pleasure of your company</div><div class="royal-guest">Guest Name &amp; Family</div><p class="royal-note">“We are so excited to invite you to celebrate this special day with us!”</p><div class="royal-seal">✦</div><div class="royal-details"><div class="invite-event-date"><strong class="invite-date-scratch">December 18, 2026</strong><span class="invite-time">5:30 PM Onwards</span><div class="invite-countdown" hidden="" role="timer" aria-label="Countdown to Wedding"></div></div><section class="invite-event-extra" aria-label="Additional event details"><h2>More details</h2><div class="invite-event-extra-section"><h3>Celebration details</h3><dl><div><dt>Event</dt><dd>Wedding</dd></div><div><dt>Guest arrival</dt><dd>5:00 PM</dd></div><div><dt>Venue address</dt><dd>Mumbai, Maharashtra</dd></div></dl></div><div class="invite-event-extra-section"><h3>With our families</h3><dl><div><dt>Groom</dt><dd>Groom</dd></div><div><dt>Groom’s family</dt><dd>S</dd></div><div><dt>Groom’s parents</dt><dd>P1</dd></div><div><dt>Bride</dt><dd>Bride</dd></div><div><dt>Bride’s family</dt><dd>Q</dd></div><div><dt>Bride’s parents</dt><dd>P2</dd></div></dl></div><div class="invite-event-extra-section"><h3>Wedding schedule</h3><dl><div><dt>Muhurtham / auspicious time</dt><dd>10:30 AM</dd></div></dl></div></section><br>The Grand Ballroom, Taj Lands End, Mumbai</div><div class="royal-actions"><section class="invite-map" aria-label="Map to The Grand Ballroom, Taj Lands End, Mumbai"><div class="invite-map-heading"><span class="invite-map-kicker">Location</span><a class="invite-map-location" href="https://www.google.co.in/maps/place/THE+LAKE+MANOR/@9.8942858,76.3242697,13.67z/data=!4m9!3m8!1s0x3b0873001ac261bb:0x2d08102b43a48b69!5m2!4m1!1i2!8m2!3d9.8919751!4d76.3380213!16s%2Fg%2F11ln16y7hp?entry=ttu&amp;g_ep=EgoyMDI2MTAxMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">The Grand Ballroom, Taj Lands End, Mumbai</a></div><iframe src="https://www.google.com/maps?q=The%20Grand%20Ballroom%2C%20Taj%20Lands%20End%2C%20Mumbai%2C%20Mumbai%2C%20Maharashtra&amp;output=embed" title="Map showing The Grand Ballroom, Taj Lands End, Mumbai" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></section><a href="https://wa.me/919876543210?text=Hi!%20I%20(Guest%20Name%20%26%20Family)%20happily%20confirm%20my%20attendance%20for%20Groom%20%26%20Bride's%20wedding!" target="_blank" rel="noopener">RSVP on WhatsApp</a><a href="mailto:rsvp%40urlovingly.com?subject=Wedding%20RSVP%20-%20Guest%20Name%20%26%20Family&amp;body=Hi!%20I%20(Guest%20Name%20%26%20Family)%20happily%20confirm%20my%20attendance%20for%20Groom%20%26%20Bride's%20wedding!">RSVP by email</a></div></article></section>
+
+  </div>
+  <script>
+    (() => {
+      const invite = document.querySelector('.invite-container');
+      if (!invite) return;
+
+      const initializeCountdown = eventBlock => {
+        const dateText = eventBlock.querySelector('.invite-date-scratch').textContent.trim();
+        const timeText = eventBlock.querySelector('.invite-time').textContent;
+        const countdown = eventBlock.querySelector('.invite-countdown');
+        const target = new Date(dateText);
+        const timeMatch = timeText.match(/\b(\d{1,2})(?::(\d{2}))?\s*(AM|PM)\b/i);
+        if (timeMatch && !Number.isNaN(target.getTime())) {
+          let hours = Number(timeMatch[1]) % 12;
+          if (timeMatch[3].toUpperCase() === 'PM') hours += 12;
+          target.setHours(hours, Number(timeMatch[2] || 0), 0, 0);
+        }
+        countdown.replaceChildren();
+        if (Number.isNaN(target.getTime())) {
+          countdown.textContent = 'Add a valid event date to start the countdown.';
+          countdown.classList.add('invite-countdown-past');
+          countdown.hidden = false;
+          return;
+        }
+        const values = ['Days', 'Hours', 'Minutes', 'Seconds'].map(label => {
+          const unit = document.createElement('span');
+          unit.className = 'invite-countdown-unit';
+          const value = document.createElement('strong');
+          const caption = document.createElement('span');
+          caption.textContent = label;
+          unit.append(value, caption);
+          countdown.append(unit);
+          return value;
+        });
+        let timer = null;
+        const update = () => {
+          const remaining = target.getTime() - Date.now();
+          if (remaining <= 0) {
+            countdown.replaceChildren();
+            countdown.textContent = 'The celebration has begun.';
+            countdown.classList.add('invite-countdown-past');
+            if (timer) clearInterval(timer);
+            return;
+          }
+          let seconds = Math.floor(remaining / 1000);
+          const days = Math.floor(seconds / 86400);
+          seconds %= 86400;
+          const hours = Math.floor(seconds / 3600);
+          seconds %= 3600;
+          const minutes = Math.floor(seconds / 60);
+          seconds %= 60;
+          [days, hours, minutes, seconds].forEach((value, index) => { values[index].textContent = String(value).padStart(2, '0'); });
+        };
+        update();
+        timer = setInterval(update, 1000);
+        countdown.hidden = false;
+      };
+
+      invite.querySelectorAll('.invite-date-scratch').forEach(dateElement => {
+        const eventBlock = dateElement.closest('.invite-event-date');
+        const cover = document.createElement('canvas');
+        const context = cover.getContext('2d', { willReadFrequently: true });
+        cover.className = 'invite-scratch-cover';
+        cover.setAttribute('role', 'button');
+        cover.tabIndex = 0;
+        cover.setAttribute('aria-label', 'Scratch to reveal the event date');
+        dateElement.append(cover);
+        const countdown = eventBlock.querySelector('.invite-countdown');
+        countdown.hidden = true;
+        let moves = 0;
+        let revealed = false;
+        let scratching = false;
+        const drawCover = () => {
+          const bounds = cover.getBoundingClientRect();
+          if (!bounds.width || !bounds.height) return;
+          const ratio = window.devicePixelRatio || 1;
+          cover.width = Math.round(bounds.width * ratio);
+          cover.height = Math.round(bounds.height * ratio);
+          context.setTransform(ratio, 0, 0, ratio, 0, 0);
+          const gradient = context.createLinearGradient(0, 0, bounds.width, bounds.height);
+          gradient.addColorStop(0, '#eee9dd');
+          gradient.addColorStop(.5, '#c6c0b4');
+          gradient.addColorStop(1, '#f5f0e6');
+          context.fillStyle = gradient;
+          context.fillRect(0, 0, bounds.width, bounds.height);
+          context.strokeStyle = 'rgba(255,255,255,.34)';
+          context.lineWidth = 1;
+          for (let line = -bounds.height; line < bounds.width + bounds.height; line += 9) {
+            context.beginPath();
+            context.moveTo(line, 0);
+            context.lineTo(line + bounds.height, bounds.height);
+            context.stroke();
+          }
+          context.fillStyle = '#4d493f';
+          context.font = '700 9px Plus Jakarta Sans, sans-serif';
+          context.textAlign = 'center';
+          context.textBaseline = 'middle';
+          context.fillText('SCRATCH TO REVEAL', bounds.width / 2, bounds.height / 2, bounds.width - 12);
+        };
+        const revealDate = () => {
+          if (revealed) return;
+          revealed = true;
+          eventBlock.classList.add('is-revealed');
+          cover.setAttribute('aria-label', 'Event date revealed');
+          initializeCountdown(eventBlock);
+          window.setTimeout(() => cover.remove(), 450);
+        };
+        const erasePoint = event => {
+          const bounds = cover.getBoundingClientRect();
+          const x = event.clientX - bounds.left;
+          const y = event.clientY - bounds.top;
+          context.globalCompositeOperation = 'destination-out';
+          context.beginPath();
+          context.arc(x, y, 16, 0, Math.PI * 2);
+          context.fill();
+          moves++;
+          if (moves % 5) return;
+          const pixels = context.getImageData(0, 0, cover.width, cover.height).data;
+          let clearCount = 0;
+          let sampleCount = 0;
+          const step = 4 * Math.max(1, Math.floor(cover.width / 80));
+          for (let pixel = 3; pixel < pixels.length; pixel += step) {
+            sampleCount++;
+            if (pixels[pixel] < 32) clearCount++;
+          }
+          if (sampleCount && clearCount / sampleCount > .38) revealDate();
+        };
+        cover.addEventListener('pointerdown', event => {
+          event.preventDefault();
+          scratching = true;
+          cover.setPointerCapture(event.pointerId);
+          erasePoint(event);
+        });
+        cover.addEventListener('pointermove', event => { if (scratching) erasePoint(event); });
+        cover.addEventListener('pointerup', () => { scratching = false; });
+        cover.addEventListener('pointercancel', () => { scratching = false; });
+        cover.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); revealDate(); }
+        });
+        new ResizeObserver(drawCover).observe(dateElement);
+        drawCover();
+      });
+
+      const letterObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          letterObserver.unobserve(entry.target);
+        });
+      }, { threshold: .15, rootMargin: '0px 0px -6% 0px' }) : null;
+      invite.querySelectorAll('h1,h2,h3,p,[class$="-guest"]').forEach(block => {
+        if (block.children.length && !block.matches('[class$="-guest"]')) return;
+        const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+        const textNodes = [];
+        while (walker.nextNode()) if (walker.currentNode.textContent.trim()) textNodes.push(walker.currentNode);
+        if (!textNodes.length) return;
+        block.classList.add('invite-letter-block');
+        let letterIndex = 0;
+        textNodes.forEach(textNode => {
+          const fragment = document.createDocumentFragment();
+          Array.from(textNode.textContent).forEach(character => {
+            const letter = document.createElement('span');
+            letter.className = 'invite-letter-char';
+            letter.style.setProperty('--letter-delay', Math.min(letterIndex * 18, 540) + 'ms');
+            letter.textContent = character === ' ' ? '\u00a0' : character;
+            fragment.append(letter);
+            letterIndex++;
+          });
+          textNode.replaceWith(fragment);
+        });
+        if (letterObserver) letterObserver.observe(block);
+        else block.classList.add('is-visible');
+      });
+    })();
+  </script>
+</body>
+</html>
+<!-- urlovingly-build:1792391562420-gro4rx8zjm -->
