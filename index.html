@@ -251,7 +251,7 @@
             <!-- Restored Template Selector -->
             <div>
               <label class="block text-xs font-bold text-brand-navy mb-2.5">Invitation Visual Style</label>
-              <div class="grid grid-cols-3 gap-3">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <label class="cursor-pointer">
                   <input type="radio" name="templateType" value="urlovingly" checked onchange="updateLivePreview()" class="sr-only peer">
                   <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
@@ -262,20 +262,65 @@
                 </label>
 
                 <label class="cursor-pointer">
-                  <input type="radio" name="templateType" value="royal" onchange="updateLivePreview()" class="sr-only peer">
+                  <input type="radio" name="templateType" value="regal-palatial" onchange="updateLivePreview()" class="sr-only peer">
                   <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-[#241142] border border-pink-400 flex items-center justify-center text-pink-300 font-serif font-bold text-xs shadow-sm">RV</div>
-                    <div class="text-xs font-bold text-brand-navy">Royal Velvet</div>
-                    <div class="text-[10px] text-slate-500">Deep Plum</div>
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-amber-100 border border-amber-700 flex items-center justify-center text-amber-900 font-serif font-bold text-xs shadow-sm">RP</div>
+                    <div class="text-xs font-bold text-brand-navy">Regal &amp; Palatial</div>
+                    <div class="text-[10px] text-slate-500">Gilt &amp; ivory</div>
                   </div>
                 </label>
 
                 <label class="cursor-pointer">
-                  <input type="radio" name="templateType" value="modern" onchange="updateLivePreview()" class="sr-only peer">
+                  <input type="radio" name="templateType" value="royal" onchange="updateLivePreview()" class="sr-only peer">
                   <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-pink-50 border border-brand-navy flex items-center justify-center text-brand-navy font-sans font-extrabold text-[10px] shadow-sm">BM</div>
-                    <div class="text-xs font-bold text-brand-navy">Blush Minimal</div>
-                    <div class="text-[10px] text-slate-500">Pure White</div>
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-violet-950 border border-amber-400 flex items-center justify-center text-amber-200 font-serif font-bold text-xs shadow-sm">R</div>
+                    <div class="text-xs font-bold text-brand-navy">Royal</div>
+                    <div class="text-[10px] text-slate-500">Velvet &amp; gold</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="modern-minimalist" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-stone-100 border border-emerald-800 flex items-center justify-center text-emerald-900 font-sans font-bold text-xs shadow-sm">M</div>
+                    <div class="text-xs font-bold text-brand-navy">Modern Minimalist</div>
+                    <div class="text-[10px] text-slate-500">Quiet &amp; refined</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="vibrant-contemporary" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-orange-500 border border-slate-900 flex items-center justify-center text-lime-200 font-bold text-xs shadow-sm">V</div>
+                    <div class="text-xs font-bold text-brand-navy">Vibrant &amp; Contemporary</div>
+                    <div class="text-[10px] text-slate-500">Playful &amp; bold</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="heritage-temple-art" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-orange-100 border border-red-800 flex items-center justify-center text-red-900 font-serif font-bold text-xs shadow-sm">H</div>
+                    <div class="text-xs font-bold text-brand-navy">Heritage &amp; Temple Art</div>
+                    <div class="text-[10px] text-slate-500">Motifs &amp; warmth</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="tropical-destination" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-emerald-100 border border-teal-800 flex items-center justify-center text-teal-900 font-serif font-bold text-xs shadow-sm">T</div>
+                    <div class="text-xs font-bold text-brand-navy">Tropical &amp; Destination</div>
+                    <div class="text-[10px] text-slate-500">Garden getaway</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="vintage-nostalgia" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-amber-100 border border-stone-600 flex items-center justify-center text-stone-700 font-serif font-bold text-xs shadow-sm">V</div>
+                    <div class="text-xs font-bold text-brand-navy">Vintage Nostalgia</div>
+                    <div class="text-[10px] text-slate-500">A keepsake feel</div>
                   </div>
                 </label>
               </div>
@@ -348,7 +393,7 @@
             <div class="bg-purple-50/70 border-b border-purple-100 px-4 py-2 flex items-center gap-2 shrink-0">
               <div id="previewBrowserUrl" class="text-[11px] font-mono text-brand-navy/75 truncate"></div>
             </div>
-            <div id="mobilePreviewViewport" class="flex-1 overflow-y-auto custom-scrollbar p-5"></div>
+            <iframe id="mobilePreviewViewport" title="Complete invitation website preview" class="flex-1 min-h-0 w-full border-0 bg-white" sandbox="allow-scripts allow-popups"></iframe>
           </div>
         </div>
       </div>
@@ -361,6 +406,11 @@
     const STORAGE_KEYS = { DEFAULTS: 'urlovingly_event_defaults_v2' };
     
     let activeSessionToken = localStorage.getItem("urlovingly_session");
+    let previewRenderPromise = Promise.resolve();
+    let previewRenderId = 0;
+    let activeTemplateLoaded = true;
+    let renderedInvitationFragment = '';
+    const invitationTemplateCache = new Map();
 
     window.addEventListener('DOMContentLoaded', () => {
       if (activeSessionToken) {
@@ -437,6 +487,8 @@
       e.preventDefault();
       if (!activeSessionToken) return alert("Please log in first.");
 
+      await previewRenderPromise;
+      if (!activeTemplateLoaded) return alert("The selected invitation style could not be loaded. Please try another style.");
       const data = getFormState();
       const submitBtn = document.getElementById('submitBtn');
       const resultBanner = document.getElementById('resultBanner');
@@ -555,14 +607,33 @@
         venueName: document.getElementById('venueName').value
       }));
     }
+    function buildFullPageHtml(guestName, renderedHtml) {
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Invitation for ${escapeHtml(guestName)}</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fcfaff; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .invite-container { width: 100%; max-width: 420px; min-height: 100vh; background: white; box-shadow: 0 0 40px rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+  <div class="invite-container">
+    ${renderedHtml}
+  </div>
+</body>
+</html>`;
+    }
+
     function getFormState() {
       const guestName = document.getElementById('guestName').value || 'Valued Guest';
       const coupleNames = document.getElementById('coupleNames').value || 'Aarav & Priya';
       const selectedTheme = document.querySelector('input[name="templateType"]:checked');
       const slug = slugify(guestName), coupleSlug = slugify(coupleNames);
-      
-      // Capture the live preview HTML container contents
-      const previewHtml = document.getElementById('mobilePreviewViewport').innerHTML;
 
       return {
         name: guestName, 
@@ -577,7 +648,7 @@
         rsvp_phone: document.getElementById('rsvpPhone').value,
         host_email: document.getElementById('hostEmail').value,
         custom_note: getSelectedNote(),
-        rendered_html: previewHtml, // <--- Sends the exact designed template layout
+        rendered_html: buildFullPageHtml(guestName, renderedInvitationFragment),
         fullUrl: `${BASE_HOSTED_DOMAIN.replace(/\/+$/, '')}/${coupleSlug}/to/${slug}/`
       };
     }
@@ -590,98 +661,51 @@
       document.getElementById('previewBrowserUrl').textContent = data.fullUrl.replace(/^https?:\/\//, '');
 
       const viewport = document.getElementById('mobilePreviewViewport');
-      const rsvpText = `Hi! I (${data.name}) happily confirm my attendance for ${data.couple_names}'s wedding!`;
-      const waLink = `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`;
-      const mailLink = `mailto:${encodeURIComponent(data.host_email)}?subject=${encodeURIComponent(`Wedding RSVP - ${data.name}`)}&body=${encodeURIComponent(rsvpText)}`;
-
-      // Render template based on selection
-      if (data.template === 'urlovingly') {
-        viewport.innerHTML = `
-          <div class="min-h-full bg-gradient-to-b from-purple-50/90 via-pink-50/60 to-white p-5 text-center flex flex-col justify-between">
-            <div class="bg-white rounded-[28px] p-6 shadow-md border border-pink-100 relative overflow-hidden">
-              <div class="absolute top-0 inset-x-0 h-1.5 brand-gradient"></div>
-              ${getEnvelopeIconHtml("w-16 h-16")}
-              <span class="inline-block mt-2 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest bg-pink-50 text-brand-pink border border-pink-200">
-                Wedding Invitation
-              </span>
-              <div class="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-purple-50/80 to-pink-50/80 border border-purple-100">
-                <div class="text-[9px] uppercase tracking-widest font-bold text-brand-purple">Exclusively Prepared For</div>
-                <div class="font-serif text-xl font-bold text-brand-navy mt-0.5">${escapeHtml(data.name)}</div>
-              </div>
-              <p class="mt-4 text-[10px] uppercase tracking-widest text-brand-purple font-bold">Together With Their Families</p>
-              <h1 class="font-serif text-3xl font-bold brand-text-gradient my-1">${escapeHtml(data.couple_names)}</h1>
-              <p class="text-xs text-slate-600 italic leading-relaxed my-3">"${escapeHtml(data.custom_note)}"</p>
-              <div class="bg-purple-50/50 rounded-2xl p-3.5 border border-purple-100 text-left space-y-2 text-xs">
-                <div>
-                  <span class="text-[9px] font-bold uppercase text-brand-pink block">Date & Time</span>
-                  <span class="font-semibold text-brand-navy">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</span>
-                </div>
-                <div>
-                  <span class="text-[9px] font-bold uppercase text-brand-pink block">Venue</span>
-                  <span class="font-semibold text-brand-navy">${escapeHtml(data.venue)}</span>
-                </div>
-              </div>
-              <div class="mt-4 space-y-2">
-                <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full py-2.5 rounded-xl bg-purple-50 text-brand-purple font-bold text-xs border border-purple-200">📍 View Venue Map</a>
-                <a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs shadow">💌 RSVP via WhatsApp</a>
-                <a href="${mailLink}" class="block w-full py-2 rounded-xl bg-white text-brand-navy font-semibold text-[11px] border border-pink-200">✉️ RSVP via Email</a>
-              </div>
-              <div class="mt-4 text-[10px] text-slate-400">Created with <strong class="text-brand-pink">URLovingly</strong></div>
-            </div>
-          </div>
-        `;
-      } else if (data.template === 'royal') {
-        viewport.innerHTML = `
-          <div class="min-h-full bg-gradient-to-b from-[#151438] via-[#2b124c] to-[#151438] text-white p-5 text-center flex flex-col justify-between">
-            <div class="border border-pink-400/30 rounded-[28px] p-5 bg-white/5 backdrop-blur-sm">
-              ${getEnvelopeIconHtml("w-14 h-14")}
-              <div class="mt-2 text-[10px] uppercase tracking-widest text-pink-300 font-bold">Royal Celebration</div>
-              <div class="mt-3 p-3 rounded-2xl bg-white/10 border border-pink-300/20">
-                <div class="text-[9px] uppercase tracking-widest text-pink-200">Honored Guest</div>
-                <div class="font-serif text-xl font-bold text-white mt-0.5">${escapeHtml(data.name)}</div>
-              </div>
-              <h1 class="font-serif text-3xl font-bold text-pink-300 my-4">${escapeHtml(data.couple_names)}</h1>
-              <p class="text-xs text-purple-100/90 italic mb-4">"${escapeHtml(data.custom_note)}"</p>
-              <div class="bg-black/25 rounded-2xl p-3.5 text-xs space-y-2 border border-white/10">
-                <div class="text-pink-200 font-semibold">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</div>
-                <div class="text-white/90">${escapeHtml(data.venue)}</div>
-              </div>
-              <div class="mt-4 space-y-2">
-                <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full py-2 rounded-xl bg-white/10 text-pink-200 font-bold text-xs">📍 Location Map</a>
-                <a href="${waLink}" target="_blank" class="block w-full py-2.5 rounded-xl brand-gradient text-white font-bold text-xs">💌 WhatsApp RSVP</a>
-                <a href="${mailLink}" class="block w-full py-2 rounded-xl border border-pink-300/30 text-pink-100 text-[11px]">✉️ Email RSVP</a>
-              </div>
-              <div class="mt-4 text-[10px] text-purple-300">URLovingly Digital Invites</div>
-            </div>
-          </div>
-        `;
-      } else {
-        viewport.innerHTML = `
-          <div class="min-h-full bg-white p-6 text-left flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between border-b border-pink-100 pb-3">
-                <span class="font-serif font-bold text-base text-brand-navy">UR<span class="text-brand-pink">Lovingly</span></span>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-brand-purple">Wedding Invite</span>
-              </div>
-              <div class="mt-5">
-                <div class="text-[10px] font-bold uppercase tracking-widest text-brand-purple">Personal Invitation For</div>
-                <div class="font-serif text-2xl font-bold text-brand-navy mt-0.5">${escapeHtml(data.name)}</div>
-              </div>
-              <h1 class="font-serif text-4xl font-bold text-brand-pink my-4 leading-tight">${escapeHtml(data.couple_names)}</h1>
-              <p class="text-xs text-slate-600 italic leading-relaxed mb-5">"${escapeHtml(data.custom_note)}"</p>
-              <div class="border-l-2 border-brand-pink pl-3.5 space-y-2 text-xs">
-                <div class="font-bold text-brand-navy">${escapeHtml(data.wedding_date)} • ${escapeHtml(data.wedding_time)}</div>
-                <div class="text-slate-600">${escapeHtml(data.venue)}</div>
-              </div>
-            </div>
-            <div class="space-y-2 pt-6">
-              <a href="${escapeHtml(data.map_url)}" target="_blank" class="block w-full text-center py-2.5 rounded-xl bg-purple-50 text-brand-purple font-bold text-xs">📍 Open Venue Map</a>
-              <a href="${waLink}" target="_blank" class="block w-full text-center py-2.5 rounded-xl bg-brand-navy text-white font-bold text-xs">💌 Confirm on WhatsApp</a>
-              <a href="${mailLink}" class="block w-full text-center py-2 rounded-xl border border-slate-200 text-slate-700 font-semibold text-[11px]">✉️ Confirm via Email</a>
-            </div>
-          </div>
-        `;
-      }
+      const renderId = ++previewRenderId;
+      activeTemplateLoaded = false;
+      const templateRequest = invitationTemplateCache.has(data.template)
+        ? Promise.resolve(invitationTemplateCache.get(data.template))
+        : fetch(`templates/${data.template}/index.html`).then(response => {
+          if (!response.ok) throw new Error(`Template request failed (${response.status})`);
+          return response.text();
+        }).then(markup => {
+          invitationTemplateCache.set(data.template, markup);
+          return markup;
+        });
+      previewRenderPromise = templateRequest
+        .then(templateMarkup => {
+          if (renderId !== previewRenderId) return;
+          const rsvpText = `Hi! I (${data.name}) happily confirm my attendance for ${data.couple_names}'s wedding!`;
+          const values = {
+            guest_name: data.name,
+            couple_names: data.couple_names,
+            wedding_date: data.wedding_date,
+            wedding_time: data.wedding_time,
+            venue: data.venue,
+            custom_note: data.custom_note,
+            map_url: data.map_url,
+            rsvp_phone: data.rsvp_phone,
+            host_email: data.host_email,
+            wa_url: `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`,
+            email_url: `mailto:${encodeURIComponent(data.host_email)}?subject=${encodeURIComponent(`Wedding RSVP - ${data.name}`)}&body=${encodeURIComponent(rsvpText)}`
+          };
+          const renderedMarkup = templateMarkup.replace(/\{\{\s*(guest_name|couple_names|wedding_date|wedding_time|venue|custom_note|map_url|rsvp_phone|host_email|wa_url|email_url)(?:\s*\|\s*(urlencode))?\s*\}\}/g, (match, key, encoded) => {
+            return encoded ? encodeURIComponent(values[key]) : escapeHtml(values[key]);
+          });
+          const templateDocument = new DOMParser().parseFromString(renderedMarkup, 'text/html');
+          const styles = Array.from(templateDocument.head.querySelectorAll('style')).map(style => style.outerHTML).join('');
+          const stylesheets = Array.from(templateDocument.head.querySelectorAll('link[rel="stylesheet"]')).map(link => link.outerHTML).join('');
+          renderedInvitationFragment = stylesheets + styles + templateDocument.body.innerHTML;
+          viewport.srcdoc = buildFullPageHtml(data.name, renderedInvitationFragment);
+          activeTemplateLoaded = true;
+        })
+        .catch(error => {
+          if (renderId !== previewRenderId) return;
+          console.error('Invitation template could not be loaded:', error);
+          renderedInvitationFragment = '<p>This invitation style could not be loaded.</p>';
+          viewport.srcdoc = buildFullPageHtml(data.name, renderedInvitationFragment);
+          activeTemplateLoaded = false;
+        });
     }
   </script>
 </body>

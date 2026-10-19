@@ -19,7 +19,7 @@ def main():
     couple_slug = slugify(couple_names)
 
     # Wrap the dynamic preview template inside a complete mobile-responsive HTML wrapper page
-    full_page_html = f"""<!DOCTYPE html>
+    full_page_html = rendered_html if rendered_html.lstrip().lower().startswith("<!doctype html") else f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
