@@ -325,6 +325,19 @@ Errors use `{"error": "<code>", "message": "<text>"}`. A plan restriction return
 * Python 3.10+, Flask, SQLite. Plans, prices and entitlements live in one file (`server/plans.py`).
 * Configuration by environment variables (section 9).
 
+### 7.7 Hosting and deployment
+
+| ID | Requirement | Acceptance criterion |
+|---|---|---|
+| FR-DEP-01 | The landing page, Flask APIs, authentication and studio are served from the same HTTPS origin. GitHub Pages may host static marketing content or redirect visitors, but cannot complete sign-in, checkout or studio workflows by itself. | Deployed browser flow uses one origin; authenticated requests retain the session cookie. |
+| FR-DEP-02 | A host used for real customer data must preserve the SQLite database and uploaded media across application restarts and redeployments. A free plan with ephemeral storage is suitable only for disposable demos unless the app is moved to persistent storage. | Create a record and upload, restart/redeploy, then confirm both remain available. |
+| FR-DEP-03 | Production runs with HTTPS, `URLOVINGLY_ENV=production`, developer login disabled, and Razorpay credentials configured. Google sign-in requires the public site origin to be in the OAuth client's Authorized JavaScript origins. | Production startup guards pass; Google sign-in succeeds from the deployed origin; secure session cookie is present. |
+| FR-DEP-04 | The production host permits outbound HTTPS requests to Google's token verification endpoints and `api.razorpay.com`; payment webhooks must reach `/api/payments/razorpay/webhook`. Razorpay test credentials may be used for staging; mock payments and developer login are local/development-only. | Verify a Google login and Razorpay test-mode order/settlement; verify webhook delivery from the gateway dashboard. |
+| FR-DEP-05 | `URLOVINGLY_PUBLIC_URL` must be set to the Flask app's canonical HTTPS origin so generated guest links resolve to the SQLite-backed application. It must not point at the Cloudflare Worker unless SQLite-to-D1 synchronization and matching invitation records have been implemented. | Publish a guest link and confirm its host is the Flask app and it opens the published invitation. |
+| FR-DEP-06 | A zero-cost host is acceptable only if its current free-tier terms satisfy the persistence, Python/WSGI, HTTPS and outbound-network requirements above. PythonAnywhere may be evaluated as a candidate; confirm its current free-tier outbound access to Google and Razorpay before relying on it. | Record the chosen provider and complete the FR-DEP-01…05 deployment checks. |
+
+A local `python run.py --dev` deployment provides a no-cost development cycle using developer sign-in and mock payments; it must not be exposed as a public production service. Cloudflare Workers + D1 can serve dynamic guest pages, but the current Worker is a separate system and is not a drop-in host for the Flask customer app.
+
 ---
 
 ## 8. Business rules
@@ -349,7 +362,7 @@ Errors use `{"error": "<code>", "message": "<text>"}`. A plan restriction return
 | `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` | – | Required in production |
 | `RAZORPAY_WEBHOOK_SECRET` | – | Enables the webhook endpoint |
 | `URLOVINGLY_DB` / `URLOVINGLY_MEDIA` | `data/…` | Database file and upload folder |
-| `URLOVINGLY_PUBLIC_URL` | request host | Base URL used in generated links |
+| `URLOVINGLY_PUBLIC_URL` | `https://invite-guests.urlovingly-comp.workers.dev` in `server/config.py` | Base URL used in generated links. For the Flask app, set this to its own canonical HTTPS origin; the current Worker does not receive/synchronize SQLite invitation data. |
 | `URLOVINGLY_OWNER_EMAIL` | empty (dashboard disabled) | Exact Google account allowed to access `/owner` |
 
 Run locally: `pip install -r req-dev.txt`, then `python run.py --dev` and open <http://127.0.0.1:5000>. Run tests: `python -m pytest`.
@@ -391,3 +404,4 @@ Test files are in [`tests/`](../tests). Run `python -m pytest -v` to see each ca
 | FR-AD-01…04 | `test_features.py`: audio tests |
 | FR-NF-S1…S7 | `test_pages_and_security.py`: CSRF, security headers, SQL-injection, path traversal; `test_auth.py`; `test_features.py` (escaping, content sniffing) |
 | FR-ST-04…07, FR-LP-08 | Manual verification in the browser (UI behaviour) |
+| FR-DEP-01…06 | Manual deployment checks against the selected host; verify persistent data, same-origin session, OAuth origin, outbound gateway access, webhook, and generated guest-link host. |

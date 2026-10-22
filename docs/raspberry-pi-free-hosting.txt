@@ -1,0 +1,237 @@
+URLovingly on a Raspberry Pi (free setup)
+===========================================
+
+Goal
+----
+Run the Flask website, API, studio, SQLite database and uploaded media on your Raspberry Pi, and make it reachable over HTTPS without buying a hosting plan or opening router ports. This guide uses Tailscale Funnel for a public HTTPS tunnel.
+
+Cost and limits
+---------------
+- No paid cloud host or domain is required for the test setup. Tailscale Funnel is currently available on all Tailscale plans; check its current terms and bandwidth limits before relying on it.
+- The Pi, electricity and home internet are not free. The site is unavailable when the Pi, power or internet is down. Keep the Pi cool and powered reliably.
+- Use Razorpay TEST keys only. They simulate payment; no money is received. Live payments require a Razorpay account, business onboarding, live keys and transaction fees.
+- Google sign-in requires an OAuth client that accepts the public HTTPS origin. A Tailscale `*.ts.net` hostname is not a domain you own. Confirm Google Cloud accepts it as an authorized JavaScript origin; if it requires proof of domain ownership, use a domain you control or do not enable public Google sign-in. Never expose developer login as a public substitute.
+- This is a small personal deployment, not a highly available or hardened commercial hosting setup. Keep the operating system and packages updated and make backups.
+
+How the request will flow
+-------------------------
+Visitor -> https://<your-pi>.<your-tailnet>.ts.net -> Tailscale Funnel -> Gunicorn on 127.0.0.1:8000 -> Flask app -> SQLite/media on the Pi.
+
+Keep the landing page and APIs on this same origin. GitHub Pages is not part of the authenticated app flow. The Cloudflare Worker/D1 project is separate and is not synchronized with this Flask app's SQLite database.
+
+Before you begin
+----------------
+- Raspberry Pi 3 or newer is recommended; Raspberry Pi OS 64-bit Lite is a good starting point.
+- Have the Pi connected to the internet and know its local username. The examples use `pi`; replace it with your real username everywhere.
+- Push the latest app code to GitHub first, or use another secure way to copy your project to the Pi.
+- Have access to the Google Cloud project for the web OAuth client.
+- Create a Tailscale account. Install the official client on the Pi and a computer you can use to manage the tailnet.
+
+1. Install Raspberry Pi OS and secure the Pi
+--------------------------------------------
+1. Install Raspberry Pi OS 64-bit Lite using Raspberry Pi Imager. Set a strong unique password, a hostname such as `urlovingly-pi`, your Wi-Fi settings if needed, and enable SSH only if you need remote administration.
+2. Boot the Pi, connect over SSH or use its terminal, and update it:
+
+   sudo apt update
+   sudo apt full-upgrade -y
+   sudo reboot
+
+3. After it restarts, reconnect and install the app's system packages:
+
+   sudo apt install -y git python3 python3-venv python3-pip sqlite3 curl
+
+4. Check the username and architecture:
+
+   whoami
+   uname -m
+
+   Record the username. For a 64-bit OS, `uname -m` commonly prints `aarch64`.
+
+2. Download and prepare the app
+-------------------------------
+1. Clone the repository. If it is private, authenticate using your normal GitHub-approved method; never put a password or access token in the clone URL.
+
+   cd ~
+   git clone https://github.com/URLovingly/Invitation.git
+   cd ~/Invitation
+
+2. Create an isolated Python environment and install runtime dependencies plus Gunicorn:
+
+   python3 -m venv .venv
+   . .venv/bin/activate
+   python -m pip install --upgrade pip
+   pip install -r req.txt gunicorn
+
+3. Create the persistent runtime directories and make sure your user can write them:
+
+   mkdir -p ~/Invitation/data/media
+   chmod 700 ~/Invitation/data ~/Invitation/data/media
+
+4. Create a WSGI entry point. Gunicorn must not import `run.py`, because it parses command-line arguments when imported.
+
+   cd ~/Invitation
+   nano wsgi.py
+
+   Put these two lines in `wsgi.py`, save, and exit:
+
+   from server import create_app
+   app = create_app()
+
+3. Set production configuration safely
+--------------------------------------
+1. Create a root-readable environment file. Do not commit it to GitHub or paste secrets into chat.
+
+   sudo nano /etc/urlovingly.env
+
+2. Add the following, replacing every example value. Obtain Razorpay credentials in TEST mode. `GOOGLE_CLIENT_ID` is public, but Razorpay secret values are private.
+
+   URLOVINGLY_ENV=production
+   URLOVINGLY_DEV_LOGIN=0
+   GOOGLE_CLIENT_ID=your-web-client-id.apps.googleusercontent.com
+   RAZORPAY_KEY_ID=rzp_test_your_test_key_id
+   RAZORPAY_KEY_SECRET=your_test_key_secret
+   RAZORPAY_WEBHOOK_SECRET=choose-a-long-random-webhook-secret
+   URLOVINGLY_PUBLIC_URL=https://your-pi.your-tailnet.ts.net
+   URLOVINGLY_DB=/home/pi/Invitation/data/urlovingly.db
+   URLOVINGLY_MEDIA=/home/pi/Invitation/data/media
+   URLOVINGLY_OWNER_EMAIL=your-owner-gmail@gmail.com
+
+   IMPORTANT: Replace `/home/pi` if your username is not `pi`. Do not add quotes around ordinary values. Generate a long random webhook secret, for example with `python3 -c "import secrets; print(secrets.token_urlsafe(32))"`; enter the same value in the Razorpay webhook configuration.
+
+3. Restrict access to the secret file:
+
+   sudo chown root:root /etc/urlovingly.env
+   sudo chmod 600 /etc/urlovingly.env
+
+4. The app refuses to start outside development unless Razorpay key id and secret are present and developer login is disabled. Test keys satisfy the startup check, but they do not charge customers real money.
+
+4. Run the app locally behind loopback only
+-------------------------------------------
+1. Create a systemd service so the app starts at boot and restarts after errors:
+
+   sudo nano /etc/systemd/system/urlovingly.service
+
+2. Add this unit. Replace `pi` in both paths and User/Group with the username from step 1.
+
+   [Unit]
+   Description=URLovingly Flask application
+   After=network-online.target
+   Wants=network-online.target
+
+   [Service]
+   User=pi
+   Group=pi
+   WorkingDirectory=/home/pi/Invitation
+   EnvironmentFile=/etc/urlovingly.env
+   ExecStart=/home/pi/Invitation/.venv/bin/gunicorn --workers 2 --bind 127.0.0.1:8000 wsgi:app
+   Restart=on-failure
+   RestartSec=5
+   PrivateTmp=true
+   NoNewPrivileges=true
+
+   [Install]
+   WantedBy=multi-user.target
+
+3. Load and start it:
+
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now urlovingly
+   sudo systemctl status urlovingly
+
+4. Test the local app on the Pi:
+
+   curl -I http://127.0.0.1:8000/
+   curl http://127.0.0.1:8000/api/config
+
+   The first command should report HTTP 200. The JSON config should include your Google client id and `dev_login: false`. If startup fails, inspect `sudo journalctl -u urlovingly -n 100 --no-pager`.
+
+5. Publish it with Tailscale Funnel
+-----------------------------------
+1. Install Tailscale on the Pi by following the current official Linux installation instructions: https://tailscale.com/download/linux
+2. Authenticate the Pi to your tailnet using the login URL shown by the Tailscale CLI. Confirm the Pi appears in the Tailscale admin console.
+3. Enable MagicDNS and HTTPS certificates for the tailnet if Tailscale asks. Funnel requires these plus a Funnel node attribute in the tailnet policy. The CLI can open an approval page or describe the missing policy setting.
+4. Run Funnel for the local Gunicorn port:
+
+   sudo tailscale funnel --bg 8000
+
+5. Display the assigned public URL and Funnel status:
+
+   sudo tailscale funnel status
+
+   The URL has the form `https://machine-name.tailnet-name.ts.net`. Copy the exact HTTPS origin. Funnel accepts public internet traffic and relays it to this Pi; do not use `tailscale serve` when the site must be public.
+6. Confirm it opens from a device not signed in to your tailnet, such as a phone with Wi-Fi disabled. The app should show the URLovingly landing page.
+
+Official Funnel instructions and limits: https://tailscale.com/kb/1223/funnel
+
+6. Configure Google sign-in
+---------------------------
+1. In Google Cloud Console, open the same Web application OAuth client used by this app.
+2. Add the exact Funnel origin, including `https://` and hostname, under Authorized JavaScript origins. Do not add a path or trailing route. For example: `https://machine-name.tailnet-name.ts.net`.
+3. Ensure the OAuth consent screen has the required app name, support email and homepage/privacy details for your intended audience. Google may require ownership verification for domains used in OAuth branding/consent settings.
+4. Update the Pi's `GOOGLE_CLIENT_ID` in `/etc/urlovingly.env` if using a different client, then restart:
+
+   sudo systemctl restart urlovingly
+
+5. Test the sign-in button from the public Funnel URL. If Google refuses the `ts.net` hostname because you cannot verify/control its parent domain, stop here: there is no safe code workaround. Use a domain you own and that Google allows, or keep the Pi private. Do not turn on public developer login.
+
+Google's current client setup: https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid
+
+7. Configure Razorpay test mode
+-------------------------------
+1. In the Razorpay Dashboard, switch to Test Mode and generate a test key id and secret. Do not use Live Mode keys for this free test deployment.
+2. Put them in `/etc/urlovingly.env` as `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET`. Restart the service.
+3. If testing webhooks, create a webhook in Razorpay Test Mode with URL:
+
+   https://machine-name.tailnet-name.ts.net/api/payments/razorpay/webhook
+
+   Select the payment-captured/order-paid events required by the app, set a webhook secret, and put the identical secret in `RAZORPAY_WEBHOOK_SECRET`. Save and restart the app if you changed the environment file.
+4. Complete a test checkout with Razorpay's documented test payment details. Test transactions are simulations only; they do not transfer money.
+5. If Razorpay refuses the `ts.net` website or webhook URL, a provider-approved domain may be required. Do not switch to Live Mode just to bypass a test restriction.
+
+Razorpay test keys: https://razorpay.com/docs/payments/dashboard/account-settings/api-keys/
+
+8. Check guest links and persistence
+------------------------------------
+1. Sign in and create a Free Tier trial event. Publish a guest invitation.
+2. Confirm the invitation link begins with the Funnel URL, not `invite-guests.urlovingly-comp.workers.dev`. `URLOVINGLY_PUBLIC_URL` must exactly equal the Funnel HTTPS origin.
+3. Open the guest link in a private browser window. Check the guest page, RSVP, and any features allowed by the plan.
+4. Restart the service and confirm the account, event and link remain:
+
+   sudo systemctl restart urlovingly
+
+5. Before updates, back up the database and media to another device or storage location. Example database backup:
+
+   sqlite3 /home/pi/Invitation/data/urlovingly.db ".backup '/home/pi/urlovingly-backup.db'"
+
+   Replace `/home/pi` with your real home directory. A backup stored only on the same SD card does not protect against card failure.
+
+9. Update and maintain
+----------------------
+1. Stop or back up before changing code. From the project directory:
+
+   cd ~/Invitation
+   git pull
+   . .venv/bin/activate
+   pip install -r req.txt gunicorn
+   sudo systemctl restart urlovingly
+   sudo journalctl -u urlovingly -n 50 --no-pager
+
+2. Keep Raspberry Pi OS, Python packages and Tailscale updated. Review logs after each deployment.
+3. Keep `/etc/urlovingly.env`, the database and media private. Never place API secrets in the repo, HTML, screenshots or browser code.
+4. If you stop hosting, disable Funnel and stop the service:
+
+   sudo tailscale funnel reset
+   sudo systemctl disable --now urlovingly
+
+Troubleshooting
+---------------
+- Service will not start: inspect `sudo journalctl -u urlovingly -n 100 --no-pager`; check username/path substitutions, file permissions, and all production environment variables.
+- Funnel has no URL: check `sudo tailscale status`, `sudo tailscale funnel status`, tailnet MagicDNS/HTTPS settings, policy approval, and that port 8000 is listening on `127.0.0.1`.
+- Google chooser is missing/inert: check browser console and Google OAuth authorized origin. It must be the exact Funnel HTTPS origin. A 403 from Google's button endpoint means Google rejected the origin.
+- Guest URLs point at Cloudflare: fix `URLOVINGLY_PUBLIC_URL` and restart. This Flask app stores data in SQLite; the separate Worker reads D1.
+- Cannot accept real payments: expected with test keys. Real payments require Razorpay live onboarding/keys and fees, so that part is not completely free.
+- Pi is unreachable: Funnel cannot help if the Pi is powered off, offline, suspended or updating.
+
+Free versus production
+----------------------
+A fully free demonstration can use the Pi, Tailscale Funnel, Google sign-in if Google accepts the Funnel origin, and Razorpay TEST mode. It will not accept real payments and it is not an uptime-guaranteed production service. Hardware, power, broadband, and any live payment/domain requirements are outside the software's control.

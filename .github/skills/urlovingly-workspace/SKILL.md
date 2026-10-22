@@ -50,6 +50,7 @@ Invitation/
   server/                     Part A backend package (see 5)
   tests/                      pytest suite for part A + docs drift check
   docs/REQUIREMENTS.md        Software requirements specification with traceability matrix
+  docs/raspberry-pi-free-hosting.txt  Step-by-step Raspberry Pi deployment using Gunicorn and Tailscale Funnel, with OAuth/payment limitations
   edge/                       Part B Cloudflare Worker project (see 6)
   .github/workflows/          Legacy GitHub Actions builder (part C)
   .github/skills/urlovingly-workspace/SKILL.md   THIS FILE
@@ -169,7 +170,7 @@ Deploy with wrangler: `cd edge`, `npm install`, `npx wrangler d1 create urloving
 | `URLOVINGLY_DEV_LOGIN` | `1` in development, else `0` | Developer sign-in switch |
 | `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET` | empty | Enable the real payment provider (required in production) |
 | `RAZORPAY_WEBHOOK_SECRET` | empty | Enables `/api/payments/razorpay/webhook` |
-| `URLOVINGLY_PUBLIC_URL` | request host | Base URL used in generated guest links |
+| `URLOVINGLY_PUBLIC_URL` | `https://invite-guests.urlovingly-comp.workers.dev` in `server/config.py` | Base URL used in generated links; production Flask deployments must override it with the Flask app's canonical HTTPS origin because the Worker is not synchronized with SQLite |
 | `URLOVINGLY_OWNER_EMAIL` | empty | Exact Google account allowed into `/owner`; empty disables the owner dashboard |
 
 ## 9. Commands (Windows PowerShell; chain with `;`, not `&&`)
@@ -180,6 +181,14 @@ python -m pytest -q                 # full Python suite (about 20 s, 160+ tests)
 cd edge; npm install; npm test      # part B tests (needs Node 20+)
 ```
 Test layout: `tests/conftest.py` (app factory fixture with temp DB, `Api` client that sends the CSRF header, `clock` fixture that patches `server.util.now`, helpers `create_event`, `publish`, `invite_payload`), `test_plans.py`, `test_auth.py`, `test_subscriptions.py` (events, payments, upgrades, Razorpay), `test_invites.py`, `test_imports.py` (CSV/XLSX parsing and authenticated preview), `test_owner.py` (owner-only dashboard and private metadata), `test_features.py` (plan-gated features), `test_pages_and_security.py`, `test_skill_file.py` (this file's drift check). Every feature or requirement needs a test; keep them green.
+
+### Production hosting notes
+- Serve the landing page and Flask APIs from the same HTTPS origin; GitHub Pages is static and cannot complete customer sign-in, payment or studio workflows.
+- Production startup requires Razorpay key id/secret and developer login disabled. Use Razorpay test credentials for staging; keep mock payments and dev login local/private.
+- Use a host with persistent storage for `data/urlovingly.db` and `data/media`, and outbound HTTPS access to Google's verification endpoints and `api.razorpay.com`. Confirm free-tier limits, sleep behavior and outbound rules with the provider; PythonAnywhere is only a candidate until checked.
+- Set `URLOVINGLY_PUBLIC_URL` to the Flask site's canonical HTTPS origin, not the Cloudflare Worker. The Worker uses separate D1 and has no SQLite synchronization.
+- Add that site's origin (scheme + host, no path) to Google OAuth Authorized JavaScript origins; configure the Razorpay webhook at `/api/payments/razorpay/webhook`.
+- A local `python run.py --dev` cycle is free and uses mock payments/developer login, but must not be exposed as production.
 
 ### 9.1 Live browser testing and agent sign-in
 Use the integrated browser to review UI changes (the `open_browser_page`, `navigate_page`, `read_page`, `screenshot_page` and `run_playwright_code` tools; load them with `tool_search` if they are deferred).
@@ -223,3 +232,5 @@ Append newest last: `YYYY-MM-DD – what changed – tests run`.
 - 2026-10-22 – Documented live-browser testing and developer-login steps for agents (section 9.1), including the Google origin 403 finding on `127.0.0.1`; verified dev login to `/studio` in the integrated browser; documentation only.
 - 2026-10-22 – Live site https://urlovingly.github.io/Invitation was found serving the old page (logo 404 at `/URLovingly_Icon.jpg`) until the relative-path fix is pushed; verified the fix under an `/Invitation/` subpath with a static server; added a visible message when Google rejects the page origin; landing tests updated.
 - 2026-10-22 – Replaced the hero phone mockup with a Royal-template preview and documented where the Google client id is set; full pytest run.
+- 2026-10-22 – Added hosting/deployment requirements for a low-cost complete backend cycle and corrected the documented `URLOVINGLY_PUBLIC_URL` default; full pytest run.
+- 2026-10-22 – Added `docs/raspberry-pi-free-hosting.txt` with Raspberry Pi OS, Gunicorn/systemd, Tailscale Funnel, Google OAuth, Razorpay test mode, persistence and backup steps; checked current provider setup docs.
