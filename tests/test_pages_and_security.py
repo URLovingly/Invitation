@@ -49,6 +49,24 @@ def test_landing_page_contains_payment_portal_and_google_login():
     assert "/api/auth/google" in html and "/api/payments/order" in html
 
 
+def test_github_pages_logo_and_google_chooser_fallback():
+    html = read("index.html")
+    assert os.path.isfile(os.path.join(BASE_DIR, "URLovingly_Icon.jpg"))
+    assert html.count('src="./URLovingly_Icon.jpg"') == 2
+    assert 'href="./URLovingly_Icon.jpg"' in html
+    assert '<a href="./" class="flex items-center gap-3">' in html
+    assert 'name="google-client-id"' in html
+    assert "requestAnimationFrame(() => renderGoogleButton())" in html
+    assert "Google account selection is available, but sign-in needs the URLovingly application backend." in html
+    assert "GitHub Pages only hosts static files." in html
+    assert "Authorized JavaScript origins" in html
+
+
+def test_landing_hero_previews_the_royal_template():
+    html = read("index.html")
+    assert "By royal invitation" in html and 'class="rp-card"' in html
+
+
 def test_landing_page_never_ships_secrets():
     html = read("index.html")
     assert not re.search(r"rzp_(live|test)_\w{6,}", html)

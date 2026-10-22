@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>URLovingly — A personalized digital invitation for every guest</title>
   <meta name="description" content="Create animated, personalized wedding and celebration invitations with a unique link for every guest. WhatsApp sharing, live RSVP, UPI Shagun and more. Start free.">
-  <link rel="icon" href="/URLovingly_Icon.jpg" type="image/jpeg">
+  <link rel="icon" href="./URLovingly_Icon.jpg" type="image/jpeg">
+  <meta name="google-client-id" content="412855134600-qku667pr3h0713748chh1o5i7u0nfo9p.apps.googleusercontent.com">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,9 +28,21 @@
     .brand-gradient { background: linear-gradient(135deg, #FF5E8E 0%, #F42F6C 45%, #6C2BD9 100%); }
     .brand-text-gradient { background: linear-gradient(135deg, #151438 0%, #F42F6C 55%, #6C2BD9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .phone { box-shadow: 0 30px 70px -15px rgba(108,43,217,.3), 0 0 0 10px #151438, 0 0 0 13px #f3e8ff; }
-    @keyframes float { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
-    .float { animation: float 5s ease-in-out infinite; }
-    @media (prefers-reduced-motion: reduce) { .float { animation: none; } html { scroll-behavior: auto; } }
+    .rp { padding: 14px; background: radial-gradient(ellipse at 50% 0, #57336c, #21162f 63%); color: #fff7e8; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .rp-card { height: 100%; padding: 14px 12px; text-align: center; border: 1px solid #c7a75b; outline: 1px solid #80663d; outline-offset: -6px; display: flex; flex-direction: column; justify-content: center; animation: rp-rise .8s cubic-bezier(.2,.75,.25,1) both; }
+    .rp-crown { color: #d5b86c; font-size: 22px; animation: rp-crown 2.8s ease-in-out infinite; }
+    .rp-label { font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: #dfc77e; }
+    .rp-names { font: 500 30px/1.06 'Cormorant Garamond', serif; color: #f1d98c; margin: 10px 0; }
+    .rp-guest { font: 600 16px 'Cormorant Garamond', serif; margin: 12px 0 6px; }
+    .rp-note { font: italic 12px/1.5 'Cormorant Garamond', serif; color: #e6d9ee; }
+    .rp-seal { width: 40px; height: 40px; border: 1px solid #c7a75b; border-radius: 50%; display: grid; place-items: center; margin: 12px auto; color: #e0c778; font-size: 15px; }
+    .rp-details { border-top: 1px solid #8e7447; border-bottom: 1px solid #8e7447; padding: 9px 4px; font-size: 10px; line-height: 1.7; color: #f7ecd7; }
+    .rp-actions { display: grid; gap: 6px; margin-top: 12px; }
+    .rp-btn { padding: 8px; background: #c3a45a; color: #251a2d; font-size: 9px; font-weight: 700; letter-spacing: .7px; }
+    .rp-ghost { background: transparent; color: #f7e6bd; border: 1px solid #94794b; }
+    @keyframes rp-rise { from { opacity: 0; transform: translateY(16px) scale(.985); } to { opacity: 1; transform: none; } }
+    @keyframes rp-crown { 50% { transform: translateY(-4px); text-shadow: 0 0 16px #e7c66b; } }
+    @media (prefers-reduced-motion: reduce) { .rp-card, .rp-crown { animation: none; } html { scroll-behavior: auto; } }
     .plan-featured { box-shadow: 0 25px 60px -15px rgba(244,47,108,.35); border: 2px solid #F42F6C; }
   </style>
 </head>
@@ -38,8 +51,8 @@
   <!-- ================= HEADER ================= -->
   <header class="sticky top-0 z-30 bg-white/85 backdrop-blur-xl border-b border-pink-100/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-      <a href="/" class="flex items-center gap-3">
-        <img src="/URLovingly_Icon.jpg" alt="URLovingly logo" class="w-10 h-10 rounded-xl object-cover border border-pink-200/70">
+      <a href="./" class="flex items-center gap-3">
+        <img src="./URLovingly_Icon.jpg" alt="URLovingly logo" class="w-10 h-10 rounded-xl object-cover border border-pink-200/70">
         <span class="font-serif text-2xl font-bold"><span class="text-brand-navy">UR</span><span class="text-brand-pink">Lovingly</span></span>
       </a>
       <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-brand-navy/80" aria-label="Primary">
@@ -79,18 +92,18 @@
       <div class="flex justify-center" aria-hidden="true">
         <div class="phone w-[290px] h-[560px] rounded-[44px] bg-white overflow-hidden flex flex-col">
           <div class="bg-purple-50/70 border-b border-purple-100 px-4 py-2 text-[11px] font-mono text-brand-navy/75 truncate">urlovingly.com/aarav-and-priya/to/rahul-sharma</div>
-          <div class="flex-1 flex flex-col items-center justify-center text-center px-6 bg-gradient-to-b from-[#2a1731] to-[#17141f] text-amber-50">
-            <div class="float w-44 h-28 rounded-lg border border-amber-300/70 brand-gradient relative shadow-2xl">
-              <div class="absolute inset-x-3 -top-5 h-16 bg-amber-50 rounded text-brand-navy text-[10px] flex flex-col items-center justify-center">
-                <span class="uppercase tracking-widest text-[7px] text-brand-pink">You are warmly invited</span>
-                <span class="font-serif text-lg leading-none">Aarav &amp; Priya</span>
-              </div>
-              <div class="absolute bottom-2 inset-x-0 text-[10px] font-serif">A special invitation for<br><strong class="text-sm">Rahul Sharma &amp; Family</strong></div>
-            </div>
-            <p class="mt-10 text-[10px] uppercase tracking-[.25em] text-amber-200">Touch to open</p>
-            <div class="mt-6 flex gap-1.5">
-              <span class="px-2 py-1 rounded bg-white/10 text-[10px]">42d</span><span class="px-2 py-1 rounded bg-white/10 text-[10px]">11h</span><span class="px-2 py-1 rounded bg-white/10 text-[10px]">36m</span>
-            </div>
+          <div class="rp flex-1">
+            <article class="rp-card">
+              <div class="rp-crown">♛</div>
+              <div class="rp-label">By royal invitation</div>
+              <p class="rp-names">Aarav &amp; Priya</p>
+              <div class="rp-label">Request the pleasure of your company</div>
+              <div class="rp-guest">Rahul Sharma &amp; Family</div>
+              <p class="rp-note">“We would be honoured to have you with us.”</p>
+              <div class="rp-seal">✦</div>
+              <div class="rp-details"><strong>Sunday, 14 February</strong> · 10:30 AM<br>The Grand Palace, Jaipur</div>
+              <div class="rp-actions"><span class="rp-btn">RSVP on WhatsApp</span><span class="rp-btn rp-ghost">RSVP by email</span></div>
+            </article>
           </div>
         </div>
       </div>
@@ -225,11 +238,11 @@
   <div id="loginModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-brand-navy/40 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
     <div class="glass-card rounded-3xl p-8 max-w-md w-full text-center relative bg-white">
       <button type="button" data-close="loginModal" class="absolute top-3 right-4 text-slate-400 text-xl" aria-label="Close">×</button>
-      <img src="/URLovingly_Icon.jpg" alt="" class="w-14 h-14 mx-auto rounded-2xl object-cover border border-pink-200/70 mb-3">
+      <img src="./URLovingly_Icon.jpg" alt="" class="w-14 h-14 mx-auto rounded-2xl object-cover border border-pink-200/70 mb-3">
       <h2 id="loginTitle" class="font-serif text-3xl font-bold">Sign in to continue</h2>
       <p id="loginPlanNote" class="hidden mt-2 text-sm font-semibold text-brand-pink"></p>
       <p class="mt-2 text-sm text-slate-600">Use your Gmail account. Your plan and event details are saved to it.</p>
-      <div class="mt-6 flex justify-center"><div id="googleButton"></div></div>
+      <div class="mt-6 flex justify-center"><div id="googleButton" class="min-h-11 min-w-[280px]"></div></div>
       <form id="devLoginForm" class="hidden mt-6 pt-5 border-t border-dashed border-purple-200 text-left">
         <p class="text-[11px] font-bold uppercase tracking-wider text-brand-purple">Local development sign-in</p>
         <label for="devEmail" class="block mt-2 text-xs font-bold">Gmail address</label>
@@ -267,7 +280,10 @@
   <script>
     const API_HEADERS = { 'Content-Type': 'application/json', 'X-Requested-With': 'urlovingly' };
     const PENDING_PLAN_KEY = 'urlovingly_pending_plan';
-    const state = { config: null, user: null, events: [], plans: {}, upgradeEventId: null, checkout: null };
+    const DEFAULT_GOOGLE_CLIENT_ID = document.querySelector('meta[name="google-client-id"]').content;
+    const state = { config: { google_client_id: DEFAULT_GOOGLE_CLIENT_ID, dev_login: false }, user: null, events: [], plans: {}, upgradeEventId: null, checkout: null };
+    let backendAvailable = false;
+    let googleButtonRendered = false;
     const $ = id => document.getElementById(id);
     const rupees = paise => '₹' + (paise / 100).toLocaleString('en-IN');
 
@@ -308,6 +324,7 @@
       if (planId && state.plans[planId]) note.textContent = 'Selected plan: ' + state.plans[planId];
       $('loginError').classList.add('hidden');
       show('loginModal');
+      requestAnimationFrame(() => renderGoogleButton());
     }
 
     function loginFailed(message) { const el = $('loginError'); el.textContent = message; el.classList.remove('hidden'); }
@@ -321,6 +338,9 @@
     }
 
     async function handleGoogleCredential(response) {
+      if (!backendAvailable) {
+        return loginFailed('Google account selection is available, but sign-in needs the URLovingly application backend. GitHub Pages only hosts static files.');
+      }
       const result = await post('/api/auth/google', { credential: response.credential });
       if (result.ok) afterLogin(); else loginFailed(result.body.message || 'Sign-in failed. Please try again.');
     }
@@ -443,37 +463,64 @@
 
     // ---------- start-up ----------
     async function init() {
-      const [config, plans] = await Promise.all([api('/api/config'), api('/api/plans')]);
-      state.config = config.body;
-      state.planData = Object.fromEntries(plans.body.plans.map(plan => [plan.id, plan]));
-      state.plans = Object.fromEntries(plans.body.plans.map(plan => [plan.id, plan.name]));
-      $('devLoginForm').classList.toggle('hidden', !state.config.dev_login);
-
       const params = new URLSearchParams(location.search);
-      await loadSession();
+      try {
+        const [config, plans] = await Promise.all([api('/api/config'), api('/api/plans')]);
+        if (!config.ok || !plans.ok || !Array.isArray(plans.body.plans)) throw new Error('Backend unavailable');
+        state.config = config.body;
+        state.planData = Object.fromEntries(plans.body.plans.map(plan => [plan.id, plan]));
+        state.plans = Object.fromEntries(plans.body.plans.map(plan => [plan.id, plan.name]));
+        $('devLoginForm').classList.toggle('hidden', !state.config.dev_login);
+        await loadSession();
+        backendAvailable = true;
 
-      if (params.get('upgrade') && state.user) {
-        state.upgradeEventId = parseInt(params.get('upgrade'), 10);
-        const event = state.events.find(item => item.id === state.upgradeEventId);
-        if (event) {
-          showBanner('Upgrading "' + event.title + '". Choose a higher plan — you only pay the difference.');
-          document.querySelectorAll('.plan-cta').forEach(button => {
-            const target = state.planData[button.dataset.plan];
-            if (target.price_paise <= event.plan.price_paise) button.classList.add('hidden');
-          });
+        if (params.get('upgrade') && state.user) {
+          state.upgradeEventId = parseInt(params.get('upgrade'), 10);
+          const event = state.events.find(item => item.id === state.upgradeEventId);
+          if (event) {
+            showBanner('Upgrading "' + event.title + '". Choose a higher plan — you only pay the difference.');
+            document.querySelectorAll('.plan-cta').forEach(button => {
+              const target = state.planData[button.dataset.plan];
+              if (target.price_paise <= event.plan.price_paise) button.classList.add('hidden');
+            });
+          }
+        } else if (params.get('choose') === 'plan') {
+          showBanner('Choose a plan to start creating invitations.');
         }
-      } else if (params.get('choose') === 'plan') {
-        showBanner('Choose a plan to start creating invitations.');
+      } catch (error) {
+        $('devLoginForm').classList.add('hidden');
+        showBanner('Pricing is available, but sign-in and checkout require the URLovingly application backend.');
       }
       if (params.get('signin') === '1' && !state.user) openLogin(null);
-
-      if (window.google && google.accounts) { initGoogle(); } else { window.addEventListener('load', initGoogle); }
     }
 
-    function initGoogle() {
-      if (!(window.google && google.accounts) || !state.config.google_client_id) return;
-      google.accounts.id.initialize({ client_id: state.config.google_client_id, callback: handleGoogleCredential });
-      google.accounts.id.renderButton($('googleButton'), { theme: 'outline', size: 'large', text: 'continue_with', shape: 'rectangular' });
+    function renderGoogleButton(attempt = 0) {
+      if (googleButtonRendered) return;
+      if (!(window.google && google.accounts && google.accounts.id)) {
+        if (attempt < 40) return setTimeout(() => renderGoogleButton(attempt + 1), 250);
+        return loginFailed('Google sign-in did not load. Check that Google Identity Services is allowed on this site.');
+      }
+      const clientId = state.config?.google_client_id || DEFAULT_GOOGLE_CLIENT_ID;
+      if (!clientId) return loginFailed('Google sign-in is not configured for this site.');
+      try {
+        google.accounts.id.initialize({ client_id: clientId, callback: handleGoogleCredential, ux_mode: 'popup' });
+        $('googleButton').replaceChildren();
+        google.accounts.id.renderButton($('googleButton'), {
+          theme: 'outline', size: 'large', text: 'continue_with', shape: 'rectangular', width: 280
+        });
+        googleButtonRendered = true;
+        watchGoogleButton(0);
+      } catch (error) {
+        loginFailed('Google sign-in could not be displayed. Check the OAuth client and authorized site origin.');
+      }
+    }
+
+    // Google answers 403 for an unauthorised origin and its iframe then stays 0x0.
+    function watchGoogleButton(attempt) {
+      const frame = document.querySelector('#googleButton iframe');
+      if (frame && frame.getBoundingClientRect().width > 0) return;
+      if (attempt < 16) return setTimeout(() => watchGoogleButton(attempt + 1), 500);
+      loginFailed('Google did not open its account chooser for ' + location.origin + '. Add this address to the OAuth client\'s Authorized JavaScript origins in Google Cloud Console.');
     }
 
     init();

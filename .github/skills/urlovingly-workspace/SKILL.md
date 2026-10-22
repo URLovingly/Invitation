@@ -38,7 +38,7 @@ The git repository root is the `Invitation/` folder (the VS Code workspace root 
 
 ```
 Invitation/
-  index.html                  Public landing page (Tailwind CDN, inline JS). Plans, checkout modal, Google + dev sign-in
+  index.html                  Public landing page (Tailwind CDN, inline JS). Plans, checkout modal, Google + dev sign-in; relative logo paths support GitHub Pages project sites; the hero phone previews the Royal design (`.rp-*` CSS, static copy of `templates/royal`)
   private/studio.html         The studio. NOT public; served by GET /studio after sign-in
   private/owner.html          Owner dashboard UI. NOT public; served only by GET /owner for the configured Google account
   URLovingly_Icon.jpg         Logo (served at /URLovingly_Icon.jpg)
@@ -114,6 +114,7 @@ Feature errors: 403 `feature_not_in_plan` (with `feature`, `required_plan`); 402
 - The live preview does not include RSVP/UPI/audio blocks; the server adds them when serving the published page.
 - Guest-list import accepts UTF-8 `.csv` and `.xlsx` (first worksheet), with a downloadable CSV header template. Required column: `Guest Name`; optional columns: `WhatsApp Number`, `Personal Note`. Preview validates the file; the studio checks remaining plan capacity and publishes each guest through the normal invite API, which remains the quota and ownership authority. Limits: 2 MB, 500 guest rows; XLSX expanded content ≤5 MB and ≤64 archive entries.
 - The landing page (`index.html`) drives plan choice, sign-in and checkout with its own inline JS; `?upgrade=<event_id>`, `?choose=plan`, `?signin=1` are supported.
+- Logo assets and the header home link are relative for GitHub Pages project subpaths. The Google Identity Services button is rendered when the visible login modal opens (with a public client ID fallback), but GitHub Pages has no `/api/config`, `/api/plans` or auth API: it can show marketing/pricing and the account chooser, while completing sign-in/checkout still requires the Flask backend. Register each deployed site origin in Google OAuth settings; paths are not included in authorized JavaScript origins. If Google rejects the origin (its iframe stays 0x0 after about 8 s), the modal shows a message naming the origin to authorize.
 
 ## 6. Part B: Edge hydration (`edge/`)
 
@@ -163,7 +164,7 @@ Deploy with wrangler: `cd edge`, `npm install`, `npx wrangler d1 create urloving
 | `URLOVINGLY_ENV` | `production` | `development` enables mock payments and developer sign-in |
 | `URLOVINGLY_DB` | `data/urlovingly.db` | SQLite file |
 | `URLOVINGLY_MEDIA` | `data/media` | Uploaded audio folder |
-| `GOOGLE_CLIENT_ID` | project client id in `config.py` | Google OAuth client (its allowed JS origins must include the site origin; `localhost` is not allowed for the default id, so use dev sign-in locally) |
+| `GOOGLE_CLIENT_ID` | project client id in `config.py` | Google OAuth client. Change it in `GOOGLE_CLIENT_ID` (environment, preferred), `DEFAULT_GOOGLE_CLIENT_ID` in `server/config.py`, and the `google-client-id` meta tag in `index.html` (static fallback used when the Flask API is unreachable, e.g. GitHub Pages); keep all three identical. Its allowed JS origins must include the site origin; `localhost` is not allowed for the default id, so use dev sign-in locally) |
 | `URLOVINGLY_ALLOWED_EMAIL_DOMAINS` | `gmail.com,googlemail.com` | Empty value removes the Gmail-only rule |
 | `URLOVINGLY_DEV_LOGIN` | `1` in development, else `0` | Developer sign-in switch |
 | `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET` | empty | Enable the real payment provider (required in production) |
@@ -179,6 +180,21 @@ python -m pytest -q                 # full Python suite (about 20 s, 160+ tests)
 cd edge; npm install; npm test      # part B tests (needs Node 20+)
 ```
 Test layout: `tests/conftest.py` (app factory fixture with temp DB, `Api` client that sends the CSRF header, `clock` fixture that patches `server.util.now`, helpers `create_event`, `publish`, `invite_payload`), `test_plans.py`, `test_auth.py`, `test_subscriptions.py` (events, payments, upgrades, Razorpay), `test_invites.py`, `test_imports.py` (CSV/XLSX parsing and authenticated preview), `test_owner.py` (owner-only dashboard and private metadata), `test_features.py` (plan-gated features), `test_pages_and_security.py`, `test_skill_file.py` (this file's drift check). Every feature or requirement needs a test; keep them green.
+
+### 9.1 Live browser testing and agent sign-in
+Use the integrated browser to review UI changes (the `open_browser_page`, `navigate_page`, `read_page`, `screenshot_page` and `run_playwright_code` tools; load them with `tool_search` if they are deferred).
+
+1. **Start the app once.** Run `python run.py --dev` from `Invitation/` as an async/background terminal and use `http://127.0.0.1:5000`. If the port is busy (the command exits with code 1) the server is already running: reuse it. Only `--dev` enables mock payments and developer sign-in.
+2. **Reuse the shared page.** Prefer an already shared page id and `navigate_page`; open a new page only when none exists. Use `read_page` (accessibility snapshot) to find elements and `screenshot_page` for visual checks. `run_playwright_code` must go through `page` (no direct `document`/`window`; use `page.evaluate(() => ...)`) and needs `timeoutMs` above 5000 for navigations. `page.request` is not supported in this browser (`Storage.getCookies` error); call `fetch` inside `page.evaluate` instead, and add header `X-Requested-With: urlovingly` to state-changing `/api/` calls.
+3. **Sign in with the developer login, not Google.** Agents cannot complete a Google account chooser, and on `127.0.0.1` the Google button is inert anyway (the default client id does not authorize that origin, so the `accounts.google.com/gsi/button` iframe returns 403 and stays 0×0). Steps:
+   - Open `/?signin=1` (or click `#signInBtn`) and wait for `#devLoginForm` to lose the `hidden` class (it appears only when `/api/config` reports `dev_login: true`).
+   - Fill `#devEmail` with any `@gmail.com` address (other domains get 403, invalid emails 400) and click the form's submit button. Use a fresh address such as `agent.<topic>@gmail.com` for a clean state; every address is a separate customer with its own free trial.
+   - Success: the modal closes, or the browser goes to `/studio` when that account already has an active event. The session cookie `urlovingly_session` is HttpOnly, so verify with `fetch('/api/me')` (200 with `user.email`; 401 before sign-in is normal).
+   - Sign out with `#signOutBtn` or `POST /api/auth/logout`.
+4. **Plans and payment.** After sign-in, pick a plan on the landing page. `free` creates an active event at once (one trial per account, `trial_already_used` otherwise). Paid plans open the checkout modal; with the mock provider the Pay button confirms immediately and redirects to `/studio`.
+5. **Not testable by agents:** real Google sign-in, Razorpay checkout and `/owner` (requires the configured owner email authenticated through Google; a developer-login session gets 403). Cover those with pytest. Never type real credentials or Google passwords into the browser.
+6. **Diagnosing problems.** Register `page.on('console')`, `page.on('pageerror')`, `page.on('requestfailed')` and a `page.on('response')` filter for status >= 400 before `goto`/reload, then wait a few seconds. Check logos with `[...document.images].map(i => i.complete && i.naturalWidth > 0)`. Expected noise: the Tailwind CDN production warning and `GET /api/me` 401 when signed out. A 403 from `accounts.google.com/gsi/button` means the site origin must be added to the OAuth client's Authorized JavaScript origins in Google Cloud Console; it cannot be fixed in code.
+7. Dev data lives in git-ignored `data/urlovingly.db`. Stop the server and ask the user before deleting `data/` to reset state.
 
 ## 10. Conventions and gotchas
 - Python 3.12, Flask 2.3, plain `sqlite3`. Timestamps are ISO-8601 UTC strings produced by `server.util`; always call `util.now()` through the module so tests can patch it.
@@ -203,3 +219,7 @@ Append newest last: `YYYY-MM-DD – what changed – tests run`.
 - 2026-10-22 – Added `edge/worker.js` (single-file Worker for the Cloudflare dashboard) and `edge/test/single-file.test.js`; added a test that `worker.js` embeds `base.html`; Node unavailable so JS tests not run.
 - 2026-10-22 – Added CSV/XLSX guest-list parsing, authenticated import preview, a downloadable CSV template and plan-capacity-aware studio publishing; documented FR-ST-08 and added `tests/test_imports.py` (focused tests pass).
 - 2026-10-22 – Added `/owner` and `/api/owner/overview`, exact Google owner-email gating, private metadata-only dashboard, `URLOVINGLY_OWNER_EMAIL` and owner authorization tests; clarified generic Worker routing and separate D1 population.
+- 2026-10-22 – Fixed GitHub Pages project-path logo URLs and made Google account chooser initialization independent of backend startup; documented the static-host auth limitation and added landing regression coverage.
+- 2026-10-22 – Documented live-browser testing and developer-login steps for agents (section 9.1), including the Google origin 403 finding on `127.0.0.1`; verified dev login to `/studio` in the integrated browser; documentation only.
+- 2026-10-22 – Live site https://urlovingly.github.io/Invitation was found serving the old page (logo 404 at `/URLovingly_Icon.jpg`) until the relative-path fix is pushed; verified the fix under an `/Invitation/` subpath with a static server; added a visible message when Google rejects the page origin; landing tests updated.
+- 2026-10-22 – Replaced the hero phone mockup with a Royal-template preview and documented where the Google client id is set; full pytest run.

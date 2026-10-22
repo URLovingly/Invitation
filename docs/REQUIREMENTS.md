@@ -104,6 +104,8 @@ Priority: **M** = must have. All requirements below are M.
 | FR-LP-06 | The **payment portal is on the first page**: a secure checkout dialog opens from the pricing cards without leaving the page, and a `#payment` section explains the payment methods. | `#checkoutModal` and `#payment` exist; the dialog shows plan, amount and a Pay button. |
 | FR-LP-07 | The page never contains payment-gateway secrets. | No `key_secret` or live key in the page source. |
 | FR-LP-08 | A signed-in customer sees their email, an "Open studio" button (when they have an active event) and "Sign out". | Manual check; `/api/me` drives the header. |
+| FR-LP-09 | The landing page works from a GitHub Pages project subpath: logo assets and home navigation are repository-relative. Google Identity Services renders its account-selection button after the sign-in modal opens. If the Flask API is unavailable, the page remains usable for marketing/pricing and explains that login/checkout need the backend. | `test_pages_and_security.py`: relative logo/home paths, client ID metadata, modal-visible GIS rendering and backend-unavailable explanation. |
+| FR-LP-10 | The hero phone mockup beside the headline previews the Royal invitation design (static sample data, hidden from assistive technology). | `test_landing_hero_previews_the_royal_template`. |
 
 ### 4.2 Authentication and customer records
 
@@ -371,6 +373,7 @@ Test files are in [`tests/`](../tests). Run `python -m pytest -v` to see each ca
 | Requirement(s) | Automated tests |
 |---|---|
 | FR-LP-01…07 | `test_pages_and_security.py`: `test_landing_page_is_public`, `…explains_product_and_uniqueness`, `…offers_free_trial_and_all_three_plans`, `…contains_payment_portal_and_google_login`, `…never_ships_secrets` |
+| FR-LP-09 | `test_pages_and_security.py`: `test_github_pages_logo_and_google_chooser_fallback` |
 | Plan catalogue (§3) | `test_plans.py`: all `test_*_plan_definition`, `test_three_plans_are_offered_in_order`, `test_plans_are_stored_in_database`, `test_public_config_exposes_no_secrets` |
 | FR-AU-01…07 | `test_auth.py` (Google login, hashing, cookie flags, Gmail-only, unverified, forged cookie, expiry, logout, dev-login, production guards) |
 | FR-SU-01…04 | `test_subscriptions.py`: free-trial, once-per-account, pending paid, reuse pending, invalid plan |
