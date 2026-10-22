@@ -1,1 +1,4 @@
 jinja2
+flask>=2.3
+google-auth>=2.23
+requests>=2.31

@@ -3,1408 +3,480 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>URLovingly — Personalized Digital Event Invites</title>
-  
-  <link rel="icon" href="URLovingly_Icon.jpg" type="image/jpeg">
+  <title>URLovingly — A personalized digital invitation for every guest</title>
+  <meta name="description" content="Create animated, personalized wedding and celebration invitations with a unique link for every guest. WhatsApp sharing, live RSVP, UPI Shagun and more. Start free.">
+  <link rel="icon" href="/URLovingly_Icon.jpg" type="image/jpeg">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <script>
     tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            brand: { navy: '#151438', pink: '#F42F6C', purple: '#6C2BD9' }
-          }
-        }
-      }
+      theme: { extend: {
+        fontFamily: { serif: ['"Cormorant Garamond"', 'Georgia', 'serif'], sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'] },
+        colors: { brand: { navy: '#151438', pink: '#F42F6C', purple: '#6C2BD9' } }
+      } }
     }
   </script>
   <style>
-    body {
-      background-color: #fcfaff;
-      background-image: 
-        radial-gradient(at 10% 10%, rgba(255, 107, 139, 0.12) 0px, transparent 50%),
-        radial-gradient(at 90% 15%, rgba(108, 43, 217, 0.10) 0px, transparent 50%),
-        radial-gradient(at 50% 90%, rgba(244, 47, 108, 0.08) 0px, transparent 50%);
-      color: #151438;
-    }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(244, 47, 108, 0.14);
-      box-shadow: 0 20px 50px -15px rgba(21, 20, 56, 0.06);
-    }
+    html { scroll-behavior: smooth; }
+    body { background-color: #fcfaff; color: #151438;
+      background-image: radial-gradient(at 10% 5%, rgba(255,107,139,.14) 0, transparent 45%), radial-gradient(at 92% 12%, rgba(108,43,217,.11) 0, transparent 45%); }
+    .glass-card { background: rgba(255,255,255,.88); backdrop-filter: blur(18px); border: 1px solid rgba(244,47,108,.14); box-shadow: 0 20px 50px -18px rgba(21,20,56,.08); }
     .brand-gradient { background: linear-gradient(135deg, #FF5E8E 0%, #F42F6C 45%, #6C2BD9 100%); }
-    .brand-text-gradient {
-      background: linear-gradient(135deg, #151438 0%, #F42F6C 50%, #6C2BD9 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .phone-mockup {
-      box-shadow: 0 30px 70px -15px rgba(108, 43, 217, 0.28), 0 0 0 11px #151438, 0 0 0 14px #f3e8ff;
-    }
-    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(244, 47, 108, 0.25); border-radius: 9999px; }
+    .brand-text-gradient { background: linear-gradient(135deg, #151438 0%, #F42F6C 55%, #6C2BD9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .phone { box-shadow: 0 30px 70px -15px rgba(108,43,217,.3), 0 0 0 10px #151438, 0 0 0 13px #f3e8ff; }
+    @keyframes float { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
+    .float { animation: float 5s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) { .float { animation: none; } html { scroll-behavior: auto; } }
+    .plan-featured { box-shadow: 0 25px 60px -15px rgba(244,47,108,.35); border: 2px solid #F42F6C; }
   </style>
 </head>
-<body class="font-sans antialiased min-h-screen selection:bg-pink-200 selection:text-brand-navy relative">
+<body class="font-sans antialiased selection:bg-pink-200">
 
-  <!-- ================= LOGIN / SIGN-UP OVERLAY ================= -->
-  <div id="loginSection" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/60 backdrop-blur-md transition-opacity duration-500">
-    <div class="glass-card p-10 rounded-3xl text-center max-w-md w-full mx-4">
-      <img src="URLovingly_Icon.jpg" alt="URLovingly Logo" class="w-16 h-16 mx-auto rounded-2xl object-cover shadow-sm border border-pink-200/70 mb-4">
-      <h2 class="font-serif text-3xl font-bold text-brand-navy mb-2">Welcome to URLovingly</h2>
-      <p class="text-sm text-slate-600 mb-8">Sign in or create an account with your Google email to manage your bespoke digital invitations.</p>
-      
-      <div class="flex justify-center">
-        <!-- Google Sign-In Button Configuration -->
-        <div id="g_id_onload"
-             data-client_id="412855134600-qku667pr3h0713748chh1o5i7u0nfo9p.apps.googleusercontent.com"
-             data-context="signin"
-             data-ux_mode="popup"
-             data-callback="handleCredentialResponse"
-             data-auto_prompt="false">
-        </div>
-        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
+  <!-- ================= HEADER ================= -->
+  <header class="sticky top-0 z-30 bg-white/85 backdrop-blur-xl border-b border-pink-100/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-3">
+        <img src="/URLovingly_Icon.jpg" alt="URLovingly logo" class="w-10 h-10 rounded-xl object-cover border border-pink-200/70">
+        <span class="font-serif text-2xl font-bold"><span class="text-brand-navy">UR</span><span class="text-brand-pink">Lovingly</span></span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-brand-navy/80" aria-label="Primary">
+        <a href="#features" class="hover:text-brand-pink">What we provide</a>
+        <a href="#unique" class="hover:text-brand-pink">Why we're different</a>
+        <a href="#pricing" class="hover:text-brand-pink">Pricing</a>
+        <a href="#payment" class="hover:text-brand-pink">Payments</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <span id="accountEmail" class="hidden lg:inline text-xs font-bold text-brand-navy"></span>
+        <a id="openStudioBtn" href="/studio" class="hidden px-4 py-2 rounded-xl brand-gradient text-white text-xs font-bold shadow">Open studio</a>
+        <button id="signOutBtn" type="button" class="hidden px-3 py-2 rounded-xl bg-purple-50 text-brand-purple text-xs font-bold border border-purple-100">Sign out</button>
+        <button id="signInBtn" type="button" class="px-4 py-2 rounded-xl bg-purple-50 text-brand-purple text-xs font-bold border border-purple-100 hover:bg-purple-100">Sign in</button>
       </div>
-      <p id="loginErrorMsg" class="text-xs text-red-500 mt-4 hidden">Authentication failed. Please try again.</p>
     </div>
-  </div>
+  </header>
 
-  <!-- ================= MAIN STUDIO WORKSPACE (HIDDEN INITIALLY) ================= -->
-  <div id="studioSection" class="hidden flex-col min-h-screen">
-    
-    <!-- Header -->
-    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-pink-100/80">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <img src="URLovingly_Icon.jpg" alt="URLovingly Logo" class="w-12 h-12 rounded-2xl object-cover shadow-sm border border-pink-200/70">
-          <div>
-            <div class="flex items-baseline tracking-tight">
-              <span class="font-serif text-3xl font-bold text-brand-navy">UR</span>
-              <span class="font-serif text-3xl font-bold text-brand-pink ml-0.5">Lovingly</span>
+  <div id="banner" class="hidden bg-brand-navy text-white text-center text-sm font-semibold py-2.5 px-4" role="status"></div>
+
+  <main>
+    <!-- ================= HERO ================= -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16 grid lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-pink-100/80 text-brand-pink">Digital invitations, made personal</span>
+        <h1 class="font-serif text-5xl sm:text-6xl font-bold leading-[1.05] mt-4">
+          Every guest gets an invitation <span class="brand-text-gradient">made just for them</span>
+        </h1>
+        <p class="mt-5 text-base sm:text-lg text-slate-600 max-w-xl">
+          URLovingly turns your wedding or celebration into a beautiful animated website with a <strong>personalized link for each guest or family</strong> — ready to share on WhatsApp in minutes, with RSVPs tracked live.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <button type="button" data-plan="free" class="plan-cta px-6 py-3.5 rounded-2xl brand-gradient text-white font-bold text-sm shadow-xl shadow-pink-500/25 hover:opacity-95">Start free trial</button>
+          <a href="#pricing" class="px-6 py-3.5 rounded-2xl bg-white border border-purple-200 text-brand-navy font-bold text-sm hover:bg-purple-50">See pricing</a>
+        </div>
+        <p class="mt-4 text-xs text-slate-500">Sign in with your Gmail account. No card needed for the free trial.</p>
+      </div>
+      <div class="flex justify-center" aria-hidden="true">
+        <div class="phone w-[290px] h-[560px] rounded-[44px] bg-white overflow-hidden flex flex-col">
+          <div class="bg-purple-50/70 border-b border-purple-100 px-4 py-2 text-[11px] font-mono text-brand-navy/75 truncate">urlovingly.com/aarav-and-priya/to/rahul-sharma</div>
+          <div class="flex-1 flex flex-col items-center justify-center text-center px-6 bg-gradient-to-b from-[#2a1731] to-[#17141f] text-amber-50">
+            <div class="float w-44 h-28 rounded-lg border border-amber-300/70 brand-gradient relative shadow-2xl">
+              <div class="absolute inset-x-3 -top-5 h-16 bg-amber-50 rounded text-brand-navy text-[10px] flex flex-col items-center justify-center">
+                <span class="uppercase tracking-widest text-[7px] text-brand-pink">You are warmly invited</span>
+                <span class="font-serif text-lg leading-none">Aarav &amp; Priya</span>
+              </div>
+              <div class="absolute bottom-2 inset-x-0 text-[10px] font-serif">A special invitation for<br><strong class="text-sm">Rahul Sharma &amp; Family</strong></div>
             </div>
-            <p class="text-[11px] font-medium text-brand-navy/65 -mt-1">Personalized digital invites for your special days</p>
+            <p class="mt-10 text-[10px] uppercase tracking-[.25em] text-amber-200">Touch to open</p>
+            <div class="mt-6 flex gap-1.5">
+              <span class="px-2 py-1 rounded bg-white/10 text-[10px]">42d</span><span class="px-2 py-1 rounded bg-white/10 text-[10px]">11h</span><span class="px-2 py-1 rounded bg-white/10 text-[10px]">36m</span>
+            </div>
           </div>
         </div>
-        <div class="flex items-center gap-4">
-          <span id="userEmailDisplay" class="hidden sm:block text-xs font-bold text-brand-navy"></span>
-          <button onclick="logout()" class="px-4 py-2 rounded-xl bg-purple-50 text-brand-purple text-xs font-bold hover:bg-purple-100 transition shadow-sm border border-purple-100">Sign Out</button>
-        </div>
-      </div>
-    </header>
-
-    <!-- Hero Banner -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-pink-100/80 text-brand-pink">
-            ✨ Crafted with Love
-          </span>
-          <h1 class="font-serif text-3xl sm:text-4xl font-bold text-brand-navy mt-2">
-            Create Bespoke Event Invitations
-          </h1>
-        </div>
-        <p class="text-xs sm:text-sm text-slate-600 max-w-md">
-          Enter your celebration details and personalize each guest's invitation with a dedicated URL ready to share over WhatsApp or Email.
-        </p>
       </div>
     </section>
 
-    <!-- Main Studio Grid -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        <!-- LEFT COLUMN: Creation Studio Forms (7 cols) -->
-        <div class="lg:col-span-7 space-y-6">
+    <!-- ================= WHAT WE PROVIDE ================= -->
+    <section id="features" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 scroll-mt-20">
+      <div class="text-center max-w-2xl mx-auto">
+        <h2 class="font-serif text-4xl font-bold">What we provide</h2>
+        <p class="mt-3 text-slate-600">Everything you need to invite, inform and hear back from your guests — without printing or posting a single card.</p>
+      </div>
+      <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <article class="glass-card rounded-3xl p-6"><h3 class="font-bold">A link for every guest</h3><p class="mt-2 text-sm text-slate-600">Each guest or family gets their own page and URL — <em>/your-names/to/guest-name</em> — greeted by name with a personal note from you.</p></article>
+        <article class="glass-card rounded-3xl p-6"><h3 class="font-bold">8 invitation designs</h3><p class="mt-2 text-sm text-slate-600">Regal, royal, modern minimalist, tropical, vintage, heritage temple art, vibrant and our signature style — all mobile-first.</p></article>
+        <article class="glass-card rounded-3xl p-6"><h3 class="font-bold">Every kind of celebration</h3><p class="mt-2 text-sm text-slate-600">Weddings, birthdays, naming and rice ceremonies, housewarming, anniversaries, baptism, communion and more — with ceremony-wise details.</p></article>
+        <article class="glass-card rounded-3xl p-6"><h3 class="font-bold">Maps, photos &amp; schedule</h3><p class="mt-2 text-sm text-slate-600">Venue map, parking and travel notes, meal details, family names and up to three photos, all beautifully laid out.</p></article>
+        <article class="glass-card rounded-3xl p-6"><h3 class="font-bold">Share in one tap</h3><p class="mt-2 text-sm text-slate-600">Copy the link or send it straight through WhatsApp with a ready-written message for each guest.</p></article>
+        <article class="glass-card rounded-3xl p-6"><h3 class="font-bold">Hosted for you</h3><p class="mt-2 text-sm text-slate-600">No servers or domains to manage. Your links stay live for the whole hosting period of your plan.</p></article>
+      </div>
+    </section>
 
-          <!-- Card 1: Event Selection -->
-          <div class="glass-card rounded-[28px] p-6 sm:p-7">
-            <div class="flex items-center justify-between mb-5">
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-2xl bg-pink-50 border border-pink-200 text-brand-pink flex items-center justify-center text-xs font-extrabold">01</div>
-                <div>
-                  <h2 class="text-base font-bold text-brand-navy">Event Type & Ceremonies</h2>
-                  <p class="text-xs text-slate-500">Choose the celebration and any related ceremonies</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="space-y-5">
-              <div>
-                <label for="eventType" class="block text-xs font-bold text-brand-navy mb-1.5">Event Type</label>
-                <select id="eventType" onchange="handleEventTypeChange()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-                  <option>Wedding</option>
-                  <option>Birthday</option>
-                  <option>First Birthday</option>
-                  <option>Naming Ceremony (Namakaran)</option>
-                  <option>First Rice Feeding Ceremony (Annaprashan)</option>
-                  <option>60th Birthday Celebration (Shashti Poorthi)</option>
-                  <option>70th Birthday Celebration (Bhimarathi Shanthi)</option>
-                  <option>Silver Wedding Anniversary (25th)</option>
-                  <option>Golden Anniversary (50th)</option>
-                  <option>Wedding Anniversary</option>
-                  <option>House Warming (Griha Pravesh)</option>
-                  <option>Coming of Age</option>
-                  <option>Baptism</option>
-                  <option>Holy Communion</option>
-                  <option>Sacrament of Confirmation</option>
-                </select>
-              </div>
-
-              <fieldset>
-                <legend class="block text-xs font-bold text-brand-navy mb-2">Ceremonies <span class="font-medium text-slate-400">Optional · select all that apply</span></legend>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Engagement / Ring Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Engagement / Ring Ceremony</span></label>
-                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Roka / Thakaana / Churni Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Roka / Thakaana / Churni Ceremony</span></label>
-                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Haldi Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Haldi Ceremony</span></label>
-                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Mehendi Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Mehendi Ceremony</span></label>
-                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Sangeet / Cocktail Party" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Sangeet / Cocktail Party</span></label>
-                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Tilak / Sagan Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Tilak / Sagan Ceremony</span></label>
-                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Baraat & Wedding Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Baraat &amp; Wedding Ceremony</span></label>
-                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Wedding Reception / Valima" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Wedding Reception / Valima</span></label>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-
-          <!-- Card 2: Event Details -->
-          <section class="glass-card rounded-[28px] p-6 sm:p-7" aria-labelledby="eventDetailsHeading">
-            <div class="flex items-center justify-between mb-5">
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-2xl bg-pink-50 border border-pink-200 text-brand-pink flex items-center justify-center text-xs font-extrabold">02</div>
-                <div>
-                  <h2 id="eventDetailsHeading" class="text-base font-bold text-brand-navy">Event Details</h2>
-                  <p class="text-xs text-slate-500">Add the people, schedule and venue information</p>
-                </div>
-              </div>
-              <button type="button" onclick="saveEventDefaults()" id="saveDefaultsBtn" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-brand-purple text-xs font-bold transition">Save Details</button>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div id="celebrantNamesField" class="sm:col-span-2 hidden">
-                <label for="celebrantNames" class="block text-xs font-bold text-brand-navy mb-1.5">Name(s) being celebrated</label>
-                <input type="text" id="celebrantNames" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-
-              <div class="wedding-only sm:col-span-2">
-                <label for="groomFullName" class="block text-xs font-bold text-brand-navy mb-1.5">Groom full name and professional title</label>
-                <input type="text" id="groomFullName" value="Groom" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="wedding-only sm:col-span-2">
-                <label for="brideFullName" class="block text-xs font-bold text-brand-navy mb-1.5">Bride full name and professional title</label>
-                <input type="text" id="brideFullName" value="Bride" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="wedding-only">
-                <label for="groomParents" class="block text-xs font-bold text-brand-navy mb-1.5">Groom's father and mother</label>
-                <input type="text" id="groomParents" oninput="updateLivePreview()" placeholder="Names of parents" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="wedding-only">
-                <label for="groomFamilyName" class="block text-xs font-bold text-brand-navy mb-1.5">Groom's family name <span class="font-medium text-slate-400">Optional</span></label>
-                <input type="text" id="groomFamilyName" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="wedding-only">
-                <label for="brideParents" class="block text-xs font-bold text-brand-navy mb-1.5">Bride's father and mother</label>
-                <input type="text" id="brideParents" oninput="updateLivePreview()" placeholder="Names of parents" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="wedding-only">
-                <label for="brideFamilyName" class="block text-xs font-bold text-brand-navy mb-1.5">Bride's family name <span class="font-medium text-slate-400">Optional</span></label>
-                <input type="text" id="brideFamilyName" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="wedding-only sm:col-span-2">
-                <label for="closeRelatives" class="block text-xs font-bold text-brand-navy mb-1.5">Siblings, grandparents, guardians or other relatives <span class="font-medium text-slate-400">Optional</span></label>
-                <textarea id="closeRelatives" rows="2" oninput="updateLivePreview()" placeholder="Names and how they would like to be mentioned" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition"></textarea>
-              </div>
-
-              <div>
-                <label id="eventDateLabel" for="weddingDate" class="block text-xs font-bold text-brand-navy mb-1.5">Wedding date</label>
-                <input type="text" id="weddingDate" value="December 25, 2026" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div>
-                <label id="eventTimeLabel" for="weddingTime" class="block text-xs font-bold text-brand-navy mb-1.5">Wedding time</label>
-                <input type="text" id="weddingTime" value="5:30 PM Onwards" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="wedding-only sm:col-span-2">
-                <label for="muhurthamTime" class="block text-xs font-bold text-brand-navy mb-1.5">Muhurtham or auspicious time <span class="font-medium text-slate-400">Optional</span></label>
-                <input type="text" id="muhurthamTime" oninput="updateLivePreview()" placeholder="e.g. 10:30 AM" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="sm:col-span-2">
-                <label for="guestArrivalTime" class="block text-xs font-bold text-brand-navy mb-1.5">Time guests should arrive <span class="font-medium text-slate-400">Optional</span></label>
-                <input type="text" id="guestArrivalTime" oninput="updateLivePreview()" placeholder="e.g. 5:00 PM" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="sm:col-span-2">
-                <label for="venueName" class="block text-xs font-bold text-brand-navy mb-1.5">Name of venue / auditorium / church / temple / mosque</label>
-                <input type="text" id="venueName" value="The Grand Ballroom, Taj Lands End" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="sm:col-span-2">
-                <label for="venueAddress" class="block text-xs font-bold text-brand-navy mb-1.5">Full venue address</label>
-                <textarea id="venueAddress" rows="2" oninput="updateLivePreview()" placeholder="Street, city, state and postal code" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">Mumbai, Maharashtra</textarea>
-              </div>
-              <div class="sm:col-span-2">
-                <label for="mapUrl" class="block text-xs font-bold text-brand-navy mb-1.5">Google Maps location URL <span class="font-medium text-slate-400">Optional</span></label>
-                <input type="url" id="mapUrl" value="https://maps.google.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="sm:col-span-2">
-                <label for="parkingTransport" class="block text-xs font-bold text-brand-navy mb-1.5">Parking and transportation <span class="font-medium text-slate-400">Optional</span></label>
-                <textarea id="parkingTransport" rows="2" oninput="updateLivePreview()" placeholder="Parking, shuttle or public transit details" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition"></textarea>
-              </div>
-              <div class="sm:col-span-2">
-                <label for="mealDetails" class="block text-xs font-bold text-brand-navy mb-1.5">Meal or wedding feast <span class="font-medium text-slate-400">Optional</span></label>
-                <input type="text" id="mealDetails" oninput="updateLivePreview()" placeholder="e.g. Lunch, dinner or sadhya" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="wedding-only">
-                <label for="receptionDateTime" class="block text-xs font-bold text-brand-navy mb-1.5">Separate reception date and time <span class="font-medium text-slate-400">Optional</span></label>
-                <input type="text" id="receptionDateTime" oninput="updateLivePreview()" placeholder="Date and time" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div class="wedding-only">
-                <label for="receptionVenue" class="block text-xs font-bold text-brand-navy mb-1.5">Reception venue <span class="font-medium text-slate-400">Optional</span></label>
-                <input type="text" id="receptionVenue" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div>
-                <label for="rsvpPhone" class="block text-xs font-bold text-brand-navy mb-1.5">Host WhatsApp number</label>
-                <input type="text" id="rsvpPhone" value="919876543210" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-              <div>
-                <label for="hostEmail" class="block text-xs font-bold text-brand-navy mb-1.5">Host email</label>
-                <input type="email" id="hostEmail" value="rsvp@urlovingly.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-              </div>
-            </div>
-            <div id="ceremonyDetailsContainer" class="hidden mt-5 space-y-3"></div>
-          </section>
-
-          <!-- Card 3: Guest, Message & Website Template -->
-          <form id="inviteForm" onsubmit="handleGenerateSubmit(event)" class="glass-card rounded-[28px] p-6 sm:p-7 space-y-5">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-2xl brand-gradient text-white flex items-center justify-center text-xs font-extrabold shadow-sm">03</div>
-                <div>
-                  <h2 class="text-base font-bold text-brand-navy">Guest Details & Website Template</h2>
-                  <p class="text-xs text-slate-500">Personalize this guest's message and choose the invitation design</p>
-                </div>
-              </div>
-              <div class="px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-mono font-bold text-brand-pink">
-                /<span id="coupleSlugPreview">Groom-and-Bride</span>/to/<span id="slugPreview">guest-name-and-family</span>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-brand-navy mb-1.5">Guest or Family Name <span class="text-brand-pink">*</span></label>
-              <input type="text" id="guestName" required value="Guest Name & Family" oninput="updateLivePreview()" class="w-full px-4 py-3 rounded-2xl bg-white border border-purple-200 text-sm font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
-            </div>
-
-            <div class="space-y-2">
-              <div class="flex items-center justify-between gap-3">
-                <label for="invitePhotoInput" class="block text-xs font-bold text-brand-navy">Photos for the invitation <span class="font-medium text-slate-400">Optional</span></label>
-                <span class="text-[10px] text-slate-500">Up to 3</span>
-              </div>
-              <input type="file" id="invitePhotoInput" accept="image/*" multiple onchange="handlePhotoUploadChange(event)" class="block w-full text-xs text-slate-600 file:mr-3 file:rounded-xl file:border-0 file:bg-purple-50 file:px-3 file:py-2 file:text-xs file:font-bold file:text-brand-purple hover:file:bg-purple-100">
-              <div class="flex items-center justify-between gap-2"><p id="invitePhotoStatus" class="text-[10px] text-slate-500">Photos are resized to fit the shareable invitation.</p><button type="button" id="clearInvitePhotos" onclick="clearInvitePhotos()" class="hidden shrink-0 text-[10px] font-bold text-brand-purple underline">Clear photos</button></div>
-              <div id="invitePhotoPreview" class="hidden grid grid-cols-3 gap-2"></div>
-            </div>
-
-            <!-- Restored Sample Personal Note Options -->
-            <div class="space-y-3">
-              <label class="block text-xs font-bold text-brand-navy">Select a Warm Personal Note</label>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="notePresetGroup">
-                
-                <label class="cursor-pointer">
-                  <input type="radio" name="noteOption" value="We are so excited to invite you to celebrate this special day with us!" checked onchange="handleNoteOptionChange()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
-                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
-                      <span>✨ A Special Day</span>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"We are so excited to invite you to celebrate this special day with us!"</p>
-                  </div>
-                </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="noteOption" value="Your presence and blessings mean the world to us as we celebrate together." onchange="handleNoteOptionChange()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
-                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
-                      <span>🙏 Traditional & Heartfelt</span>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"Your presence and blessings mean the world to us as we celebrate together."</p>
-                  </div>
-                </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="noteOption" value="This celebration wouldn't be complete without you by our side! Come ready to celebrate." onchange="handleNoteOptionChange()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
-                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
-                      <span>🥂 Warm & Festive</span>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"This celebration wouldn't be complete without you by our side! Come ready to celebrate."</p>
-                  </div>
-                </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="noteOption" value="custom" onchange="handleNoteOptionChange()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full flex flex-col justify-center">
-                    <div class="text-xs font-bold text-brand-pink flex items-center gap-1.5">
-                      <span>✍️ Write a Personal Message</span>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-1">Craft a custom note specifically for this guest or family.</p>
-                  </div>
-                </label>
-
-              </div>
-
-              <div id="customNoteContainer" class="hidden pt-1">
-                <textarea id="customNoteInput" rows="2" oninput="updateLivePreview()"
-                  placeholder="Write your personal message for this guest..."
-                  class="w-full px-4 py-2.5 rounded-2xl bg-white border border-brand-pink text-sm text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Dear Guest & Family, we have shared so many wonderful memories together and can't wait to celebrate with you!</textarea>
-              </div>
-            </div>
-
-            <!-- Restored Template Selector -->
-            <div>
-              <label class="block text-xs font-bold text-brand-navy mb-2.5">Invitation Visual Style</label>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <label class="cursor-pointer">
-                  <input type="radio" name="templateType" value="urlovingly" checked onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl brand-gradient flex items-center justify-center text-white font-serif font-bold text-xs shadow-sm">UL</div>
-                    <div class="text-xs font-bold text-brand-navy">Signature</div>
-                    <div class="text-[10px] text-brand-pink font-medium">Pink & Purple</div>
-                  </div>
-                </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="templateType" value="regal-palatial" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-amber-100 border border-amber-700 flex items-center justify-center text-amber-900 font-serif font-bold text-xs shadow-sm">RP</div>
-                    <div class="text-xs font-bold text-brand-navy">Regal &amp; Palatial</div>
-                    <div class="text-[10px] text-slate-500">Gilt &amp; ivory</div>
-                  </div>
-                </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="templateType" value="royal" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-violet-950 border border-amber-400 flex items-center justify-center text-amber-200 font-serif font-bold text-xs shadow-sm">R</div>
-                    <div class="text-xs font-bold text-brand-navy">Royal</div>
-                    <div class="text-[10px] text-slate-500">Velvet &amp; gold</div>
-                  </div>
-                </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="templateType" value="modern-minimalist" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-stone-100 border border-emerald-800 flex items-center justify-center text-emerald-900 font-sans font-bold text-xs shadow-sm">M</div>
-                    <div class="text-xs font-bold text-brand-navy">Modern Minimalist</div>
-                    <div class="text-[10px] text-slate-500">Quiet &amp; refined</div>
-                  </div>
-                </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="templateType" value="vibrant-contemporary" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-orange-500 border border-slate-900 flex items-center justify-center text-lime-200 font-bold text-xs shadow-sm">V</div>
-                    <div class="text-xs font-bold text-brand-navy">Vibrant &amp; Contemporary</div>
-                    <div class="text-[10px] text-slate-500">Playful &amp; bold</div>
-                  </div>
-                </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="templateType" value="heritage-temple-art" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-orange-100 border border-red-800 flex items-center justify-center text-red-900 font-serif font-bold text-xs shadow-sm">H</div>
-                    <div class="text-xs font-bold text-brand-navy">Heritage &amp; Temple Art</div>
-                    <div class="text-[10px] text-slate-500">Motifs &amp; warmth</div>
-                  </div>
-                </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="templateType" value="tropical-destination" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-emerald-100 border border-teal-800 flex items-center justify-center text-teal-900 font-serif font-bold text-xs shadow-sm">T</div>
-                    <div class="text-xs font-bold text-brand-navy">Tropical &amp; Destination</div>
-                    <div class="text-[10px] text-slate-500">Garden getaway</div>
-                  </div>
-                </label>
-
-                <label class="cursor-pointer">
-                  <input type="radio" name="templateType" value="vintage-nostalgia" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-amber-100 border border-stone-600 flex items-center justify-center text-stone-700 font-serif font-bold text-xs shadow-sm">V</div>
-                    <div class="text-xs font-bold text-brand-navy">Vintage Nostalgia</div>
-                    <div class="text-[10px] text-slate-500">A keepsake feel</div>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-brand-navy mb-2.5">Mail Arrival Style</label>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <label class="cursor-pointer">
-                  <input type="radio" name="mailAnimationType" value="velvet" checked onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-[#552244] border border-amber-300 flex items-center justify-center text-amber-200 font-serif text-sm">&amp;</div>
-                    <div class="text-xs font-bold text-brand-navy">Grand Velvet</div>
-                    <div class="text-[10px] text-slate-500">Rises in with a seal</div>
-                  </div>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="radio" name="mailAnimationType" value="rose-gold" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-rose-200 border border-rose-500 flex items-center justify-center text-rose-800 font-serif text-sm">&#10084;</div>
-                    <div class="text-xs font-bold text-brand-navy">Rose Gold</div>
-                    <div class="text-[10px] text-slate-500">Drifts in diagonally</div>
-                  </div>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="radio" name="mailAnimationType" value="botanical" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-emerald-800 border border-lime-300 flex items-center justify-center text-lime-100 font-serif text-sm">&#10047;</div>
-                    <div class="text-xs font-bold text-brand-navy">Botanical</div>
-                    <div class="text-[10px] text-slate-500">Leaf-sealed arrival</div>
-                  </div>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="radio" name="mailAnimationType" value="celestial" onchange="updateLivePreview()" class="sr-only peer">
-                  <div class="p-3 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
-                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-slate-950 border border-sky-300 flex items-center justify-center text-sky-100 font-serif text-sm">&#10022;</div>
-                    <div class="text-xs font-bold text-brand-navy">Celestial</div>
-                    <div class="text-[10px] text-slate-500">Arrives with starlight</div>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <button type="submit" id="submitBtn" class="w-full py-4 px-6 rounded-2xl brand-gradient hover:opacity-95 text-white font-bold text-sm shadow-xl shadow-pink-500/25 transition flex items-center justify-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-              <span id="submitBtnText">Create & Publish Personalized Invite Link</span>
-            </button>
-          </form>
-
-          <!-- Result & Share Banner with Progress Bar -->
-          <div id="resultBanner" class="hidden glass-card rounded-[28px] p-6 border-2 border-brand-pink/40 bg-gradient-to-r from-pink-50/90 via-white to-purple-50/90 space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-brand-pink uppercase tracking-wider">
-                <span id="statusTitle">Triggering GitHub Action...</span>
-              </div>
-              <span id="progressPercent" class="text-xs font-mono font-bold text-brand-purple">0%</span>
-            </div>
-
-            <!-- Progress Bar Track -->
-            <div class="w-full bg-purple-100 rounded-full h-2 overflow-hidden">
-              <div id="progressBar" class="bg-gradient-to-r from-pink-500 to-purple-600 h-2 rounded-full transition-all duration-300" style="width: 5%"></div>
-            </div>
-
-            <p id="statusSubtext" class="text-[11px] text-slate-500">Waiting for GitHub Actions build to complete...</p>
-
-            <!-- Hidden until action completes successfully -->
-            <div id="completedLinkSection" class="hidden pt-2 border-t border-pink-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div class="min-w-0 flex-1">
-                <span class="text-[10px] font-bold uppercase text-emerald-600 block">✨ Invite is Live!</span>
-                <a id="generatedUrlLink" href="#" target="_blank" class="text-sm font-bold text-brand-navy hover:text-brand-pink underline truncate block mt-0.5"></a>
-              </div>
-              <div class="flex items-center gap-2 shrink-0">
-                <button type="button" onclick="copyGeneratedLink()" id="copyBtn" class="px-4 py-2.5 rounded-xl bg-white border border-purple-200 text-brand-navy text-xs font-bold hover:bg-purple-50 transition">
-                  Copy Link
-                </button>
-                <a id="whatsappShareBtn" href="#" target="_blank" class="px-4 py-2.5 rounded-xl brand-gradient text-white text-xs font-bold hover:opacity-95 transition shadow-md">
-                  Send via WhatsApp
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Guest Links History -->
-          <div class="glass-card rounded-[28px] p-6 sm:p-7">
-            <h3 class="text-base font-bold text-brand-navy mb-4">Your Generated Invitations</h3>
-            <div class="overflow-x-auto">
-              <table class="w-full text-left border-collapse">
-                <thead>
-                  <tr class="border-b border-pink-100 text-[11px] font-bold uppercase text-slate-400">
-                    <th class="pb-2.5">Guest Name</th>
-                    <th class="pb-2.5">Style</th>
-                    <th class="pb-2.5">Invitation URL</th>
-                  </tr>
-                </thead>
-                <tbody id="guestHistoryBody" class="divide-y divide-pink-50 text-xs"></tbody>
-              </table>
-            </div>
-          </div>
-
+    <!-- ================= WHAT MAKES US UNIQUE ================= -->
+    <section id="unique" class="bg-white/60 border-y border-pink-100/70 scroll-mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center max-w-2xl mx-auto">
+          <h2 class="font-serif text-4xl font-bold">Why URLovingly is different</h2>
+          <p class="mt-3 text-slate-600">Most invitation tools send everyone the same card. We built ours around the guest.</p>
         </div>
-
-        <!-- RIGHT COLUMN: Sticky Live Mobile Preview -->
-        <div class="lg:col-span-5 lg:sticky lg:top-24 flex flex-col items-center">
-          <div class="mb-3 flex w-full max-w-[365px] items-center justify-between gap-2">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/80 border border-purple-100 shadow-sm">
-              <span class="text-[11px] font-bold uppercase tracking-widest text-brand-navy">Live Guest Mobile View</span>
-            </div>
-            <button type="button" onclick="replayMailAnimation()" title="Replay mail arrival animation" class="inline-flex shrink-0 items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-purple-200 text-brand-purple text-xs font-bold hover:bg-purple-50 transition shadow-sm">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 11a8.1 8.1 0 0 0-14.9-3L3 11m0-6v6h6m-5 2a8.1 8.1 0 0 0 14.9 3L21 13m0 6v-6h-6"/></svg>
-              <span>Replay mail</span>
-            </button>
-          </div>
-          <div class="w-[335px] sm:w-[365px] h-[680px] rounded-[48px] phone-mockup bg-white overflow-hidden flex flex-col">
-            <div class="bg-purple-50/70 border-b border-purple-100 px-4 py-2 flex items-center gap-2 shrink-0">
-              <div id="previewBrowserUrl" class="text-[11px] font-mono text-brand-navy/75 truncate"></div>
-            </div>
-            <iframe id="mobilePreviewViewport" title="Complete invitation website preview" class="flex-1 min-h-0 w-full border-0 bg-white" sandbox="allow-scripts allow-popups"></iframe>
-          </div>
+        <div class="mt-10 grid md:grid-cols-2 gap-5">
+          <div class="glass-card rounded-3xl p-6 flex gap-4"><span class="brand-gradient text-white w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center font-bold">1</span><div><h3 class="font-bold">An envelope addressed to them</h3><p class="mt-1 text-sm text-slate-600">An animated envelope arrives with the guest's own name on it. Choose from four arrival styles — velvet, rose gold, botanical or celestial.</p></div></div>
+          <div class="glass-card rounded-3xl p-6 flex gap-4"><span class="brand-gradient text-white w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center font-bold">2</span><div><h3 class="font-bold">Scratch to reveal the date</h3><p class="mt-1 text-sm text-slate-600">Guests scratch a card to uncover the date, then a live countdown begins. Text appears letter by letter, like a handwritten note.</p></div></div>
+          <div class="glass-card rounded-3xl p-6 flex gap-4"><span class="brand-gradient text-white w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center font-bold">3</span><div><h3 class="font-bold">Multi-day selective event routing</h3><p class="mt-1 text-sm text-slate-600">Invite each guest only to the ceremonies that concern them — Haldi for family, the reception for colleagues. Nobody sees what they were not invited to.</p></div></div>
+          <div class="glass-card rounded-3xl p-6 flex gap-4"><span class="brand-gradient text-white w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center font-bold">4</span><div><h3 class="font-bold">UPI Shagun built in</h3><p class="mt-1 text-sm text-slate-600">Let guests send their blessings with a single UPI tap, right from their invitation page.</p></div></div>
+          <div class="glass-card rounded-3xl p-6 flex gap-4"><span class="brand-gradient text-white w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center font-bold">5</span><div><h3 class="font-bold">Live RSVP dashboard</h3><p class="mt-1 text-sm text-slate-600">Guests reply from their own link. You watch Yes / Maybe / No and the head-count update in real time — no more chasing messages.</p></div></div>
+          <div class="glass-card rounded-3xl p-6 flex gap-4"><span class="brand-gradient text-white w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center font-bold">6</span><div><h3 class="font-bold">Your own background audio</h3><p class="mt-1 text-sm text-slate-600">Upload the song that means something to you. It plays softly when the guest opens the invitation, with a mute button.</p></div></div>
         </div>
       </div>
-    </main>
+    </section>
+
+    <!-- ================= HOW IT WORKS ================= -->
+    <section id="how-it-works" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 scroll-mt-20">
+      <h2 class="font-serif text-4xl font-bold text-center">How it works</h2>
+      <ol class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <li class="glass-card rounded-3xl p-6"><span class="text-xs font-extrabold text-brand-pink">STEP 1</span><h3 class="mt-1 font-bold">Choose a plan</h3><p class="mt-1 text-sm text-slate-600">Start free or pick Standard or Grand for your celebration.</p></li>
+        <li class="glass-card rounded-3xl p-6"><span class="text-xs font-extrabold text-brand-pink">STEP 2</span><h3 class="mt-1 font-bold">Sign in with Gmail</h3><p class="mt-1 text-sm text-slate-600">One click with Google. Your plan and details are saved to your account.</p></li>
+        <li class="glass-card rounded-3xl p-6"><span class="text-xs font-extrabold text-brand-pink">STEP 3</span><h3 class="mt-1 font-bold">Add your event and guests</h3><p class="mt-1 text-sm text-slate-600">Enter the event details once, then add each guest and pick a design.</p></li>
+        <li class="glass-card rounded-3xl p-6"><span class="text-xs font-extrabold text-brand-pink">STEP 4</span><h3 class="mt-1 font-bold">Share and track</h3><p class="mt-1 text-sm text-slate-600">Send personalized links and follow the replies.</p></li>
+      </ol>
+    </section>
+
+    <!-- ================= PRICING ================= -->
+    <section id="pricing" class="bg-white/60 border-y border-pink-100/70 scroll-mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center max-w-2xl mx-auto">
+          <h2 class="font-serif text-4xl font-bold">Simple pricing, per event</h2>
+          <p class="mt-3 text-slate-600">Try it free. Pay once per celebration — no subscriptions.</p>
+        </div>
+        <div class="mt-10 grid lg:grid-cols-3 gap-6 items-stretch">
+
+          <article class="glass-card rounded-3xl p-7 flex flex-col" aria-labelledby="plan-free">
+            <h3 id="plan-free" class="font-bold text-lg">Free Tier (Trial)</h3>
+            <p class="mt-3"><span class="font-serif text-5xl font-bold">₹0</span> <span class="text-sm text-slate-500">to try</span></p>
+            <p class="mt-1 text-sm text-slate-600">See the experience with a handful of real guests.</p>
+            <ul class="mt-5 space-y-2.5 text-sm flex-1">
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>Up to 5 personalized guest links</li>
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>7 days of link hosting</li>
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>All invitation designs</li>
+            </ul>
+            <button type="button" data-plan="free" class="plan-cta mt-7 w-full py-3 rounded-2xl bg-white border border-brand-pink text-brand-pink font-bold text-sm hover:bg-pink-50">Start free trial</button>
+          </article>
+
+          <article class="glass-card plan-featured rounded-3xl p-7 flex flex-col relative" aria-labelledby="plan-standard">
+            <span class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full brand-gradient text-white text-[11px] font-bold uppercase tracking-wider">Most popular</span>
+            <h3 id="plan-standard" class="font-bold text-lg">Standard Celebration</h3>
+            <p class="mt-3"><span class="font-serif text-5xl font-bold">₹999</span> <span class="text-sm text-slate-500">/ event</span></p>
+            <p class="mt-1 text-sm text-slate-600">Everything most families need.</p>
+            <ul class="mt-5 space-y-2.5 text-sm flex-1">
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>Up to 100 personalized guest links</li>
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>WhatsApp message generator</li>
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>Live RSVP dashboard</li>
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>6 months of link hosting</li>
+            </ul>
+            <button type="button" data-plan="standard" class="plan-cta mt-7 w-full py-3 rounded-2xl brand-gradient text-white font-bold text-sm shadow-lg shadow-pink-500/25 hover:opacity-95">Choose Standard</button>
+          </article>
+
+          <article class="glass-card rounded-3xl p-7 flex flex-col" aria-labelledby="plan-grand">
+            <h3 id="plan-grand" class="font-bold text-lg">Grand Celebration</h3>
+            <p class="mt-3"><span class="font-serif text-5xl font-bold">₹2,499</span> <span class="text-sm text-slate-500">/ event</span></p>
+            <p class="mt-1 text-sm text-slate-600">For multi-day weddings and large guest lists.</p>
+            <ul class="mt-5 space-y-2.5 text-sm flex-1">
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>Up to 500 personalized guest links</li>
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>Multi-day selective event routing</li>
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>UPI Shagun integration</li>
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>Custom background audio</li>
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>1 year of link hosting</li>
+              <li class="flex gap-2"><span class="text-brand-pink font-bold">✓</span>Everything in Standard</li>
+            </ul>
+            <button type="button" data-plan="grand" class="plan-cta mt-7 w-full py-3 rounded-2xl bg-brand-navy text-white font-bold text-sm hover:opacity-95">Choose Grand</button>
+          </article>
+        </div>
+        <p class="mt-6 text-center text-xs text-slate-500">Prices in Indian rupees. Upgrading later? You only pay the difference.</p>
+      </div>
+    </section>
+
+    <!-- ================= PAYMENT PORTAL INTRO ================= -->
+    <section id="payment" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 scroll-mt-20 text-center">
+      <h2 class="font-serif text-4xl font-bold">Secure payment, in one place</h2>
+      <p class="mt-3 text-slate-600">Pay without leaving this page. Choose a plan above and the secure checkout opens right here.</p>
+      <div class="mt-8 grid sm:grid-cols-3 gap-5 text-left">
+        <div class="glass-card rounded-3xl p-5"><h3 class="font-bold text-sm">UPI, cards &amp; netbanking</h3><p class="mt-1 text-xs text-slate-600">Google Pay, PhonePe, Paytm, all major cards, netbanking and wallets through Razorpay.</p></div>
+        <div class="glass-card rounded-3xl p-5"><h3 class="font-bold text-sm">We never see your card</h3><p class="mt-1 text-xs text-slate-600">Card and UPI details are entered on the payment partner's secure form. We only receive a confirmation.</p></div>
+        <div class="glass-card rounded-3xl p-5"><h3 class="font-bold text-sm">Instant activation</h3><p class="mt-1 text-xs text-slate-600">The moment your payment is confirmed your plan's features unlock in the studio.</p></div>
+      </div>
+      <a href="#pricing" class="inline-block mt-8 px-6 py-3 rounded-2xl brand-gradient text-white font-bold text-sm shadow-lg shadow-pink-500/25">Choose a plan</a>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+      <h2 class="font-serif text-3xl font-bold text-center">Questions</h2>
+      <div class="mt-6 space-y-3">
+        <details class="glass-card rounded-2xl p-4"><summary class="font-bold text-sm cursor-pointer">Do I need a Gmail account?</summary><p class="mt-2 text-sm text-slate-600">Yes. You sign in with Google using your Gmail address; we never see your Google password.</p></details>
+        <details class="glass-card rounded-2xl p-4"><summary class="font-bold text-sm cursor-pointer">What does "per event" mean?</summary><p class="mt-2 text-sm text-slate-600">One payment covers one celebration — for example one wedding — including all its guest links, up to your plan's limit.</p></details>
+        <details class="glass-card rounded-2xl p-4"><summary class="font-bold text-sm cursor-pointer">What happens when hosting ends?</summary><p class="mt-2 text-sm text-slate-600">After the hosting period (7 days, 6 months or 1 year, depending on the plan) the guest links show a friendly "expired" page.</p></details>
+        <details class="glass-card rounded-2xl p-4"><summary class="font-bold text-sm cursor-pointer">Can I upgrade my trial?</summary><p class="mt-2 text-sm text-slate-600">Yes. Your existing guest links are kept and you pay only the price difference.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-pink-100/80 py-8 text-center text-xs text-slate-500">© URLovingly — Personalized digital invites for your special days</footer>
+
+  <!-- ================= SIGN-IN MODAL ================= -->
+  <div id="loginModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-brand-navy/40 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <div class="glass-card rounded-3xl p-8 max-w-md w-full text-center relative bg-white">
+      <button type="button" data-close="loginModal" class="absolute top-3 right-4 text-slate-400 text-xl" aria-label="Close">×</button>
+      <img src="/URLovingly_Icon.jpg" alt="" class="w-14 h-14 mx-auto rounded-2xl object-cover border border-pink-200/70 mb-3">
+      <h2 id="loginTitle" class="font-serif text-3xl font-bold">Sign in to continue</h2>
+      <p id="loginPlanNote" class="hidden mt-2 text-sm font-semibold text-brand-pink"></p>
+      <p class="mt-2 text-sm text-slate-600">Use your Gmail account. Your plan and event details are saved to it.</p>
+      <div class="mt-6 flex justify-center"><div id="googleButton"></div></div>
+      <form id="devLoginForm" class="hidden mt-6 pt-5 border-t border-dashed border-purple-200 text-left">
+        <p class="text-[11px] font-bold uppercase tracking-wider text-brand-purple">Local development sign-in</p>
+        <label for="devEmail" class="block mt-2 text-xs font-bold">Gmail address</label>
+        <input id="devEmail" type="email" required placeholder="you@gmail.com" class="mt-1 w-full px-4 py-2.5 rounded-2xl border border-purple-200 text-sm">
+        <button type="submit" class="mt-3 w-full py-2.5 rounded-2xl bg-brand-navy text-white text-sm font-bold">Continue</button>
+      </form>
+      <p id="loginError" class="hidden mt-4 text-xs text-red-600" role="alert"></p>
+    </div>
+  </div>
+
+  <!-- ================= PAYMENT PORTAL / CHECKOUT MODAL ================= -->
+  <div id="checkoutModal" class="hidden fixed inset-0 z-50 items-center justify-center bg-brand-navy/40 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <div class="rounded-3xl p-8 max-w-md w-full relative bg-white shadow-2xl">
+      <button type="button" data-close="checkoutModal" class="absolute top-3 right-4 text-slate-400 text-xl" aria-label="Close">×</button>
+      <h2 id="checkoutTitle" class="font-serif text-3xl font-bold">Secure checkout</h2>
+      <div class="mt-4 rounded-2xl bg-pink-50/70 border border-pink-100 p-4">
+        <p id="checkoutPlanName" class="font-bold"></p>
+        <p id="checkoutPlanSummary" class="text-xs text-slate-600 mt-0.5"></p>
+        <div class="mt-3 flex items-baseline justify-between border-t border-pink-100 pt-3">
+          <span id="checkoutAmountLabel" class="text-sm font-semibold">Total</span>
+          <span id="checkoutAmount" class="font-serif text-3xl font-bold"></span>
+        </div>
+      </div>
+      <div id="checkoutTitleField" class="mt-4">
+        <label for="eventTitle" class="block text-xs font-bold">Name of your celebration</label>
+        <input id="eventTitle" type="text" maxlength="120" value="My Celebration" class="mt-1 w-full px-4 py-2.5 rounded-2xl border border-purple-200 text-sm">
+      </div>
+      <p class="mt-4 text-xs text-slate-500">Pay with UPI, cards, netbanking or wallets. Paying as <strong id="checkoutEmail"></strong>.</p>
+      <p id="mockNotice" class="hidden mt-2 text-[11px] rounded-xl bg-amber-50 border border-amber-200 text-amber-800 px-3 py-2">Test mode: no real money is charged and no card is needed.</p>
+      <button id="payBtn" type="button" class="mt-5 w-full py-3.5 rounded-2xl brand-gradient text-white font-bold text-sm shadow-lg shadow-pink-500/25">Pay now</button>
+      <p id="checkoutStatus" class="mt-3 text-xs min-h-[1.25rem] text-center" role="status"></p>
+    </div>
   </div>
 
   <script>
-    const CLOUDFLARE_WORKER_URL = "https://invite-guests.urlovingly-comp.workers.dev";
-    const BASE_HOSTED_DOMAIN = "https://urlovingly.github.io/Invitation/";
-    const STORAGE_KEYS = { DEFAULTS: 'urlovingly_event_defaults_v2' };
-    
-    let activeSessionToken = localStorage.getItem("urlovingly_session");
-    let previewRenderPromise = Promise.resolve();
-    let previewRenderId = 0;
-    let activeTemplateLoaded = true;
-    let renderedInvitationFragment = '';
-    const invitationTemplateCache = new Map();
-    const previewIntroShown = new Set();
-    let lastPreviewSelection = '';
-    let uploadedInvitePhotos = [];
-    let photoUploadRequestId = 0;
-    const MAX_INVITE_PHOTOS = 3;
-    const MAX_PHOTO_DATA_URL_LENGTH = 9000;
-    const MAX_DISPATCH_PAYLOAD_BYTES = 60 * 1024;
+    const API_HEADERS = { 'Content-Type': 'application/json', 'X-Requested-With': 'urlovingly' };
+    const PENDING_PLAN_KEY = 'urlovingly_pending_plan';
+    const state = { config: null, user: null, events: [], plans: {}, upgradeEventId: null, checkout: null };
+    const $ = id => document.getElementById(id);
+    const rupees = paise => '₹' + (paise / 100).toLocaleString('en-IN');
 
-    window.addEventListener('DOMContentLoaded', () => {
-      if (activeSessionToken) {
-        verifyAndLoadStudio();
-      }
+    async function api(path, options = {}) {
+      const response = await fetch(path, { credentials: 'same-origin', ...options, headers: { ...API_HEADERS, ...(options.headers || {}) } });
+      let body = {};
+      try { body = await response.json(); } catch (e) { /* empty body */ }
+      return { ok: response.ok, status: response.status, body };
+    }
+    const post = (path, data) => api(path, { method: 'POST', body: JSON.stringify(data || {}) });
+
+    function show(id) { const el = $(id); el.classList.remove('hidden'); el.classList.add('flex'); }
+    function hide(id) { const el = $(id); el.classList.add('hidden'); el.classList.remove('flex'); }
+    document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', () => hide(button.dataset.close)));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') { hide('loginModal'); hide('checkoutModal'); } });
+
+    function showBanner(message) { const banner = $('banner'); banner.textContent = message; banner.classList.remove('hidden'); }
+    function activeEvents() { return state.events.filter(event => event.status === 'active'); }
+
+    function renderAccount() {
+      const signedIn = !!state.user;
+      $('signInBtn').classList.toggle('hidden', signedIn);
+      $('signOutBtn').classList.toggle('hidden', !signedIn);
+      $('accountEmail').textContent = signedIn ? state.user.email : '';
+      $('openStudioBtn').classList.toggle('hidden', !(signedIn && activeEvents().length));
+    }
+
+    async function loadSession() {
+      const me = await api('/api/me');
+      if (me.ok) { state.user = me.body.user; state.events = me.body.events; } else { state.user = null; state.events = []; }
+      renderAccount();
+    }
+
+    // ---------- sign-in ----------
+    function openLogin(planId) {
+      const note = $('loginPlanNote');
+      note.classList.toggle('hidden', !planId);
+      if (planId && state.plans[planId]) note.textContent = 'Selected plan: ' + state.plans[planId];
+      $('loginError').classList.add('hidden');
+      show('loginModal');
+    }
+
+    function loginFailed(message) { const el = $('loginError'); el.textContent = message; el.classList.remove('hidden'); }
+
+    async function afterLogin() {
+      hide('loginModal');
+      await loadSession();
+      const pending = sessionStorage.getItem(PENDING_PLAN_KEY);
+      sessionStorage.removeItem(PENDING_PLAN_KEY);
+      if (pending) choosePlan(pending); else if (activeEvents().length) location.href = '/studio';
+    }
+
+    async function handleGoogleCredential(response) {
+      const result = await post('/api/auth/google', { credential: response.credential });
+      if (result.ok) afterLogin(); else loginFailed(result.body.message || 'Sign-in failed. Please try again.');
+    }
+
+    $('devLoginForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const result = await post('/api/auth/dev-login', { email: $('devEmail').value });
+      if (result.ok) afterLogin(); else loginFailed(result.body.message || 'Sign-in failed.');
     });
 
-    async function handleCredentialResponse(response) {
-      try {
-        const res = await fetch(`${CLOUDFLARE_WORKER_URL}/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: response.credential })
-        });
-        
-        if (!res.ok) throw new Error("Login failed");
-        
-        const data = await res.json();
-        activeSessionToken = data.session;
-        localStorage.setItem("urlovingly_session", activeSessionToken);
-        localStorage.setItem("urlovingly_email", data.email);
-        
-        verifyAndLoadStudio();
-      } catch (err) {
-        document.getElementById("loginErrorMsg").classList.remove("hidden");
+    $('signInBtn').addEventListener('click', () => openLogin(null));
+    $('signOutBtn').addEventListener('click', async () => { await post('/api/auth/logout'); location.href = '/'; });
+
+    // ---------- choosing a plan ----------
+    async function choosePlan(planId) {
+      if (!state.user) {
+        sessionStorage.setItem(PENDING_PLAN_KEY, planId);
+        return openLogin(planId);
       }
-    }
-
-    function verifyAndLoadStudio() {
-      document.getElementById("loginSection").classList.add("opacity-0", "pointer-events-none", "hidden");
-      document.getElementById("studioSection").classList.remove("hidden");
-      document.getElementById("studioSection").classList.add("flex");
-      document.getElementById("userEmailDisplay").textContent = localStorage.getItem("urlovingly_email");
-      
-      loadDefaults();
-      handleEventTypeChange();
-      fetchHistory();
-    }
-
-    function logout() {
-      localStorage.removeItem("urlovingly_session");
-      localStorage.removeItem("urlovingly_email");
-      location.reload();
-    }
-
-    async function fetchHistory() {
-      try {
-        const res = await fetch(`${CLOUDFLARE_WORKER_URL}/api/invites`, {
-          headers: { "Authorization": `Bearer ${activeSessionToken}` }
-        });
-        const invites = await res.json();
-        renderHistoryTable(invites);
-      } catch (err) {
-        console.error("Failed to load history");
-      }
-    }
-
-    function renderHistoryTable(invites) {
-      const tbody = document.getElementById('guestHistoryBody');
-      if (!invites || !invites.length) {
-        tbody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-slate-400">No guest links generated yet.</td></tr>`;
+      const plan = state.plans[planId];
+      if (planId === 'free') {
+        const result = await post('/api/events', { plan: 'free', title: 'My Free Trial Event' });
+        if (result.ok) { location.href = '/studio'; return; }
+        showBanner(result.status === 409 ? 'You have already used your free trial. Choose Standard or Grand to continue.' : (result.body.message || 'Could not start the trial.'));
+        location.hash = '#pricing';
         return;
       }
-      tbody.innerHTML = invites.map(item => `
-        <tr class="hover:bg-pink-50/40">
-          <td class="py-3 font-bold text-brand-navy">${escapeHtml(item.guest_name)}</td>
-          <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-brand-purple capitalize">${escapeHtml(item.template)}</span></td>
-          <td class="py-3 font-mono text-[11px] text-brand-pink truncate max-w-[200px]"><a href="${escapeHtml(item.invite_url)}" target="_blank" class="hover:underline">${escapeHtml(item.invite_url)}</a></td>
-        </tr>
-      `).join('');
+      openCheckout(planId);
     }
 
-    async function handleGenerateSubmit(e) {
-      e.preventDefault();
-      if (!activeSessionToken) return alert("Please log in first.");
-
-      await previewRenderPromise;
-      if (!activeTemplateLoaded) return alert("The selected invitation style could not be loaded. Please try another style.");
-      const data = getFormState();
-      const buildId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-      const buildMarker = `<!-- urlovingly-build:${buildId} -->`;
-      data.rendered_html += `\n${buildMarker}`;
-      const requestBody = JSON.stringify(data);
-      if (new Blob([requestBody]).size > MAX_DISPATCH_PAYLOAD_BYTES) {
-        return alert('This invitation is too large to publish. Remove a photo and try again.');
+    function openCheckout(planId) {
+      const plan = state.planData[planId];
+      const upgrading = state.upgradeEventId !== null;
+      let amount = plan.price_paise;
+      if (upgrading) {
+        const event = state.events.find(item => item.id === state.upgradeEventId);
+        amount = plan.price_paise - event.plan.price_paise;
       }
-      const submitBtn = document.getElementById('submitBtn');
-      const resultBanner = document.getElementById('resultBanner');
-      const progressBar = document.getElementById('progressBar');
-      const progressPercent = document.getElementById('progressPercent');
-      const statusTitle = document.getElementById('statusTitle');
-      const statusSubtext = document.getElementById('statusSubtext');
-      const completedLinkSection = document.getElementById('completedLinkSection');
-
-      submitBtn.disabled = true;
-      document.getElementById('submitBtnText').textContent = 'Triggering URLovingly Cloud Builder...';
-      
-      // Reset banner view
-      resultBanner.classList.remove('hidden');
-      completedLinkSection.classList.add('hidden');
-      progressBar.style.width = '10%';
-      progressPercent.textContent = '10%';
-      statusTitle.textContent = 'Triggering GitHub Action...';
-      statusSubtext.textContent = 'Initializing workflow dispatch...';
-
-      try {
-        // 1. Trigger Cloudflare Worker -> GitHub Action
-        const dispatchResponse = await fetch(`${CLOUDFLARE_WORKER_URL}/generate`, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${activeSessionToken}` 
-          },
-          body: requestBody
-        });
-        if (!dispatchResponse.ok) throw new Error('The invitation builder rejected this request. Please try again.');
-
-        progressBar.style.width = '30%';
-        progressPercent.textContent = '30%';
-        statusTitle.textContent = 'Building Invitation...';
-        statusSubtext.textContent = 'GitHub Action is compiling and deploying your template (~20-30s)...';
-
-        // 2. Poll GitHub Pages URL until it's live (Status 200)
-        let isLive = false;
-        let attempts = 0;
-        const maxAttempts = 20; // Try for up to ~80 seconds
-        const verificationUrl = new URL(data.fullUrl);
-        verificationUrl.searchParams.set('_urlovingly_build', buildId);
-
-        while (!attempts || (attempts < maxAttempts && !isLive)) {
-          await new Promise(resolve => setTimeout(resolve, 4000)); // wait 4 seconds per poll
-          attempts++;
-
-          // Increment progress smoothly up to 90% while waiting
-          const currentProgress = Math.min(30 + (attempts * 4), 90);
-          progressBar.style.width = `${currentProgress}%`;
-          progressPercent.textContent = `${currentProgress}%`;
-
-          try {
-            const checkRes = await fetch(verificationUrl.toString(), { cache: 'no-store' });
-            if (checkRes.ok) isLive = (await checkRes.text()).includes(buildMarker);
-          } catch (err) {
-            // Cross-origin or deployment propagation failures are normal while the build is running.
-          }
-        }
-
-        if (isLive) {
-          progressBar.style.width = '100%';
-          progressPercent.textContent = '100%';
-          statusTitle.textContent = 'Invitation Published Successfully!';
-          statusSubtext.textContent = 'Your custom guest link is now fully live.';
-          
-          const linkEl = document.getElementById('generatedUrlLink');
-          linkEl.textContent = data.fullUrl;
-          linkEl.href = data.fullUrl;
-
-          const shareMsg = `Hi ${data.name}! Here is your personalized ${data.event_type.toLowerCase()} invitation from ${data.couple_names}: ${data.fullUrl}`;
-          document.getElementById('whatsappShareBtn').href = `https://wa.me/?text=${encodeURIComponent(shareMsg)}`;
-          
-          completedLinkSection.classList.remove('hidden');
-          fetchHistory();
-        } else {
-          statusTitle.textContent = 'Deployment Taking Longer Than Expected';
-          statusSubtext.textContent = 'The action was triggered, but page verification timed out. Check your GitHub Actions tab.';
-        }
-
-      } catch (err) {
-        console.warn('Worker dispatch notice:', err);
-        statusTitle.textContent = 'Error Triggering Action';
-        statusSubtext.textContent = err.message;
-      }
-
-      submitBtn.disabled = false;
-      document.getElementById('submitBtnText').textContent = 'Create & Publish Personalized Invite Link';
+      state.checkout = { planId, amount, upgrading };
+      $('checkoutPlanName').textContent = plan.name;
+      $('checkoutPlanSummary').textContent = plan.highlights.slice(0, 3).join(' · ');
+      $('checkoutAmountLabel').textContent = upgrading ? 'Upgrade difference' : 'Total (per event)';
+      $('checkoutAmount').textContent = rupees(amount);
+      $('checkoutEmail').textContent = state.user.email;
+      $('checkoutTitleField').classList.toggle('hidden', upgrading);
+      $('mockNotice').classList.toggle('hidden', state.config.payment_provider !== 'mock');
+      $('payBtn').disabled = false;
+      $('payBtn').textContent = 'Pay ' + rupees(amount);
+      setCheckoutStatus('');
+      show('checkoutModal');
     }
 
-    function slugify(text) { return (text || '').toLowerCase().replace(/&/g, 'and').replace(/[\W_]+/g, '-').replace(/^-+|-+$/g, '') || 'guest'; }
-    function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
-    function getSelectedNote() {
-      const selected = document.querySelector('input[name="noteOption"]:checked');
-      return selected.value === 'custom' ? document.getElementById('customNoteInput').value.trim() : selected.value;
+    function setCheckoutStatus(message, isError) {
+      const el = $('checkoutStatus');
+      el.textContent = message;
+      el.className = 'mt-3 text-xs min-h-[1.25rem] text-center ' + (isError ? 'text-red-600' : 'text-slate-600');
     }
-    function handleNoteOptionChange() {
-      const selected = document.querySelector('input[name="noteOption"]:checked');
-      const customBox = document.getElementById('customNoteContainer');
-      selected && selected.value === 'custom' ? customBox.classList.remove('hidden') : customBox.classList.add('hidden');
-      updateLivePreview();
+
+    async function requestOrder() {
+      const { planId, upgrading } = state.checkout;
+      if (upgrading) return post('/api/events/' + state.upgradeEventId + '/upgrade', { plan: planId });
+      const title = $('eventTitle').value.trim() || 'My Celebration';
+      const created = await post('/api/events', { plan: planId, title });
+      if (!created.ok) return created;
+      return post('/api/payments/order', { event_id: created.body.event.id });
     }
-    function handleEventTypeChange() {
-      const isWedding = document.getElementById('eventType').value === 'Wedding';
-      document.querySelectorAll('.wedding-only').forEach(field => field.classList.toggle('hidden', !isWedding));
-      document.getElementById('celebrantNamesField').classList.toggle('hidden', isWedding);
-      document.getElementById('eventDateLabel').textContent = isWedding ? 'Wedding date' : 'Event date';
-      document.getElementById('eventTimeLabel').textContent = isWedding ? 'Wedding time' : 'Event time';
-      updateLivePreview();
-    }
-    function handleCeremoniesChange() {
-      const container = document.getElementById('ceremonyDetailsContainer');
-      const previous = new Map(Array.from(container.querySelectorAll('[data-ceremony-name]'), card => [
-        card.dataset.ceremonyName,
-        Object.fromEntries(Array.from(card.querySelectorAll('[data-ceremony-field]'), input => [input.dataset.ceremonyField, input.value]))
-      ]));
-      const selected = Array.from(document.querySelectorAll('input[name="ceremonies"]:checked'), input => input.value);
-      container.innerHTML = selected.map(name => {
-        const saved = previous.get(name) || {};
-        return `<fieldset data-ceremony-name="${escapeHtml(name)}" class="rounded-2xl border border-purple-100 bg-white/70 p-4"><legend class="px-1 text-xs font-bold text-brand-navy">${escapeHtml(name)} details</legend><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><label class="text-[11px] font-semibold text-slate-600">Date<input data-ceremony-field="date" type="text" value="${escapeHtml(saved.date || '')}" placeholder="Date" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="text-[11px] font-semibold text-slate-600">Time<input data-ceremony-field="time" type="text" value="${escapeHtml(saved.time || '')}" placeholder="Start time" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="text-[11px] font-semibold text-slate-600">Venue<input data-ceremony-field="venue" type="text" value="${escapeHtml(saved.venue || '')}" placeholder="Venue name" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="text-[11px] font-semibold text-slate-600">Address<input data-ceremony-field="address" type="text" value="${escapeHtml(saved.address || '')}" placeholder="Venue address" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="sm:col-span-2 text-[11px] font-semibold text-slate-600">Google Maps URL<input data-ceremony-field="map_url" type="url" value="${escapeHtml(saved.map_url || '')}" placeholder="https://maps.google.com/..." oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="sm:col-span-2 text-[11px] font-semibold text-slate-600">Notes<textarea data-ceremony-field="notes" rows="2" oninput="updateLivePreview()" placeholder="Dress code, customs or other details" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm">${escapeHtml(saved.notes || '')}</textarea></label></div></fieldset>`;
-      }).join('');
-      container.classList.toggle('hidden', selected.length === 0);
-      updateLivePreview();
-    }
-    function compressInvitePhoto(file) {
+
+    function loadRazorpayScript() {
       return new Promise((resolve, reject) => {
-        const image = new Image();
-        const objectUrl = URL.createObjectURL(file);
-        image.onload = () => {
-          URL.revokeObjectURL(objectUrl);
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          const maxDimensions = [640, 480, 360, 280, 220];
-          const qualities = [0.72, 0.6, 0.48, 0.38];
-          for (const maxDimension of maxDimensions) {
-            const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
-            canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
-            canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
-            context.fillStyle = '#fff';
-            context.fillRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(image, 0, 0, canvas.width, canvas.height);
-            for (const quality of qualities) {
-              const dataUrl = canvas.toDataURL('image/jpeg', quality);
-              if (dataUrl.length <= MAX_PHOTO_DATA_URL_LENGTH) {
-                resolve({ src: dataUrl, alt: file.name });
-                return;
-              }
-            }
-          }
-          reject(new Error(`${file.name} is too detailed to fit the invitation. Choose another photo.`));
-        };
-        image.onerror = () => {
-          URL.revokeObjectURL(objectUrl);
-          reject(new Error(`${file.name} could not be opened as an image.`));
-        };
-        image.src = objectUrl;
+        if (window.Razorpay) return resolve();
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('Could not load the payment form.'));
+        document.head.appendChild(script);
       });
     }
-    async function handlePhotoUploadChange(event) {
-      const files = Array.from(event.target.files || []);
-      const status = document.getElementById('invitePhotoStatus');
-      if (files.length > MAX_INVITE_PHOTOS) {
-        event.target.value = '';
-        status.textContent = `Choose ${MAX_INVITE_PHOTOS} photos or fewer.`;
-        return;
-      }
-      const requestId = ++photoUploadRequestId;
-      status.textContent = files.length ? 'Preparing photos…' : 'Photos are resized to fit the shareable invitation.';
-      try {
-        const photos = await Promise.all(files.map(compressInvitePhoto));
-        if (requestId !== photoUploadRequestId) return;
-        uploadedInvitePhotos = photos;
-        renderInvitePhotoPreviews();
-        status.textContent = photos.length ? `${photos.length} photo${photos.length === 1 ? '' : 's'} ready for the invitation.` : 'Photos are resized to fit the shareable invitation.';
-        updateLivePreview();
-      } catch (error) {
-        if (requestId !== photoUploadRequestId) return;
-        event.target.value = '';
-        uploadedInvitePhotos = [];
-        renderInvitePhotoPreviews();
-        status.textContent = error.message;
-        updateLivePreview();
-      }
-    }
-    function clearInvitePhotos() {
-      photoUploadRequestId++;
-      uploadedInvitePhotos = [];
-      document.getElementById('invitePhotoInput').value = '';
-      document.getElementById('invitePhotoStatus').textContent = 'Photos are resized to fit the shareable invitation.';
-      renderInvitePhotoPreviews();
-      updateLivePreview();
-    }
-    function renderInvitePhotoPreviews() {
-      const preview = document.getElementById('invitePhotoPreview');
-      preview.replaceChildren();
-      preview.classList.toggle('hidden', uploadedInvitePhotos.length === 0);
-      document.getElementById('clearInvitePhotos').classList.toggle('hidden', uploadedInvitePhotos.length === 0);
-      uploadedInvitePhotos.forEach((photo, index) => {
-        const image = document.createElement('img');
-        image.src = photo.src;
-        image.alt = photo.alt;
-        image.className = 'aspect-square w-full rounded-xl border border-purple-100 object-cover';
-        preview.append(image);
-      });
-    }
-    function buildInvitePhotoGallery() {
-      if (!uploadedInvitePhotos.length) return '';
-      const images = uploadedInvitePhotos.map(photo => `<img src="${photo.src}" alt="${escapeHtml(photo.alt)}" loading="lazy">`).join('');
-      return `<section class="invite-gallery" aria-label="Invitation photo gallery"><h2>Our story in photos</h2><div class="invite-gallery-grid">${images}</div></section>`;
-    }
-    function loadDefaults() {
-      const d = JSON.parse(localStorage.getItem(STORAGE_KEYS.DEFAULTS) || '{}');
-      const defaultFields = ['eventType', 'celebrantNames', 'groomFullName', 'brideFullName', 'groomParents', 'groomFamilyName', 'brideParents', 'brideFamilyName', 'closeRelatives', 'weddingDate', 'weddingTime', 'muhurthamTime', 'guestArrivalTime', 'venueName', 'venueAddress', 'mapUrl', 'parkingTransport', 'mealDetails', 'receptionDateTime', 'receptionVenue', 'rsvpPhone', 'hostEmail'];
-      defaultFields.forEach(id => {
-        if (d[id] !== undefined && document.getElementById(id)) document.getElementById(id).value = d[id];
-      });
-      if (Array.isArray(d.ceremonies)) {
-        const selectedCeremonies = new Set(d.ceremonies);
-        document.querySelectorAll('input[name="ceremonies"]').forEach(input => { input.checked = selectedCeremonies.has(input.value); });
-        handleCeremoniesChange();
-        (d.ceremonyDetails || []).forEach(saved => {
-          const card = Array.from(document.querySelectorAll('[data-ceremony-name]')).find(item => item.dataset.ceremonyName === saved.name);
-          if (!card) return;
-          Object.entries(saved).forEach(([field, value]) => {
-            const input = card.querySelector(`[data-ceremony-field="${field}"]`);
-            if (input) input.value = value;
-          });
-        });
-      }
-    }
-    function saveEventDefaults() {
-      const defaultFields = ['eventType', 'celebrantNames', 'groomFullName', 'brideFullName', 'groomParents', 'groomFamilyName', 'brideParents', 'brideFamilyName', 'closeRelatives', 'weddingDate', 'weddingTime', 'muhurthamTime', 'guestArrivalTime', 'venueName', 'venueAddress', 'mapUrl', 'parkingTransport', 'mealDetails', 'receptionDateTime', 'receptionVenue', 'rsvpPhone', 'hostEmail'];
-      const defaults = Object.fromEntries(defaultFields.map(id => [id, document.getElementById(id).value]));
-      defaults.ceremonies = Array.from(document.querySelectorAll('input[name="ceremonies"]:checked'), input => input.value);
-      defaults.ceremonyDetails = collectEventDetails().ceremonies;
-      localStorage.setItem(STORAGE_KEYS.DEFAULTS, JSON.stringify(defaults));
-    }
-    function collectEventDetails() {
-      const value = id => document.getElementById(id).value.trim();
-      const ceremonies = Array.from(document.querySelectorAll('[data-ceremony-name]'), card => ({
-        name: card.dataset.ceremonyName,
-        date: card.querySelector('[data-ceremony-field="date"]').value.trim(),
-        time: card.querySelector('[data-ceremony-field="time"]').value.trim(),
-        venue: card.querySelector('[data-ceremony-field="venue"]').value.trim(),
-        address: card.querySelector('[data-ceremony-field="address"]').value.trim(),
-        map_url: card.querySelector('[data-ceremony-field="map_url"]').value.trim(),
-        notes: card.querySelector('[data-ceremony-field="notes"]').value.trim()
-      }));
-      return {
-        event_type: document.getElementById('eventType').value,
-        celebrants: value('celebrantNames'),
-        groom: value('groomFullName'),
-        bride: value('brideFullName'),
-        groom_parents: value('groomParents'),
-        groom_family: value('groomFamilyName'),
-        bride_parents: value('brideParents'),
-        bride_family: value('brideFamilyName'),
-        close_relatives: value('closeRelatives'),
-        date: value('weddingDate'),
-        time: value('weddingTime'),
-        muhurtham: value('muhurthamTime'),
-        guest_arrival: value('guestArrivalTime'),
-        venue: value('venueName'),
-        venue_address: value('venueAddress'),
-        map_url: value('mapUrl'),
-        parking_transport: value('parkingTransport'),
-        meal: value('mealDetails'),
-        reception_date_time: value('receptionDateTime'),
-        reception_venue: value('receptionVenue'),
-        ceremonies
-      };
-    }
-    function buildEventDetailsMarkup(details) {
-      const isWedding = details.event_type === 'Wedding';
-      const sections = [];
-      const addSection = (heading, rows) => {
-        const visibleRows = rows.filter(([, value]) => value);
-        if (!visibleRows.length) return;
-        sections.push(`<div class="invite-event-extra-section"><h3>${escapeHtml(heading)}</h3><dl>${visibleRows.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl></div>`);
-      };
-      addSection('Celebration details', [
-        ['Event', details.event_type],
-        ['Celebrating', isWedding ? '' : details.celebrants],
-        ['Guest arrival', details.guest_arrival],
-        ['Venue address', details.venue_address],
-        ['Parking and transportation', details.parking_transport],
-        ['Meal', details.meal]
-      ]);
-      if (isWedding) {
-        addSection('With our families', [
-          ['Groom', details.groom],
-          ['Groom’s family', details.groom_family],
-          ['Groom’s parents', details.groom_parents],
-          ['Bride', details.bride],
-          ['Bride’s family', details.bride_family],
-          ['Bride’s parents', details.bride_parents],
-          ['Siblings, grandparents and loved ones', details.close_relatives]
-        ]);
-        addSection('Wedding schedule', [
-          ['Muhurtham / auspicious time', details.muhurtham],
-          ['Reception', details.reception_date_time],
-          ['Reception venue', details.reception_venue]
-        ]);
-      }
-      details.ceremonies.forEach(ceremony => addSection(ceremony.name, [
-        ['Date', ceremony.date], ['Time', ceremony.time], ['Venue', ceremony.venue],
-        ['Address', ceremony.address], ['Map location', ceremony.map_url], ['Notes', ceremony.notes]
-      ]));
-      if (!sections.length) return '';
-      return `<section class="invite-event-extra" aria-label="Additional event details"><h2>More details</h2>${sections.join('')}</section>`;
-    }
-    function buildMapEmbedMarkup(venueName, mapUrl, venueAddress = '') {
-      const venue = String(venueName || 'Event venue').trim() || 'Event venue';
-      const mapLocation = [venue, venueAddress].filter(Boolean).join(', ');
-      let safeMapUrl = 'https://www.google.com/maps';
-      try {
-        const parsedUrl = new URL(mapUrl);
-        if (parsedUrl.protocol === 'https:' || parsedUrl.protocol === 'http:') safeMapUrl = parsedUrl.href;
-      } catch (error) {}
-      const safeVenue = escapeHtml(venue);
-      return `<section class="invite-map" aria-label="Map to ${safeVenue}"><div class="invite-map-heading"><span class="invite-map-kicker">Location</span><a class="invite-map-location" href="${escapeHtml(safeMapUrl)}" target="_blank" rel="noopener">${safeVenue}</a></div><iframe src="https://www.google.com/maps?q=${encodeURIComponent(mapLocation)}&amp;output=embed" title="Map showing ${safeVenue}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></section>`;
-    }
-    function buildFullPageHtml(guestName, coupleNames, renderedHtml, showArrival = true, mailAnimation = 'velvet', eventType = 'Wedding') {
-      const mailStyles = {
-        velvet: { className: 'arrival--velvet', seal: '&amp;' },
-        'rose-gold': { className: 'arrival--rose-gold', seal: '&#10084;' },
-        botanical: { className: 'arrival--botanical', seal: '&#10047;' },
-        celestial: { className: 'arrival--celestial', seal: '&#10022;' }
-      };
-      const selectedMailStyle = mailStyles[mailAnimation] || mailStyles.velvet;
-        const eventLabel = escapeHtml(eventType || 'Celebration');
-      const arrivalMarkup = showArrival ? `
-      <div class="arrival ${selectedMailStyle.className}" role="status" aria-label="A ${eventLabel.toLowerCase()} invitation is being delivered">
-    <div class="arrival-stage">
-      <div class="arrival-heading">Delivered with love</div>
-      <div class="arrival-flight">
-        <div class="arrival-envelope" role="button" tabindex="0" aria-label="Open the ${eventLabel.toLowerCase()} invitation for ${escapeHtml(guestName)}" onclick="const arrival=this.closest('.arrival');arrival.classList.add('arrival--opened');window.setTimeout(()=>arrival.remove(),1400)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
-          <div class="arrival-letter">
-            <div class="arrival-letter-label">You are warmly invited</div>
-            <div class="arrival-letter-couple">${escapeHtml(coupleNames)}</div>
-            <div class="arrival-letter-guest">A celebration prepared for ${escapeHtml(guestName)}</div>
-          </div>
-          <div class="arrival-flap"></div>
-          <div class="arrival-front"></div>
-          <div class="arrival-seal">${selectedMailStyle.seal}</div>
-          <div class="arrival-address">
-            <span class="arrival-address-label">A special invitation for</span>
-            <strong class="arrival-address-guest">${escapeHtml(guestName)}</strong>
-            <span class="arrival-address-couple">from ${escapeHtml(coupleNames)}</span>
-            <span class="arrival-address-action">Touch to open</span>
-          </div>
-        </div>
-      </div>
-      <div class="arrival-smoke"></div><div class="arrival-smoke"></div><div class="arrival-smoke"></div><div class="arrival-smoke"></div>
-    </div>
-  </div>` : '';
-      return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${eventLabel} Invitation for ${escapeHtml(guestName)}</title>
-  <script src="https://cdn.tailwindcss.com"><\/script>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fcfaff; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    .invite-container { width: 100%; max-width: 420px; min-height: 100vh; background: white; box-shadow: 0 0 40px rgba(0,0,0,0.05); }
-    .invite-gallery, .invite-map { width: 100%; margin: 1.25rem 0; text-align: left; }
-    .invite-gallery h2 { margin: 0 0 .65rem; font: 600 1.15rem 'Cormorant Garamond',serif; }
-    .invite-gallery-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(100px,1fr)); gap: .5rem; }
-    .invite-gallery-grid img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; }
-    .invite-event-extra { width: 100%; margin: 1.25rem 0; padding: 1rem 0; border-top: 1px solid currentColor; text-align: left; opacity: .9; }
-    .invite-event-extra > h2 { margin: 0 0 .8rem; font: 600 1.15rem 'Cormorant Garamond',serif; }
-    .invite-event-extra-section + .invite-event-extra-section { margin-top: .85rem; }
-    .invite-event-extra-section h3 { margin: 0 0 .35rem; font: 700 .72rem 'Plus Jakarta Sans',sans-serif; }
-    .invite-event-extra-section dl { display: grid; gap: .35rem; margin: 0; font-size: .72rem; line-height: 1.5; }
-    .invite-event-extra-section dl > div { display: grid; grid-template-columns: minmax(6rem, .8fr) minmax(0, 1.4fr); gap: .5rem; }
-    .invite-event-extra-section dt { font-weight: 700; }
-    .invite-event-extra-section dd { margin: 0; overflow-wrap: anywhere; white-space: pre-line; }
-    .invite-map-heading { display: grid; gap: .15rem; margin-bottom: .5rem; }
-    .invite-map-kicker { font: 700 .62rem 'Plus Jakarta Sans',sans-serif; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
-    .invite-map-location { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
-    .invite-map iframe { display: block; width: 100%; min-height: 180px; aspect-ratio: 16 / 10; border: 0; border-radius: 6px; }
-    .invite-event-date { display: grid; justify-items: center; gap: .35rem; margin: .55rem 0 .85rem; }
-    .invite-date-scratch { position: relative; display: inline-grid; place-items: center; min-width: min(100%,180px); max-width: 100%; min-height: 2.35em; padding: .35em .75em; box-sizing: border-box; vertical-align: middle; }
-    .invite-scratch-cover { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 4px; cursor: crosshair; touch-action: none; transition: opacity .4s ease; }
-    .invite-event-date.is-revealed .invite-scratch-cover { opacity: 0; pointer-events: none; }
-    .invite-countdown { display: flex; justify-content: center; gap: .45rem; width: 100%; margin-top: .2rem; }
-    .invite-countdown[hidden] { display: none !important; }
-    .invite-countdown-unit { display: grid; min-width: 3.1rem; padding: .45rem .35rem; border: 1px solid currentColor; border-radius: 6px; text-align: center; }
-    .invite-countdown-unit strong { font: 700 1rem 'Plus Jakarta Sans',sans-serif; line-height: 1.15; }
-    .invite-countdown-unit span { margin-top: .2rem; font: 600 .55rem 'Plus Jakarta Sans',sans-serif; letter-spacing: .08em; text-transform: uppercase; }
-    .invite-countdown-past { font-size: .75rem; font-weight: 700; }
-    .invite-letter-char { display: inline-block; opacity: 0; transform: translateY(.38em); }
-    .invite-letter-block.is-visible .invite-letter-char { animation: invite-letter-in .48s cubic-bezier(.2,.75,.25,1) both; animation-delay: var(--letter-delay,0ms); }
-    @keyframes invite-letter-in { to { opacity: 1; transform: translateY(0); } }
-    @media (prefers-reduced-motion: reduce) { .invite-letter-char { opacity: 1; transform: none; animation: none !important; } .invite-scratch-cover { transition: none; } }
-    .arrival { --arrival-scene: radial-gradient(ellipse at 50% 42%, #63304f 0, #321e38 42%, #17141f 100%); --arrival-orbit: rgba(222,189,124,.17); --arrival-envelope: linear-gradient(135deg,#70294f,#a43b68 48%,#462448); --arrival-border: #d8b777; --arrival-shadow: 0 28px 75px rgba(0,0,0,.48),0 0 0 5px rgba(222,189,124,.12),inset 0 0 32px rgba(255,234,191,.12); --arrival-paper: linear-gradient(145deg,#fffdf5,#f3e4ca); --arrival-paper-ink: #53384a; --arrival-accent: #ae8150; --arrival-flap: linear-gradient(145deg,#87335d,#c35a78 55%,#7a3158); --arrival-front: linear-gradient(145deg,#552244,#a03b65 52%,#472040); --arrival-address: #ffeac4; --arrival-address-secondary: #f4d5b4; --arrival-seal: radial-gradient(circle at 35% 30%,#d5a65d,#8b3b62 75%); --arrival-seal-border: #f0d798; --arrival-seal-ink: #fff0ca; --arrival-smoke: radial-gradient(circle,rgba(255,249,232,.76),rgba(228,208,224,.32) 34%,transparent 72%); position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; overflow: hidden; color: #fff9ed; background: var(--arrival-scene); }
-    .arrival::before, .arrival::after { content: ''; position: absolute; width: min(84vw, 440px); aspect-ratio: 1; border: 1px solid var(--arrival-orbit); border-radius: 50%; animation: arrival-orbit 24s linear infinite; }
-    .arrival::after { width: min(70vw, 360px); animation-direction: reverse; }
-    .arrival--rose-gold { --arrival-scene: radial-gradient(ellipse at 50% 42%,#704351 0,#3c2936 45%,#1c1720 100%); --arrival-orbit: rgba(238,186,161,.22); --arrival-envelope: linear-gradient(135deg,#a5535f,#d28478 48%,#70404c); --arrival-border: #e6b894; --arrival-shadow: 0 28px 75px rgba(0,0,0,.44),0 0 0 5px rgba(230,184,148,.13),inset 0 0 32px rgba(255,239,215,.17); --arrival-paper: linear-gradient(145deg,#fffaf0,#f4dfd2); --arrival-paper-ink: #663c48; --arrival-accent: #b16b61; --arrival-flap: linear-gradient(145deg,#c47a77,#e0a08b 55%,#a25263); --arrival-front: linear-gradient(145deg,#854650,#c47a78 52%,#75404e); --arrival-address: #fff0df; --arrival-address-secondary: #f4d2c0; --arrival-seal: radial-gradient(circle at 35% 30%,#e5b797,#a65a65 75%); --arrival-seal-border: #f4d2b6; --arrival-seal-ink: #fff1df; --arrival-smoke: radial-gradient(circle,rgba(255,231,220,.8),rgba(232,180,183,.36) 34%,transparent 72%); }
-    .arrival--botanical { --arrival-scene: radial-gradient(ellipse at 50% 42%,#315d4b 0,#183b31 47%,#10241f 100%); --arrival-orbit: rgba(203,213,163,.2); --arrival-envelope: linear-gradient(135deg,#285647,#47785d 48%,#173c35); --arrival-border: #c4bd83; --arrival-shadow: 0 28px 75px rgba(0,0,0,.45),0 0 0 5px rgba(196,189,131,.12),inset 0 0 32px rgba(243,246,207,.13); --arrival-paper: linear-gradient(145deg,#fffdf0,#e6ead2); --arrival-paper-ink: #284638; --arrival-accent: #6b8257; --arrival-flap: linear-gradient(145deg,#547b5b,#82966b 55%,#365b4d); --arrival-front: linear-gradient(145deg,#234b40,#52775a 52%,#1d4038); --arrival-address: #f1efcf; --arrival-address-secondary: #d7dfb7; --arrival-seal: radial-gradient(circle at 35% 30%,#c5c27f,#426a51 75%); --arrival-seal-border: #e4dfa7; --arrival-seal-ink: #f6f3d5; --arrival-smoke: radial-gradient(circle,rgba(238,244,212,.75),rgba(179,207,169,.34) 34%,transparent 72%); }
-    .arrival--celestial { --arrival-scene: radial-gradient(ellipse at 50% 42%,#374a74 0,#202c4a 46%,#111725 100%); --arrival-orbit: rgba(178,204,232,.24); --arrival-envelope: linear-gradient(135deg,#26385f,#495b83 48%,#1c2848); --arrival-border: #c4d3e7; --arrival-shadow: 0 28px 75px rgba(0,0,0,.5),0 0 0 5px rgba(176,201,229,.13),inset 0 0 32px rgba(216,234,255,.14); --arrival-paper: linear-gradient(145deg,#fffefa,#e7edf5); --arrival-paper-ink: #354463; --arrival-accent: #7189aa; --arrival-flap: linear-gradient(145deg,#465b86,#788bad 55%,#34466e); --arrival-front: linear-gradient(145deg,#26385f,#50658c 52%,#202f53); --arrival-address: #e8f0ff; --arrival-address-secondary: #c4d4ee; --arrival-seal: radial-gradient(circle at 35% 30%,#c5d6ed,#536b97 75%); --arrival-seal-border: #d9e5f5; --arrival-seal-ink: #f2f7ff; --arrival-smoke: radial-gradient(circle,rgba(231,242,255,.82),rgba(177,197,234,.36) 34%,transparent 72%); }
-    .arrival-stage { position: relative; z-index: 1; width: min(92vw, 480px); height: 390px; display: grid; place-items: center; perspective: 900px; }
-    .arrival-heading { position: absolute; top: 23px; text-align: center; color: var(--arrival-address); font: 500 10px 'Plus Jakarta Sans', sans-serif; letter-spacing: 3px; text-transform: uppercase; animation: arrival-caption 1s .5s both; }
-    .arrival-heading::after { content: '✦'; display: block; margin-top: 11px; color: var(--arrival-address); font-size: 17px; }
-    .arrival-flight { position: relative; width: min(82vw, 380px); aspect-ratio: 1.55; transform-style: preserve-3d; animation: envelope-arrive 3.8s cubic-bezier(.18,.78,.2,1) both; }
-    .arrival-envelope { position: relative; width: 100%; height: 100%; border: 1px solid var(--arrival-border); border-radius: 9px; background: var(--arrival-envelope); box-shadow: var(--arrival-shadow); transform-style: preserve-3d; animation: envelope-sway 5.2s 5.35s ease-in-out infinite; cursor: pointer; }
-    .arrival-envelope:focus-visible { outline: 3px solid var(--arrival-address); outline-offset: 5px; }
-    .arrival-envelope::before { content: ''; position: absolute; inset: 7px; z-index: 5; border: 1px solid rgba(244,220,169,.53); border-radius: 5px; pointer-events: none; }
-    .arrival-letter { position: absolute; top: 5%; left: 7%; z-index: 1; width: 86%; height: 92%; padding: 19px 13px; box-sizing: border-box; text-align: center; color: var(--arrival-paper-ink); background: var(--arrival-paper); border: 1px solid var(--arrival-border); box-shadow: 0 3px 14px rgba(0,0,0,.22); transform: translateY(40%) scale(.94); animation: letter-emerge 1.8s 3.55s cubic-bezier(.2,.75,.25,1) forwards; }
-    .arrival-letter::before { content: '✧  ✦  ✧'; display: block; margin: 0 auto 8px; color: var(--arrival-accent); font-size: 13px; letter-spacing: 4px; }
-    .arrival-letter-label { color: var(--arrival-accent); font: 600 8px 'Plus Jakarta Sans', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
-    .arrival-letter-couple { overflow-wrap: anywhere; margin: 5px 0 7px; color: var(--arrival-paper-ink); font: 600 clamp(18px, 5vw, 24px)/1.05 'Cormorant Garamond', serif; }
-    .arrival-letter-guest { overflow-wrap: anywhere; color: var(--arrival-paper-ink); font: italic 13px 'Cormorant Garamond', serif; }
-    .arrival-flap { position: absolute; inset: 0 0 auto; z-index: 4; height: 66%; background: var(--arrival-flap); clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: 50% 0; backface-visibility: hidden; animation: envelope-open 1.5s 3.15s ease-in forwards; filter: drop-shadow(0 3px 3px rgba(20,10,22,.25)); }
-    .arrival-front { position: absolute; inset: 0; z-index: 3; background: var(--arrival-front); clip-path: polygon(0 0, 50% 62%, 100% 0, 100% 100%, 0 100%); }
-    .arrival-front::before { content: ''; position: absolute; inset: 10px; border: 1px solid rgba(235,205,148,.65); clip-path: polygon(0 0, 50% 62%, 100% 0, 100% 100%, 0 100%); }
-    .arrival-address { position: absolute; z-index: 6; right: 9%; bottom: 7%; left: 9%; text-align: center; color: var(--arrival-address); text-shadow: 0 1px 4px rgba(30,10,25,.5); }
-    .arrival-address-label { display: block; font: 600 7px 'Plus Jakarta Sans', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
-    .arrival-address-guest { display: block; overflow-wrap: anywhere; margin: 2px 0; font: 600 19px/1.05 'Cormorant Garamond', serif; }
-    .arrival-address-couple { display: block; overflow-wrap: anywhere; font: italic 11px 'Cormorant Garamond', serif; color: var(--arrival-address-secondary); }
-    .arrival-address-action { display: block; margin-top: 4px; font: 600 7px 'Plus Jakarta Sans', sans-serif; letter-spacing: 1.5px; text-transform: uppercase; color: var(--arrival-address-secondary); }
-    .arrival-seal { position: absolute; z-index: 7; top: 50%; left: 50%; width: 32px; aspect-ratio: 1; display: grid; place-items: center; border: 1px solid var(--arrival-seal-border); border-radius: 50%; color: var(--arrival-seal-ink); background: var(--arrival-seal); box-shadow: 0 3px 12px rgba(30,10,25,.4), inset 0 0 0 3px rgba(255,240,202,.16); font: 16px 'Cormorant Garamond', serif; transform: translate(-50%,-50%); animation: seal-glint 1.8s 2.1s ease-in-out infinite; }
-    .arrival-smoke { position: absolute; z-index: 8; left: 50%; top: 49%; width: 80px; aspect-ratio: 1; border-radius: 50%; opacity: 0; pointer-events: none; background: var(--arrival-smoke); filter: blur(10px); animation: smoke-bloom 3s 4.2s ease-out both; }
-    .arrival-smoke:nth-child(4) { --smoke-x: -130px; --smoke-y: -84px; animation-delay: 4.35s; }
-    .arrival-smoke:nth-child(5) { --smoke-x: 135px; --smoke-y: -112px; animation-delay: 4.5s; }
-    .arrival-smoke:nth-child(6) { --smoke-x: -185px; --smoke-y: -18px; animation-delay: 4.65s; }
-    .arrival--opened { pointer-events: none; animation: invitation-unveil 1.35s ease forwards; }
-    .arrival--opened .arrival-smoke { animation: invitation-smoke 1.35s ease-out forwards; }
-    .arrival--rose-gold .arrival-flight { animation-name: rose-gold-arrival; }
-    .arrival--botanical .arrival-flight { animation-name: botanical-arrival; }
-    .arrival--celestial .arrival-flight { animation-name: celestial-arrival; }
-    @keyframes envelope-arrive { 0% { opacity: 0; transform: translate3d(0, 62vh, -500px) rotate(-14deg) scale(.18); } 72% { opacity: 1; transform: translate3d(0, -13px, 0) rotate(2deg) scale(1.04); } 100% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0) scale(1); } }
-    @keyframes rose-gold-arrival { 0% { opacity: 0; transform: translate3d(-62vw, 48vh, -700px) rotate(-28deg) scale(.12); } 72% { opacity: 1; transform: translate3d(8px, -13px, 0) rotate(3deg) scale(1.04); } 100% { opacity: 1; transform: translate3d(0,0,0) rotate(0) scale(1); } }
-    @keyframes botanical-arrival { 0% { opacity: 0; transform: translate3d(58vw, 60vh, -900px) rotateY(28deg) rotate(13deg) scale(.1); } 72% { opacity: 1; transform: translate3d(-7px, -12px, 0) rotateY(-5deg) rotate(-2deg) scale(1.03); } 100% { opacity: 1; transform: translate3d(0,0,0) rotateY(0) rotate(0) scale(1); } }
-    @keyframes celestial-arrival { 0% { opacity: 0; transform: translate3d(0, -68vh, -1000px) rotate(22deg) scale(.12); } 72% { opacity: 1; transform: translate3d(0, 12px, 0) rotate(-3deg) scale(1.05); } 100% { opacity: 1; transform: translate3d(0,0,0) rotate(0) scale(1); } }
-    @keyframes envelope-sway { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-7px) rotate(.5deg); } }
-    @keyframes envelope-open { to { transform: rotateX(180deg); } }
-    @keyframes letter-emerge { to { transform: translateY(-29%) scale(1); } }
-    @keyframes smoke-bloom { 0% { opacity: 0; transform: translate(-50%, 0) scale(.25); } 22% { opacity: .9; } 100% { opacity: 0; transform: translate(calc(-50% + var(--smoke-x, 0px)), var(--smoke-y, -110px)) scale(2.6); } }
-    @keyframes invitation-smoke { 0% { opacity: 0; transform: translate(-50%, 0) scale(.3); } 24% { opacity: .9; } 100% { opacity: 0; transform: translate(calc(-50% + var(--smoke-x, 0px)), var(--smoke-y, -110px)) scale(3.2); } }
-    @keyframes invitation-unveil { to { opacity: 0; visibility: hidden; pointer-events: none; } }
-    @keyframes seal-glint { 50% { box-shadow: 0 0 22px rgba(255,224,164,.7), inset 0 0 0 3px rgba(255,240,202,.25); } }
-    @keyframes arrival-caption { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-    @keyframes arrival-orbit { to { transform: rotate(360deg); } }
-    @media (prefers-reduced-motion: reduce) { .arrival *, .arrival::before, .arrival::after { animation: none !important; transition: none !important; } .arrival.arrival--opened { display: none; } }
-  </style>
-</head>
-<body>
-  ${arrivalMarkup}
-  <div class="invite-container">
-    ${renderedHtml}
-  </div>
-  <script>
-    (() => {
-      const invite = document.querySelector('.invite-container');
-      if (!invite) return;
 
-      const initializeCountdown = eventBlock => {
-        const dateText = eventBlock.querySelector('.invite-date-scratch').textContent.trim();
-        const timeText = eventBlock.querySelector('.invite-time').textContent;
-        const countdown = eventBlock.querySelector('.invite-countdown');
-        const target = new Date(dateText);
-        const timeMatch = timeText.match(/\\b(\\d{1,2})(?::(\\d{2}))?\\s*(AM|PM)\\b/i);
-        if (timeMatch && !Number.isNaN(target.getTime())) {
-          let hours = Number(timeMatch[1]) % 12;
-          if (timeMatch[3].toUpperCase() === 'PM') hours += 12;
-          target.setHours(hours, Number(timeMatch[2] || 0), 0, 0);
+    async function payNow() {
+      const button = $('payBtn');
+      button.disabled = true;
+      setCheckoutStatus('Preparing your secure payment…');
+      const order = await requestOrder();
+      if (!order.ok) { button.disabled = false; return setCheckoutStatus(order.body.message || 'Could not start the payment.', true); }
+
+      if (order.body.provider === 'mock') {
+        const confirmed = await post('/api/payments/mock-confirm', { order_id: order.body.order_id });
+        if (!confirmed.ok) { button.disabled = false; return setCheckoutStatus('Payment failed. Please try again.', true); }
+        return paymentSucceeded();
+      }
+
+      try { await loadRazorpayScript(); } catch (error) { button.disabled = false; return setCheckoutStatus(error.message, true); }
+      const checkout = new Razorpay({
+        key: order.body.key_id,
+        order_id: order.body.order_id,
+        amount: order.body.amount_paise,
+        currency: order.body.currency,
+        name: 'URLovingly',
+        description: order.body.plan.name,
+        prefill: order.body.prefill,
+        theme: { color: '#F42F6C' },
+        handler: async response => {
+          setCheckoutStatus('Confirming your payment…');
+          const verified = await post('/api/payments/verify', response);
+          if (verified.ok) paymentSucceeded(); else { button.disabled = false; setCheckoutStatus('We could not confirm the payment. If money was debited it will be activated shortly.', true); }
+        },
+        modal: { ondismiss: () => { button.disabled = false; setCheckoutStatus('Payment cancelled.'); } }
+      });
+      setCheckoutStatus('');
+      checkout.open();
+    }
+
+    function paymentSucceeded() {
+      setCheckoutStatus('Payment successful! Opening your studio…');
+      setTimeout(() => { location.href = '/studio'; }, 700);
+    }
+
+    $('payBtn').addEventListener('click', payNow);
+    document.querySelectorAll('.plan-cta').forEach(button => button.addEventListener('click', () => choosePlan(button.dataset.plan)));
+
+    // ---------- start-up ----------
+    async function init() {
+      const [config, plans] = await Promise.all([api('/api/config'), api('/api/plans')]);
+      state.config = config.body;
+      state.planData = Object.fromEntries(plans.body.plans.map(plan => [plan.id, plan]));
+      state.plans = Object.fromEntries(plans.body.plans.map(plan => [plan.id, plan.name]));
+      $('devLoginForm').classList.toggle('hidden', !state.config.dev_login);
+
+      const params = new URLSearchParams(location.search);
+      await loadSession();
+
+      if (params.get('upgrade') && state.user) {
+        state.upgradeEventId = parseInt(params.get('upgrade'), 10);
+        const event = state.events.find(item => item.id === state.upgradeEventId);
+        if (event) {
+          showBanner('Upgrading "' + event.title + '". Choose a higher plan — you only pay the difference.');
+          document.querySelectorAll('.plan-cta').forEach(button => {
+            const target = state.planData[button.dataset.plan];
+            if (target.price_paise <= event.plan.price_paise) button.classList.add('hidden');
+          });
         }
-        countdown.replaceChildren();
-        if (Number.isNaN(target.getTime())) {
-          countdown.textContent = 'Add a valid event date to start the countdown.';
-          countdown.classList.add('invite-countdown-past');
-          countdown.hidden = false;
-          return;
-        }
-        const values = ['Days', 'Hours', 'Minutes', 'Seconds'].map(label => {
-          const unit = document.createElement('span');
-          unit.className = 'invite-countdown-unit';
-          const value = document.createElement('strong');
-          const caption = document.createElement('span');
-          caption.textContent = label;
-          unit.append(value, caption);
-          countdown.append(unit);
-          return value;
-        });
-        let timer = null;
-        const update = () => {
-          const remaining = target.getTime() - Date.now();
-          if (remaining <= 0) {
-            countdown.replaceChildren();
-            countdown.textContent = 'The celebration has begun.';
-            countdown.classList.add('invite-countdown-past');
-            if (timer) clearInterval(timer);
-            return;
-          }
-          let seconds = Math.floor(remaining / 1000);
-          const days = Math.floor(seconds / 86400);
-          seconds %= 86400;
-          const hours = Math.floor(seconds / 3600);
-          seconds %= 3600;
-          const minutes = Math.floor(seconds / 60);
-          seconds %= 60;
-          [days, hours, minutes, seconds].forEach((value, index) => { values[index].textContent = String(value).padStart(2, '0'); });
-        };
-        update();
-        timer = setInterval(update, 1000);
-        countdown.hidden = false;
-      };
+      } else if (params.get('choose') === 'plan') {
+        showBanner('Choose a plan to start creating invitations.');
+      }
+      if (params.get('signin') === '1' && !state.user) openLogin(null);
 
-      invite.querySelectorAll('.invite-date-scratch').forEach(dateElement => {
-        const eventBlock = dateElement.closest('.invite-event-date');
-        const cover = document.createElement('canvas');
-        const context = cover.getContext('2d', { willReadFrequently: true });
-        cover.className = 'invite-scratch-cover';
-        cover.setAttribute('role', 'button');
-        cover.tabIndex = 0;
-        cover.setAttribute('aria-label', 'Scratch to reveal the event date');
-        dateElement.append(cover);
-        const countdown = eventBlock.querySelector('.invite-countdown');
-        countdown.hidden = true;
-        let moves = 0;
-        let revealed = false;
-        let scratching = false;
-        const drawCover = () => {
-          const bounds = cover.getBoundingClientRect();
-          if (!bounds.width || !bounds.height) return;
-          const ratio = window.devicePixelRatio || 1;
-          cover.width = Math.round(bounds.width * ratio);
-          cover.height = Math.round(bounds.height * ratio);
-          context.setTransform(ratio, 0, 0, ratio, 0, 0);
-          const gradient = context.createLinearGradient(0, 0, bounds.width, bounds.height);
-          gradient.addColorStop(0, '#eee9dd');
-          gradient.addColorStop(.5, '#c6c0b4');
-          gradient.addColorStop(1, '#f5f0e6');
-          context.fillStyle = gradient;
-          context.fillRect(0, 0, bounds.width, bounds.height);
-          context.strokeStyle = 'rgba(255,255,255,.34)';
-          context.lineWidth = 1;
-          for (let line = -bounds.height; line < bounds.width + bounds.height; line += 9) {
-            context.beginPath();
-            context.moveTo(line, 0);
-            context.lineTo(line + bounds.height, bounds.height);
-            context.stroke();
-          }
-          context.fillStyle = '#4d493f';
-          context.font = '700 9px Plus Jakarta Sans, sans-serif';
-          context.textAlign = 'center';
-          context.textBaseline = 'middle';
-          context.fillText('SCRATCH TO REVEAL', bounds.width / 2, bounds.height / 2, bounds.width - 12);
-        };
-        const revealDate = () => {
-          if (revealed) return;
-          revealed = true;
-          eventBlock.classList.add('is-revealed');
-          cover.setAttribute('aria-label', 'Event date revealed');
-          initializeCountdown(eventBlock);
-          window.setTimeout(() => cover.remove(), 450);
-        };
-        const erasePoint = event => {
-          const bounds = cover.getBoundingClientRect();
-          const x = event.clientX - bounds.left;
-          const y = event.clientY - bounds.top;
-          context.globalCompositeOperation = 'destination-out';
-          context.beginPath();
-          context.arc(x, y, 16, 0, Math.PI * 2);
-          context.fill();
-          moves++;
-          if (moves % 5) return;
-          const pixels = context.getImageData(0, 0, cover.width, cover.height).data;
-          let clearCount = 0;
-          let sampleCount = 0;
-          const step = 4 * Math.max(1, Math.floor(cover.width / 80));
-          for (let pixel = 3; pixel < pixels.length; pixel += step) {
-            sampleCount++;
-            if (pixels[pixel] < 32) clearCount++;
-          }
-          if (sampleCount && clearCount / sampleCount > .38) revealDate();
-        };
-        cover.addEventListener('pointerdown', event => {
-          event.preventDefault();
-          scratching = true;
-          cover.setPointerCapture(event.pointerId);
-          erasePoint(event);
-        });
-        cover.addEventListener('pointermove', event => { if (scratching) erasePoint(event); });
-        cover.addEventListener('pointerup', () => { scratching = false; });
-        cover.addEventListener('pointercancel', () => { scratching = false; });
-        cover.addEventListener('keydown', event => {
-          if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); revealDate(); }
-        });
-        new ResizeObserver(drawCover).observe(dateElement);
-        drawCover();
-      });
-
-      const letterObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-visible');
-          letterObserver.unobserve(entry.target);
-        });
-      }, { threshold: .15, rootMargin: '0px 0px -6% 0px' }) : null;
-      invite.querySelectorAll('h1,h2,h3,p,[class$="-guest"]').forEach(block => {
-        if (block.children.length && !block.matches('[class$="-guest"]')) return;
-        const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
-        const textNodes = [];
-        while (walker.nextNode()) if (walker.currentNode.textContent.trim()) textNodes.push(walker.currentNode);
-        if (!textNodes.length) return;
-        block.classList.add('invite-letter-block');
-        let letterIndex = 0;
-        textNodes.forEach(textNode => {
-          const fragment = document.createDocumentFragment();
-          Array.from(textNode.textContent).forEach(character => {
-            const letter = document.createElement('span');
-            letter.className = 'invite-letter-char';
-            letter.style.setProperty('--letter-delay', Math.min(letterIndex * 18, 540) + 'ms');
-            letter.textContent = character === ' ' ? '\\u00a0' : character;
-            fragment.append(letter);
-            letterIndex++;
-          });
-          textNode.replaceWith(fragment);
-        });
-        if (letterObserver) letterObserver.observe(block);
-        else block.classList.add('is-visible');
-      });
-    })();
-  <\/script>
-</body>
-</html>`;
+      if (window.google && google.accounts) { initGoogle(); } else { window.addEventListener('load', initGoogle); }
     }
 
-    function getFormState() {
-      const guestName = document.getElementById('guestName').value || 'Valued Guest';
-      const eventDetails = collectEventDetails();
-      const coupleNames = eventDetails.event_type === 'Wedding'
-        ? [eventDetails.groom, eventDetails.bride].filter(Boolean).join(' & ') || 'Wedding Couple'
-        : eventDetails.celebrants || eventDetails.event_type;
-      const selectedTheme = document.querySelector('input[name="templateType"]:checked');
-      const selectedMailAnimation = document.querySelector('input[name="mailAnimationType"]:checked');
-      const slug = slugify(guestName), coupleSlug = slugify(coupleNames);
+    function initGoogle() {
+      if (!(window.google && google.accounts) || !state.config.google_client_id) return;
+      google.accounts.id.initialize({ client_id: state.config.google_client_id, callback: handleGoogleCredential });
+      google.accounts.id.renderButton($('googleButton'), { theme: 'outline', size: 'large', text: 'continue_with', shape: 'rectangular' });
+    }
 
-      return {
-        name: guestName, 
-        slug: slug, 
-        coupleSlug: coupleSlug,
-        template: selectedTheme ? selectedTheme.value : 'urlovingly',
-        mail_animation: selectedMailAnimation ? selectedMailAnimation.value : 'velvet',
-        event_type: eventDetails.event_type,
-        event_details: eventDetails,
-        ceremonies: eventDetails.ceremonies.map(ceremony => ceremony.name),
-        couple_names: coupleNames,
-        wedding_date: eventDetails.date,
-        wedding_time: eventDetails.time,
-        venue: eventDetails.venue,
-        map_url: eventDetails.map_url,
-        rsvp_phone: document.getElementById('rsvpPhone').value,
-        host_email: document.getElementById('hostEmail').value,
-        custom_note: getSelectedNote(),
-        rendered_html: buildFullPageHtml(guestName, coupleNames, renderedInvitationFragment, true, selectedMailAnimation ? selectedMailAnimation.value : 'velvet', eventDetails.event_type),
-        fullUrl: `${BASE_HOSTED_DOMAIN.replace(/\/+$/, '')}/${coupleSlug}/to/${slug}/`
-      };
-    }
-    async function replayMailAnimation() {
-      await previewRenderPromise;
-      if (!activeTemplateLoaded) return;
-      const data = getFormState();
-      document.getElementById('mobilePreviewViewport').srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, true, data.mail_animation, data.event_type);
-    }
-    function updateLivePreview() {
-      const data = getFormState();
-      const previewSelection = `${data.template}:${data.mail_animation}`;
-      const showArrival = previewSelection !== lastPreviewSelection || !previewIntroShown.has(data.mail_animation);
-      lastPreviewSelection = previewSelection;
-      
-      // Update visual URL preview elements
-      document.getElementById('coupleSlugPreview').textContent = data.coupleSlug;
-      document.getElementById('slugPreview').textContent = data.slug;
-      document.getElementById('previewBrowserUrl').textContent = data.fullUrl.replace(/^https?:\/\//, '');
-
-      const viewport = document.getElementById('mobilePreviewViewport');
-      const renderId = ++previewRenderId;
-      activeTemplateLoaded = false;
-      const templateRequest = invitationTemplateCache.has(data.template)
-        ? Promise.resolve(invitationTemplateCache.get(data.template))
-        : fetch(`templates/${data.template}/index.html`).then(response => {
-          if (!response.ok) throw new Error(`Template request failed (${response.status})`);
-          return response.text();
-        }).then(markup => {
-          invitationTemplateCache.set(data.template, markup);
-          return markup;
-        });
-      previewRenderPromise = templateRequest
-        .then(templateMarkup => {
-          if (renderId !== previewRenderId) return;
-          const rsvpText = `Hi! I (${data.name}) happily confirm my attendance for ${data.couple_names}'s ${data.event_type.toLowerCase()}!`;
-          const values = {
-            guest_name: data.name,
-            couple_names: data.couple_names,
-            wedding_date: data.wedding_date,
-            wedding_time: data.wedding_time,
-            venue: data.venue,
-            custom_note: data.custom_note,
-            photo_gallery: buildInvitePhotoGallery(),
-            map_embed: buildMapEmbedMarkup(data.venue, data.map_url, data.event_details.venue_address),
-            map_url: data.map_url,
-            rsvp_phone: data.rsvp_phone,
-            host_email: data.host_email,
-            wa_url: `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`,
-            email_url: `mailto:${encodeURIComponent(data.host_email)}?subject=${encodeURIComponent(`${data.event_type} RSVP - ${data.name}`)}&body=${encodeURIComponent(rsvpText)}`
-          };
-          const renderedMarkup = templateMarkup.replace(/\{\{\s*(guest_name|couple_names|wedding_date|wedding_time|venue|custom_note|photo_gallery|map_embed|map_url|rsvp_phone|host_email|wa_url|email_url)(?:\s*\|\s*(urlencode))?\s*\}\}/g, (match, key, encoded) => {
-            if (key === 'photo_gallery' || key === 'map_embed') return values[key];
-            return encoded ? encodeURIComponent(values[key]) : escapeHtml(values[key]);
-          });
-          const templateDocument = new DOMParser().parseFromString(renderedMarkup, 'text/html');
-          const signatureIntro = templateDocument.querySelector('.signature .signature-card > .signature-kicker');
-          if (signatureIntro && data.event_type !== 'Wedding') signatureIntro.textContent = `A personal ${data.event_type.toLowerCase()} invitation`;
-          templateDocument.querySelectorAll('.invite-countdown').forEach(countdown => countdown.setAttribute('aria-label', `Countdown to ${data.event_type}`));
-          const eventDetailsMarkup = buildEventDetailsMarkup(data.event_details);
-          if (eventDetailsMarkup) {
-            const eventAnchor = templateDocument.querySelector('.invite-event-date') || templateDocument.body.lastElementChild;
-            if (eventAnchor) eventAnchor.insertAdjacentHTML('afterend', eventDetailsMarkup);
-            else templateDocument.body.insertAdjacentHTML('beforeend', eventDetailsMarkup);
-          }
-          const styles = Array.from(templateDocument.head.querySelectorAll('style')).map(style => style.outerHTML).join('');
-          const stylesheets = Array.from(templateDocument.head.querySelectorAll('link[rel="stylesheet"]')).map(link => link.outerHTML).join('');
-          renderedInvitationFragment = stylesheets + styles + templateDocument.body.innerHTML;
-          viewport.srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, showArrival, data.mail_animation, data.event_type);
-          previewIntroShown.add(data.mail_animation);
-          activeTemplateLoaded = true;
-        })
-        .catch(error => {
-          if (renderId !== previewRenderId) return;
-          console.error('Invitation template could not be loaded:', error);
-          renderedInvitationFragment = '<p>This invitation style could not be loaded.</p>';
-          viewport.srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, false, data.mail_animation, data.event_type);
-          activeTemplateLoaded = false;
-        });
-    }
+    init();
   </script>
 </body>
 </html>

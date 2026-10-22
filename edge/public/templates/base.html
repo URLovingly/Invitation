@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>{{GUEST_NAME}}, you are invited | {{COUPLE_NAMES}}</title>
+  <meta name="description" content="A personal invitation for {{GUEST_NAME}} from {{COUPLE_NAMES}}.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { serif: ['"Cormorant Garamond"', 'Georgia', 'serif'], sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'] },
+        colors: { brand: { navy: '#151438', pink: '#F42F6C', purple: '#6C2BD9' } }
+      } }
+    };
+  </script>
+  <style>
+    .brand-gradient { background: linear-gradient(160deg, #FF5E8E 0%, #F42F6C 40%, #6C2BD9 100%); }
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    @keyframes drift { 0%, 100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-14px) rotate(6deg); } }
+    .rise { animation: rise .8s cubic-bezier(.2, .75, .25, 1) both; }
+    .d1 { animation-delay: .15s; } .d2 { animation-delay: .35s; } .d3 { animation-delay: .55s; } .d4 { animation-delay: .75s; }
+    .heart { position: absolute; color: rgba(255, 255, 255, .35); animation: drift 6s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) { .rise, .heart { animation: none; } }
+  </style>
+</head>
+<body class="bg-[#fcfaff] font-sans text-brand-navy antialiased">
+  <main class="mx-auto min-h-screen w-full max-w-md bg-white shadow-xl shadow-purple-900/5">
+
+    <!-- Hero -->
+    <header class="brand-gradient relative overflow-hidden px-6 pb-20 pt-14 text-center text-white">
+      <span class="heart left-6 top-8 text-2xl" aria-hidden="true">&#10084;</span>
+      <span class="heart right-8 top-20 text-lg" style="animation-delay: 1.5s" aria-hidden="true">&#10084;</span>
+      <span class="heart bottom-10 left-12 text-xl" style="animation-delay: 3s" aria-hidden="true">&#10084;</span>
+
+      <p class="rise text-[11px] font-semibold uppercase tracking-[.3em] text-white/85">You are warmly invited</p>
+      <h1 class="rise d1 mt-5 font-serif text-5xl font-bold leading-[1.05] sm:text-6xl">{{COUPLE_NAMES}}</h1>
+      <p class="rise d2 mt-5 text-sm text-white/90">invite you to celebrate with them</p>
+    </header>
+
+    <!-- Guest card overlaps the hero -->
+    <section class="relative -mt-12 px-5" aria-label="Invitation for the guest">
+      <div class="rise d2 rounded-3xl border border-pink-100 bg-white px-6 py-7 text-center shadow-xl shadow-pink-500/10">
+        <p class="text-[11px] font-bold uppercase tracking-[.25em] text-brand-pink">A special invitation for</p>
+        <p class="mt-2 break-words font-serif text-3xl font-bold text-brand-navy">{{GUEST_NAME}}</p>
+      </div>
+    </section>
+
+    <!-- Personal note -->
+    <section class="px-5 pt-6" aria-label="A personal note">
+      <figure class="rise d3 rounded-3xl bg-pink-50/70 px-6 py-6 text-center">
+        <span class="block font-serif text-4xl leading-none text-brand-pink" aria-hidden="true">&ldquo;</span>
+        <blockquote class="-mt-1 whitespace-pre-line break-words font-serif text-xl italic leading-relaxed text-brand-navy">{{CUSTOM_NOTE}}</blockquote>
+      </figure>
+    </section>
+
+    <!-- When and where -->
+    <section class="px-5 py-6" aria-label="Event details">
+      <div class="rise d4 divide-y divide-purple-100 overflow-hidden rounded-3xl border border-purple-100">
+        <div class="flex items-start gap-4 px-5 py-4">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-purple-50 text-lg" aria-hidden="true">&#128197;</span>
+          <div class="min-w-0">
+            <p class="text-[11px] font-bold uppercase tracking-widest text-brand-purple">When</p>
+            <p class="mt-0.5 break-words text-sm font-semibold">{{EVENT_DATE}}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4 px-5 py-4">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-purple-50 text-lg" aria-hidden="true">&#128205;</span>
+          <div class="min-w-0">
+            <p class="text-[11px] font-bold uppercase tracking-widest text-brand-purple">Where</p>
+            <p class="mt-0.5 break-words text-sm font-semibold">{{VENUE}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="px-6 pb-12 pt-2 text-center">
+      <p class="font-serif text-lg italic text-brand-navy/80">With love, {{COUPLE_NAMES}}</p>
+      <p class="mt-6 text-[10px] uppercase tracking-widest text-slate-400">Made with URLovingly</p>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,2 @@
+-r req.txt
+pytest>=7.4

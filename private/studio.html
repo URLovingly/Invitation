@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>URLovingly — Personalized Digital Event Invites</title>
+  
+  <link rel="icon" href="/URLovingly_Icon.jpg" type="image/jpeg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: { navy: '#151438', pink: '#F42F6C', purple: '#6C2BD9' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #fcfaff;
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(255, 107, 139, 0.12) 0px, transparent 50%),
+        radial-gradient(at 90% 15%, rgba(108, 43, 217, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 90%, rgba(244, 47, 108, 0.08) 0px, transparent 50%);
+      color: #151438;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(244, 47, 108, 0.14);
+      box-shadow: 0 20px 50px -15px rgba(21, 20, 56, 0.06);
+    }
+    .brand-gradient { background: linear-gradient(135deg, #FF5E8E 0%, #F42F6C 45%, #6C2BD9 100%); }
+    .brand-text-gradient {
+      background: linear-gradient(135deg, #151438 0%, #F42F6C 50%, #6C2BD9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .phone-mockup {
+      box-shadow: 0 30px 70px -15px rgba(108, 43, 217, 0.28), 0 0 0 11px #151438, 0 0 0 14px #f3e8ff;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(244, 47, 108, 0.25); border-radius: 9999px; }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen selection:bg-pink-200 selection:text-brand-navy relative">
+
+  <!-- ================= MAIN STUDIO WORKSPACE (served only to signed-in customers with an active plan) ================= -->
+  <div id="studioSection" class="flex flex-col min-h-screen">
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-pink-100/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <img src="/URLovingly_Icon.jpg" alt="URLovingly Logo" class="w-12 h-12 rounded-2xl object-cover shadow-sm border border-pink-200/70">
+          <div>
+            <div class="flex items-baseline tracking-tight">
+              <span class="font-serif text-3xl font-bold text-brand-navy">UR</span>
+              <span class="font-serif text-3xl font-bold text-brand-pink ml-0.5">Lovingly</span>
+            </div>
+            <p class="text-[11px] font-medium text-brand-navy/65 -mt-1">Personalized digital invites for your special days</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <label for="eventSelect" class="sr-only">Event</label>
+          <select id="eventSelect" onchange="switchEvent(this.value)" class="max-w-[180px] px-3 py-2 rounded-xl bg-white border border-purple-200 text-xs font-bold text-brand-navy"></select>
+          <span id="planBadge" class="hidden sm:inline-flex px-3 py-1.5 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-extrabold text-brand-pink"></span>
+          <a id="upgradeLink" href="/#pricing" class="hidden px-3 py-2 rounded-xl brand-gradient text-white text-xs font-bold shadow-sm">Upgrade</a>
+          <a href="/#pricing" class="hidden md:inline text-xs font-bold text-brand-purple underline">New event</a>
+          <span id="userEmailDisplay" class="hidden lg:block text-xs font-bold text-brand-navy"></span>
+          <button onclick="logout()" class="px-4 py-2 rounded-xl bg-purple-50 text-brand-purple text-xs font-bold hover:bg-purple-100 transition shadow-sm border border-purple-100">Sign Out</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Plan usage strip -->
+    <div id="planStrip" class="bg-brand-navy text-white text-xs font-semibold text-center py-2 px-4" role="status"></div>
+
+    <!-- Hero Banner -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-pink-100/80 text-brand-pink">
+            ✨ Crafted with Love
+          </span>
+          <h1 class="font-serif text-3xl sm:text-4xl font-bold text-brand-navy mt-2">
+            Create Bespoke Event Invitations
+          </h1>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 max-w-md">
+          Enter your celebration details and personalize each guest's invitation with a dedicated URL ready to share over WhatsApp or Email.
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Studio Grid -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- LEFT COLUMN: Creation Studio Forms (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+
+          <!-- Card 1: Event Selection -->
+          <div class="glass-card rounded-[28px] p-6 sm:p-7">
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-2xl bg-pink-50 border border-pink-200 text-brand-pink flex items-center justify-center text-xs font-extrabold">01</div>
+                <div>
+                  <h2 class="text-base font-bold text-brand-navy">Event Type & Ceremonies</h2>
+                  <p class="text-xs text-slate-500">Choose the celebration and any related ceremonies</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-5">
+              <div>
+                <label for="eventType" class="block text-xs font-bold text-brand-navy mb-1.5">Event Type</label>
+                <select id="eventType" onchange="handleEventTypeChange()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+                  <option>Wedding</option>
+                  <option>Birthday</option>
+                  <option>First Birthday</option>
+                  <option>Naming Ceremony (Namakaran)</option>
+                  <option>First Rice Feeding Ceremony (Annaprashan)</option>
+                  <option>60th Birthday Celebration (Shashti Poorthi)</option>
+                  <option>70th Birthday Celebration (Bhimarathi Shanthi)</option>
+                  <option>Silver Wedding Anniversary (25th)</option>
+                  <option>Golden Anniversary (50th)</option>
+                  <option>Wedding Anniversary</option>
+                  <option>House Warming (Griha Pravesh)</option>
+                  <option>Coming of Age</option>
+                  <option>Baptism</option>
+                  <option>Holy Communion</option>
+                  <option>Sacrament of Confirmation</option>
+                </select>
+              </div>
+
+              <fieldset>
+                <legend class="block text-xs font-bold text-brand-navy mb-2">Ceremonies <span class="font-medium text-slate-400">Optional · select all that apply</span></legend>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Engagement / Ring Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Engagement / Ring Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Roka / Thakaana / Churni Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Roka / Thakaana / Churni Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Haldi Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Haldi Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Mehendi Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Mehendi Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Sangeet / Cocktail Party" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Sangeet / Cocktail Party</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Tilak / Sagan Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Tilak / Sagan Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Baraat & Wedding Ceremony" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Baraat &amp; Wedding Ceremony</span></label>
+                  <label class="flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700"><input type="checkbox" name="ceremonies" value="Wedding Reception / Valima" onchange="handleCeremoniesChange()" class="mt-0.5 accent-pink-600"><span>Wedding Reception / Valima</span></label>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <!-- Card 2: Event Details -->
+          <section class="glass-card rounded-[28px] p-6 sm:p-7" aria-labelledby="eventDetailsHeading">
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-2xl bg-pink-50 border border-pink-200 text-brand-pink flex items-center justify-center text-xs font-extrabold">02</div>
+                <div>
+                  <h2 id="eventDetailsHeading" class="text-base font-bold text-brand-navy">Event Details</h2>
+                  <p class="text-xs text-slate-500">Add the people, schedule and venue information</p>
+                </div>
+              </div>
+              <button type="button" onclick="saveEventDefaults()" id="saveDefaultsBtn" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-brand-purple text-xs font-bold transition">Save Details</button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div id="celebrantNamesField" class="sm:col-span-2 hidden">
+                <label for="celebrantNames" class="block text-xs font-bold text-brand-navy mb-1.5">Name(s) being celebrated</label>
+                <input type="text" id="celebrantNames" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+
+              <div class="wedding-only sm:col-span-2">
+                <label for="groomFullName" class="block text-xs font-bold text-brand-navy mb-1.5">Groom full name and professional title</label>
+                <input type="text" id="groomFullName" value="Groom" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only sm:col-span-2">
+                <label for="brideFullName" class="block text-xs font-bold text-brand-navy mb-1.5">Bride full name and professional title</label>
+                <input type="text" id="brideFullName" value="Bride" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm font-semibold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="groomParents" class="block text-xs font-bold text-brand-navy mb-1.5">Groom's father and mother</label>
+                <input type="text" id="groomParents" oninput="updateLivePreview()" placeholder="Names of parents" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="groomFamilyName" class="block text-xs font-bold text-brand-navy mb-1.5">Groom's family name <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="groomFamilyName" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="brideParents" class="block text-xs font-bold text-brand-navy mb-1.5">Bride's father and mother</label>
+                <input type="text" id="brideParents" oninput="updateLivePreview()" placeholder="Names of parents" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="brideFamilyName" class="block text-xs font-bold text-brand-navy mb-1.5">Bride's family name <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="brideFamilyName" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only sm:col-span-2">
+                <label for="closeRelatives" class="block text-xs font-bold text-brand-navy mb-1.5">Siblings, grandparents, guardians or other relatives <span class="font-medium text-slate-400">Optional</span></label>
+                <textarea id="closeRelatives" rows="2" oninput="updateLivePreview()" placeholder="Names and how they would like to be mentioned" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition"></textarea>
+              </div>
+
+              <div>
+                <label id="eventDateLabel" for="weddingDate" class="block text-xs font-bold text-brand-navy mb-1.5">Wedding date</label>
+                <input type="text" id="weddingDate" value="December 25, 2026" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div>
+                <label id="eventTimeLabel" for="weddingTime" class="block text-xs font-bold text-brand-navy mb-1.5">Wedding time</label>
+                <input type="text" id="weddingTime" value="5:30 PM Onwards" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only sm:col-span-2">
+                <label for="muhurthamTime" class="block text-xs font-bold text-brand-navy mb-1.5">Muhurtham or auspicious time <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="muhurthamTime" oninput="updateLivePreview()" placeholder="e.g. 10:30 AM" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="sm:col-span-2">
+                <label for="guestArrivalTime" class="block text-xs font-bold text-brand-navy mb-1.5">Time guests should arrive <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="guestArrivalTime" oninput="updateLivePreview()" placeholder="e.g. 5:00 PM" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="sm:col-span-2">
+                <label for="venueName" class="block text-xs font-bold text-brand-navy mb-1.5">Name of venue / auditorium / church / temple / mosque</label>
+                <input type="text" id="venueName" value="The Grand Ballroom, Taj Lands End" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="sm:col-span-2">
+                <label for="venueAddress" class="block text-xs font-bold text-brand-navy mb-1.5">Full venue address</label>
+                <textarea id="venueAddress" rows="2" oninput="updateLivePreview()" placeholder="Street, city, state and postal code" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">Mumbai, Maharashtra</textarea>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="mapUrl" class="block text-xs font-bold text-brand-navy mb-1.5">Google Maps location URL <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="url" id="mapUrl" value="https://maps.google.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="sm:col-span-2">
+                <label for="parkingTransport" class="block text-xs font-bold text-brand-navy mb-1.5">Parking and transportation <span class="font-medium text-slate-400">Optional</span></label>
+                <textarea id="parkingTransport" rows="2" oninput="updateLivePreview()" placeholder="Parking, shuttle or public transit details" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition"></textarea>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="mealDetails" class="block text-xs font-bold text-brand-navy mb-1.5">Meal or wedding feast <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="mealDetails" oninput="updateLivePreview()" placeholder="e.g. Lunch, dinner or sadhya" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="receptionDateTime" class="block text-xs font-bold text-brand-navy mb-1.5">Separate reception date and time <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="receptionDateTime" oninput="updateLivePreview()" placeholder="Date and time" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div class="wedding-only">
+                <label for="receptionVenue" class="block text-xs font-bold text-brand-navy mb-1.5">Reception venue <span class="font-medium text-slate-400">Optional</span></label>
+                <input type="text" id="receptionVenue" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div>
+                <label for="rsvpPhone" class="block text-xs font-bold text-brand-navy mb-1.5">Host WhatsApp number</label>
+                <input type="text" id="rsvpPhone" value="919876543210" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+              <div>
+                <label for="hostEmail" class="block text-xs font-bold text-brand-navy mb-1.5">Host email</label>
+                <input type="email" id="hostEmail" value="rsvp@urlovingly.com" oninput="updateLivePreview()" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200/80 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+              </div>
+            </div>
+            <div id="ceremonyDetailsContainer" class="hidden mt-5 space-y-3"></div>
+          </section>
+
+          <section class="glass-card rounded-[28px] p-6 sm:p-7 space-y-4" aria-labelledby="guestImportHeading">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h2 id="guestImportHeading" class="text-base font-bold text-brand-navy">Import guest list</h2>
+                <p class="mt-1 text-xs text-slate-500">Upload CSV or Excel (.xlsx), then review your guests before publishing.</p>
+              </div>
+              <a href="data:text/csv;charset=utf-8,Guest%20Name%2CWhatsApp%20Number%2CPersonal%20Note%0A" download="urlovingly-guest-template.csv" class="shrink-0 rounded-xl border border-pink-200 bg-white px-3 py-2 text-xs font-bold text-brand-pink hover:bg-pink-50">Download CSV template</a>
+            </div>
+            <div class="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
+              <label class="block text-xs font-bold text-brand-navy">Guest spreadsheet
+                <input id="guestImportFile" type="file" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onchange="previewGuestImport(event)" class="mt-2 block w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-xs font-normal text-slate-600">
+              </label>
+              <button id="guestImportButton" type="button" onclick="importGuestRows()" disabled class="rounded-xl brand-gradient px-4 py-2.5 text-xs font-bold text-white shadow-md disabled:cursor-not-allowed disabled:opacity-50">Publish guest links</button>
+            </div>
+            <p class="text-[11px] text-slate-500">Columns: Guest Name (required), WhatsApp Number and Personal Note (optional). Import up to your plan's remaining guest links.</p>
+            <p id="guestImportStatus" class="text-xs text-slate-600" role="status" aria-live="polite"></p>
+            <ol id="guestImportPreview" class="hidden max-h-48 space-y-1 overflow-y-auto rounded-xl border border-pink-100 bg-white/70 p-3 text-xs text-slate-600"></ol>
+          </section>
+
+          <!-- Card 3: Guest, Message & Website Template -->
+          <form id="inviteForm" onsubmit="handleGenerateSubmit(event)" class="glass-card rounded-[28px] p-6 sm:p-7 space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-2xl brand-gradient text-white flex items-center justify-center text-xs font-extrabold shadow-sm">03</div>
+                <div>
+                  <h2 class="text-base font-bold text-brand-navy">Guest Details & Website Template</h2>
+                  <p class="text-xs text-slate-500">Personalize this guest's message and choose the invitation design</p>
+                </div>
+              </div>
+              <div class="px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-mono font-bold text-brand-pink">
+                /<span id="coupleSlugPreview">Groom-and-Bride</span>/to/<span id="slugPreview">guest-name-and-family</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-brand-navy mb-1.5">Guest or Family Name <span class="text-brand-pink">*</span></label>
+              <input type="text" id="guestName" required value="Guest Name & Family" oninput="updateLivePreview()" class="w-full px-4 py-3 rounded-2xl bg-white border border-purple-200 text-sm font-bold text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+            </div>
+
+            <div data-feature="whatsapp_generator" class="hidden">
+              <label for="guestPhone" class="block text-xs font-bold text-brand-navy mb-1.5">Guest WhatsApp number <span class="font-medium text-slate-400">Optional · used by the WhatsApp message generator</span></label>
+              <input type="tel" id="guestPhone" placeholder="e.g. 98765 43210" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition">
+            </div>
+
+            <div data-feature="multi_day_routing" class="hidden space-y-2">
+              <label class="block text-xs font-bold text-brand-navy">Ceremonies this guest is invited to <span class="font-medium text-slate-400">Multi-day routing</span></label>
+              <div id="routingOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+              <p id="routingHint" class="text-[10px] text-slate-500">Select ceremonies in step 01, then choose which of them this guest should see.</p>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-3">
+                <label for="invitePhotoInput" class="block text-xs font-bold text-brand-navy">Photos for the invitation <span class="font-medium text-slate-400">Optional</span></label>
+                <span class="text-[10px] text-slate-500">Up to 3</span>
+              </div>
+              <input type="file" id="invitePhotoInput" accept="image/*" multiple onchange="handlePhotoUploadChange(event)" class="block w-full text-xs text-slate-600 file:mr-3 file:rounded-xl file:border-0 file:bg-purple-50 file:px-3 file:py-2 file:text-xs file:font-bold file:text-brand-purple hover:file:bg-purple-100">
+              <div class="flex items-center justify-between gap-2"><p id="invitePhotoStatus" class="text-[10px] text-slate-500">Photos are resized to fit the shareable invitation.</p><button type="button" id="clearInvitePhotos" onclick="clearInvitePhotos()" class="hidden shrink-0 text-[10px] font-bold text-brand-purple underline">Clear photos</button></div>
+              <div id="invitePhotoPreview" class="hidden grid grid-cols-3 gap-2"></div>
+            </div>
+
+            <!-- Restored Sample Personal Note Options -->
+            <div class="space-y-3">
+              <label class="block text-xs font-bold text-brand-navy">Select a Warm Personal Note</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="notePresetGroup">
+                
+                <label class="cursor-pointer">
+                  <input type="radio" name="noteOption" value="We are so excited to invite you to celebrate this special day with us!" checked onchange="handleNoteOptionChange()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
+                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
+                      <span>✨ A Special Day</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"We are so excited to invite you to celebrate this special day with us!"</p>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="noteOption" value="Your presence and blessings mean the world to us as we celebrate together." onchange="handleNoteOptionChange()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
+                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
+                      <span>🙏 Traditional & Heartfelt</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"Your presence and blessings mean the world to us as we celebrate together."</p>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="noteOption" value="This celebration wouldn't be complete without you by our side! Come ready to celebrate." onchange="handleNoteOptionChange()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full">
+                    <div class="text-xs font-bold text-brand-navy flex items-center justify-between">
+                      <span>🥂 Warm & Festive</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1 line-clamp-2">"This celebration wouldn't be complete without you by our side! Come ready to celebrate."</p>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="noteOption" value="custom" onchange="handleNoteOptionChange()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border border-purple-100 bg-white/80 peer-checked:border-brand-pink peer-checked:bg-pink-50/50 hover:border-purple-200 transition h-full flex flex-col justify-center">
+                    <div class="text-xs font-bold text-brand-pink flex items-center gap-1.5">
+                      <span>✍️ Write a Personal Message</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1">Craft a custom note specifically for this guest or family.</p>
+                  </div>
+                </label>
+
+              </div>
+
+              <div id="customNoteContainer" class="hidden pt-1">
+                <textarea id="customNoteInput" rows="2" oninput="updateLivePreview()"
+                  placeholder="Write your personal message for this guest..."
+                  class="w-full px-4 py-2.5 rounded-2xl bg-white border border-brand-pink text-sm text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Dear Guest & Family, we have shared so many wonderful memories together and can't wait to celebrate with you!</textarea>
+              </div>
+            </div>
+
+            <!-- Restored Template Selector -->
+            <div>
+              <label class="block text-xs font-bold text-brand-navy mb-2.5">Invitation Visual Style</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="urlovingly" checked onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl brand-gradient flex items-center justify-center text-white font-serif font-bold text-xs shadow-sm">UL</div>
+                    <div class="text-xs font-bold text-brand-navy">Signature</div>
+                    <div class="text-[10px] text-brand-pink font-medium">Pink & Purple</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="regal-palatial" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-amber-100 border border-amber-700 flex items-center justify-center text-amber-900 font-serif font-bold text-xs shadow-sm">RP</div>
+                    <div class="text-xs font-bold text-brand-navy">Regal &amp; Palatial</div>
+                    <div class="text-[10px] text-slate-500">Gilt &amp; ivory</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="royal" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-violet-950 border border-amber-400 flex items-center justify-center text-amber-200 font-serif font-bold text-xs shadow-sm">R</div>
+                    <div class="text-xs font-bold text-brand-navy">Royal</div>
+                    <div class="text-[10px] text-slate-500">Velvet &amp; gold</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="modern-minimalist" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-stone-100 border border-emerald-800 flex items-center justify-center text-emerald-900 font-sans font-bold text-xs shadow-sm">M</div>
+                    <div class="text-xs font-bold text-brand-navy">Modern Minimalist</div>
+                    <div class="text-[10px] text-slate-500">Quiet &amp; refined</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="vibrant-contemporary" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-orange-500 border border-slate-900 flex items-center justify-center text-lime-200 font-bold text-xs shadow-sm">V</div>
+                    <div class="text-xs font-bold text-brand-navy">Vibrant &amp; Contemporary</div>
+                    <div class="text-[10px] text-slate-500">Playful &amp; bold</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="heritage-temple-art" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-orange-100 border border-red-800 flex items-center justify-center text-red-900 font-serif font-bold text-xs shadow-sm">H</div>
+                    <div class="text-xs font-bold text-brand-navy">Heritage &amp; Temple Art</div>
+                    <div class="text-[10px] text-slate-500">Motifs &amp; warmth</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="tropical-destination" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-emerald-100 border border-teal-800 flex items-center justify-center text-teal-900 font-serif font-bold text-xs shadow-sm">T</div>
+                    <div class="text-xs font-bold text-brand-navy">Tropical &amp; Destination</div>
+                    <div class="text-[10px] text-slate-500">Garden getaway</div>
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="radio" name="templateType" value="vintage-nostalgia" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3.5 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-amber-100 border border-stone-600 flex items-center justify-center text-stone-700 font-serif font-bold text-xs shadow-sm">V</div>
+                    <div class="text-xs font-bold text-brand-navy">Vintage Nostalgia</div>
+                    <div class="text-[10px] text-slate-500">A keepsake feel</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-brand-navy mb-2.5">Mail Arrival Style</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <label class="cursor-pointer">
+                  <input type="radio" name="mailAnimationType" value="velvet" checked onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-[#552244] border border-amber-300 flex items-center justify-center text-amber-200 font-serif text-sm">&amp;</div>
+                    <div class="text-xs font-bold text-brand-navy">Grand Velvet</div>
+                    <div class="text-[10px] text-slate-500">Rises in with a seal</div>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="mailAnimationType" value="rose-gold" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-rose-200 border border-rose-500 flex items-center justify-center text-rose-800 font-serif text-sm">&#10084;</div>
+                    <div class="text-xs font-bold text-brand-navy">Rose Gold</div>
+                    <div class="text-[10px] text-slate-500">Drifts in diagonally</div>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="mailAnimationType" value="botanical" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-emerald-800 border border-lime-300 flex items-center justify-center text-lime-100 font-serif text-sm">&#10047;</div>
+                    <div class="text-xs font-bold text-brand-navy">Botanical</div>
+                    <div class="text-[10px] text-slate-500">Leaf-sealed arrival</div>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="mailAnimationType" value="celestial" onchange="updateLivePreview()" class="sr-only peer">
+                  <div class="p-3 rounded-2xl border-2 border-purple-100 bg-white peer-checked:border-brand-pink peer-checked:bg-pink-50/40 transition text-center">
+                    <div class="w-8 h-8 mx-auto mb-1.5 rounded-xl bg-slate-950 border border-sky-300 flex items-center justify-center text-sky-100 font-serif text-sm">&#10022;</div>
+                    <div class="text-xs font-bold text-brand-navy">Celestial</div>
+                    <div class="text-[10px] text-slate-500">Arrives with starlight</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full py-4 px-6 rounded-2xl brand-gradient hover:opacity-95 text-white font-bold text-sm shadow-xl shadow-pink-500/25 transition flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+              <span id="submitBtnText">Create & Publish Personalized Invite Link</span>
+            </button>
+          </form>
+
+          <!-- Result & Share Banner with Progress Bar -->
+          <div id="resultBanner" class="hidden glass-card rounded-[28px] p-6 border-2 border-brand-pink/40 bg-gradient-to-r from-pink-50/90 via-white to-purple-50/90 space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-brand-pink uppercase tracking-wider">
+                <span id="statusTitle">Publishing your invitation...</span>
+              </div>
+              <span id="progressPercent" class="text-xs font-mono font-bold text-brand-purple">0%</span>
+            </div>
+
+            <!-- Progress Bar Track -->
+            <div class="w-full bg-purple-100 rounded-full h-2 overflow-hidden">
+              <div id="progressBar" class="bg-gradient-to-r from-pink-500 to-purple-600 h-2 rounded-full transition-all duration-300" style="width: 5%"></div>
+            </div>
+
+            <p id="statusSubtext" class="text-[11px] text-slate-500">Saving your invitation...</p>
+
+            <!-- Hidden until action completes successfully -->
+            <div id="completedLinkSection" class="hidden pt-2 border-t border-pink-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="min-w-0 flex-1">
+                <span class="text-[10px] font-bold uppercase text-emerald-600 block">✨ Invite is Live!</span>
+                <a id="generatedUrlLink" href="#" target="_blank" class="text-sm font-bold text-brand-navy hover:text-brand-pink underline truncate block mt-0.5"></a>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <button type="button" onclick="copyGeneratedLink()" id="copyBtn" class="px-4 py-2.5 rounded-xl bg-white border border-purple-200 text-brand-navy text-xs font-bold hover:bg-purple-50 transition">
+                  Copy Link
+                </button>
+                <a id="whatsappShareBtn" data-feature="whatsapp_generator" href="#" target="_blank" rel="noopener" class="hidden px-4 py-2.5 rounded-xl brand-gradient text-white text-xs font-bold hover:opacity-95 transition shadow-md">
+                  Send via WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Guest Links History -->
+          <div class="glass-card rounded-[28px] p-6 sm:p-7">
+            <h3 class="text-base font-bold text-brand-navy mb-4">Your Generated Invitations</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-pink-100 text-[11px] font-bold uppercase text-slate-400">
+                    <th class="pb-2.5">Guest Name</th>
+                    <th class="pb-2.5">Style</th>
+                    <th class="pb-2.5">Invitation URL</th>
+                    <th class="pb-2.5">Hosted until</th>
+                  </tr>
+                </thead>
+                <tbody id="guestHistoryBody" class="divide-y divide-pink-50 text-xs"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- WhatsApp message generator (Standard and Grand) -->
+          <section data-feature="whatsapp_generator" class="hidden glass-card rounded-[28px] p-6 sm:p-7" aria-labelledby="waHeading">
+            <h3 id="waHeading" class="text-base font-bold text-brand-navy">WhatsApp Message Generator</h3>
+            <p class="text-xs text-slate-500 mt-1">Write one message. Use {guest_name}, {couple_names}, {event_type} and {link} — each guest gets their own version.</p>
+            <textarea id="waTemplate" rows="3" maxlength="1000" class="mt-3 w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-pink/20">Hi {guest_name}! You are warmly invited to {couple_names}'s {event_type}. Your personal invitation is here: {link}</textarea>
+            <button type="button" onclick="generateWhatsappMessages()" class="mt-3 px-4 py-2.5 rounded-xl brand-gradient text-white text-xs font-bold shadow-md">Generate messages</button>
+            <p id="waStatus" class="mt-2 text-[11px] text-slate-500" role="status"></p>
+            <ul id="waList" class="mt-3 space-y-2"></ul>
+          </section>
+
+          <!-- Live RSVP dashboard (Standard and Grand) -->
+          <section data-feature="rsvp_dashboard" class="hidden glass-card rounded-[28px] p-6 sm:p-7" aria-labelledby="rsvpHeading">
+            <div class="flex items-center justify-between gap-3">
+              <h3 id="rsvpHeading" class="text-base font-bold text-brand-navy">Live RSVP Dashboard</h3>
+              <button type="button" onclick="loadRsvps()" class="px-3 py-1.5 rounded-xl bg-purple-50 text-brand-purple text-xs font-bold">Refresh</button>
+            </div>
+            <div id="rsvpSummary" class="mt-4 grid grid-cols-2 sm:grid-cols-5 gap-2 text-center"></div>
+            <div class="overflow-x-auto mt-4">
+              <table class="w-full text-left border-collapse">
+                <thead><tr class="border-b border-pink-100 text-[11px] font-bold uppercase text-slate-400"><th class="pb-2.5">Guest</th><th class="pb-2.5">Reply</th><th class="pb-2.5">Guests</th><th class="pb-2.5">Message</th></tr></thead>
+                <tbody id="rsvpBody" class="divide-y divide-pink-50 text-xs"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- UPI Shagun (Grand) -->
+          <section data-feature="upi_shagun" class="hidden glass-card rounded-[28px] p-6 sm:p-7" aria-labelledby="upiHeading">
+            <h3 id="upiHeading" class="text-base font-bold text-brand-navy">UPI Shagun</h3>
+            <p class="text-xs text-slate-500 mt-1">Guests see a "Pay Shagun with UPI" button on every invitation of this event.</p>
+            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div><label for="upiId" class="block text-xs font-bold text-brand-navy mb-1.5">UPI ID</label><input id="upiId" type="text" placeholder="name@bank" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200 text-sm"></div>
+              <div><label for="upiName" class="block text-xs font-bold text-brand-navy mb-1.5">Payee name</label><input id="upiName" type="text" maxlength="80" placeholder="Shown in the UPI app" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-purple-200 text-sm"></div>
+            </div>
+            <button type="button" onclick="saveUpiSettings()" class="mt-3 px-4 py-2.5 rounded-xl brand-gradient text-white text-xs font-bold shadow-md">Save UPI details</button>
+            <p id="upiStatus" class="mt-2 text-[11px] text-slate-500" role="status"></p>
+          </section>
+
+          <!-- Custom background audio (Grand) -->
+          <section data-feature="custom_audio" class="hidden glass-card rounded-[28px] p-6 sm:p-7" aria-labelledby="audioHeading">
+            <h3 id="audioHeading" class="text-base font-bold text-brand-navy">Background Audio</h3>
+            <p class="text-xs text-slate-500 mt-1">Upload an MP3, M4A or OGG file up to 3 MB. It plays when a guest opens the invitation.</p>
+            <input type="file" id="audioFile" accept="audio/mpeg,audio/mp4,audio/ogg,.mp3,.m4a,.ogg" class="mt-3 block w-full text-xs text-slate-600 file:mr-3 file:rounded-xl file:border-0 file:bg-purple-50 file:px-3 file:py-2 file:text-xs file:font-bold file:text-brand-purple">
+            <div class="mt-3 flex gap-2">
+              <button type="button" onclick="uploadAudio()" class="px-4 py-2.5 rounded-xl brand-gradient text-white text-xs font-bold shadow-md">Upload audio</button>
+              <button type="button" id="audioRemoveBtn" onclick="removeAudio()" class="hidden px-4 py-2.5 rounded-xl bg-white border border-purple-200 text-brand-purple text-xs font-bold">Remove</button>
+            </div>
+            <audio id="audioPreview" controls class="hidden mt-3 w-full"></audio>
+            <p id="audioStatus" class="mt-2 text-[11px] text-slate-500" role="status"></p>
+          </section>
+
+        </div>
+
+        <!-- RIGHT COLUMN: Sticky Live Mobile Preview -->
+        <div class="lg:col-span-5 lg:sticky lg:top-24 flex flex-col items-center">
+          <div class="mb-3 flex w-full max-w-[365px] items-center justify-between gap-2">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/80 border border-purple-100 shadow-sm">
+              <span class="text-[11px] font-bold uppercase tracking-widest text-brand-navy">Live Guest Mobile View</span>
+            </div>
+            <button type="button" onclick="replayMailAnimation()" title="Replay mail arrival animation" class="inline-flex shrink-0 items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-purple-200 text-brand-purple text-xs font-bold hover:bg-purple-50 transition shadow-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 11a8.1 8.1 0 0 0-14.9-3L3 11m0-6v6h6m-5 2a8.1 8.1 0 0 0 14.9 3L21 13m0 6v-6h-6"/></svg>
+              <span>Replay mail</span>
+            </button>
+          </div>
+          <div class="w-[335px] sm:w-[365px] h-[680px] rounded-[48px] phone-mockup bg-white overflow-hidden flex flex-col">
+            <div class="bg-purple-50/70 border-b border-purple-100 px-4 py-2 flex items-center gap-2 shrink-0">
+              <div id="previewBrowserUrl" class="text-[11px] font-mono text-brand-navy/75 truncate"></div>
+            </div>
+            <iframe id="mobilePreviewViewport" title="Complete invitation website preview" class="flex-1 min-h-0 w-full border-0 bg-white" sandbox="allow-scripts allow-popups"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const BASE_URL = location.origin;
+    const STORAGE_KEYS = { DEFAULTS: 'urlovingly_event_defaults_v2', ACTIVE_EVENT: 'urlovingly_active_event' };
+    
+    let currentUser = null;
+    let studioEvents = [];
+    let activeEvent = null;
+    let pendingGuestRows = [];
+    let rsvpTimer = null;
+    let previewRenderPromise = Promise.resolve();
+    let previewRenderId = 0;
+    let activeTemplateLoaded = true;
+    let renderedInvitationFragment = '';
+    const invitationTemplateCache = new Map();
+    const previewIntroShown = new Set();
+    let lastPreviewSelection = '';
+    let uploadedInvitePhotos = [];
+    let photoUploadRequestId = 0;
+    const MAX_INVITE_PHOTOS = 3;
+    const MAX_PHOTO_DATA_URL_LENGTH = 9000;
+    const MAX_PUBLISH_PAYLOAD_BYTES = 390 * 1024;
+
+    window.addEventListener('DOMContentLoaded', bootStudio);
+
+    async function api(path, options = {}) {
+      const isForm = options.body instanceof FormData;
+      const headers = { 'X-Requested-With': 'urlovingly', ...(isForm ? {} : { 'Content-Type': 'application/json' }) };
+      const response = await fetch(path, { credentials: 'same-origin', ...options, headers });
+      let body = {};
+      try { body = await response.json(); } catch (error) { /* empty body */ }
+      if (response.status === 401) location.href = '/?signin=1';
+      return { ok: response.ok, status: response.status, body };
+    }
+
+    async function bootStudio() {
+      const me = await api('/api/me');
+      if (!me.ok) return;
+      currentUser = me.body.user;
+      studioEvents = me.body.events.filter(event => event.status === 'active');
+      if (!studioEvents.length) { location.href = '/?choose=plan'; return; }
+      document.getElementById('userEmailDisplay').textContent = currentUser.email;
+      const saved = Number(localStorage.getItem(STORAGE_KEYS.ACTIVE_EVENT));
+      activeEvent = studioEvents.find(event => event.id === saved) || studioEvents[0];
+      renderEventSelect();
+      loadDefaults();
+      handleEventTypeChange();
+      applyEventPlan();
+    }
+
+    function renderEventSelect() {
+      const select = document.getElementById('eventSelect');
+      select.replaceChildren(...studioEvents.map(event => {
+        const option = new Option(`${event.title} · ${event.plan.name}`, event.id);
+        option.selected = event.id === activeEvent.id;
+        return option;
+      }));
+    }
+
+    function switchEvent(eventId) {
+      activeEvent = studioEvents.find(event => event.id === Number(eventId)) || activeEvent;
+      localStorage.setItem(STORAGE_KEYS.ACTIVE_EVENT, String(activeEvent.id));
+      applyEventPlan();
+    }
+
+    function hasFeature(name) { return !!activeEvent && activeEvent.features.includes(name); }
+    function hostingLabel(days) { return days >= 365 ? '1 year' : days >= 180 ? '6 months' : `${days} days`; }
+
+    // Only the options included in the chosen plan are shown.
+    function applyEventPlan() {
+      document.querySelectorAll('[data-feature]').forEach(element => element.classList.toggle('hidden', !hasFeature(element.dataset.feature)));
+      renderPlanInfo();
+      renderRoutingOptions();
+      document.getElementById('upiId').value = activeEvent.upi_id;
+      document.getElementById('upiName').value = activeEvent.upi_name;
+      renderAudioState();
+      document.getElementById('waList').replaceChildren();
+      document.getElementById('resultBanner').classList.add('hidden');
+      fetchHistory();
+      clearInterval(rsvpTimer);
+      if (hasFeature('rsvp_dashboard')) { loadRsvps(); rsvpTimer = setInterval(loadRsvps, 15000); }
+      updateLivePreview();
+    }
+
+    function renderPlanInfo() {
+      const event = activeEvent;
+      document.getElementById('planBadge').textContent = event.plan.name;
+      document.getElementById('planStrip').textContent = `${event.title} · ${event.plan.name} · ${event.links_used} of ${event.link_limit} guest links used · links hosted for ${hostingLabel(event.hosting_days)}`;
+      const upgrade = document.getElementById('upgradeLink');
+      upgrade.classList.toggle('hidden', event.plan.id === 'grand');
+      upgrade.href = `/?upgrade=${event.id}#pricing`;
+    }
+
+    function applyUpdatedEvent(updated) {
+      studioEvents = studioEvents.map(event => event.id === updated.id ? updated : event);
+      activeEvent = updated;
+      renderPlanInfo();
+      renderAudioState();
+    }
+
+    async function logout() {
+      await api('/api/auth/logout', { method: 'POST', body: '{}' });
+      location.href = '/';
+    }
+
+    async function fetchHistory() {
+      const result = await api(`/api/events/${activeEvent.id}/invites`);
+      if (result.ok) renderHistoryTable(result.body.invites);
+    }
+
+    function renderHistoryTable(invites) {
+      const tbody = document.getElementById('guestHistoryBody');
+      if (!invites || !invites.length) {
+        tbody.innerHTML = `<tr><td colspan="4" class="py-5 text-center text-slate-400">No guest links generated yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = invites.map(item => `
+        <tr class="hover:bg-pink-50/40">
+          <td class="py-3 font-bold text-brand-navy">${escapeHtml(item.guest_name)}</td>
+          <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-brand-purple capitalize">${escapeHtml(item.template)}</span></td>
+          <td class="py-3 font-mono text-[11px] text-brand-pink truncate max-w-[200px]"><a href="${escapeHtml(item.url)}" target="_blank" rel="noopener" class="hover:underline">${escapeHtml(item.url)}</a></td>
+          <td class="py-3 text-[11px] ${item.expired ? 'text-red-600 font-bold' : 'text-slate-500'}">${item.expired ? 'Expired' : escapeHtml(new Date(item.expires_at).toLocaleDateString())}</td>
+        </tr>
+      `).join('');
+    }
+
+    // ----- multi-day selective event routing (Grand) -----
+    function renderRoutingOptions() {
+      const box = document.getElementById('routingOptions');
+      const previous = new Map(Array.from(box.querySelectorAll('input'), input => [input.dataset.routingName, input.checked]));
+      const names = Array.from(document.querySelectorAll('input[name="ceremonies"]:checked'), input => input.value);
+      box.replaceChildren(...names.map(name => {
+        const label = document.createElement('label');
+        label.className = 'flex items-start gap-2 rounded-xl border border-purple-100 bg-white/80 p-2.5 text-xs text-slate-700';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.checked = previous.has(name) ? previous.get(name) : true;
+        input.dataset.routingName = name;
+        input.className = 'mt-0.5 accent-pink-600';
+        input.addEventListener('change', updateLivePreview);
+        const text = document.createElement('span');
+        text.textContent = name;
+        label.append(input, text);
+        return label;
+      }));
+      document.getElementById('routingHint').classList.toggle('hidden', names.length > 0);
+    }
+
+    // Returns null when routing is not in use, otherwise the ceremonies this guest should see.
+    function getRoutingSelection() {
+      if (!hasFeature('multi_day_routing')) return null;
+      const boxes = Array.from(document.querySelectorAll('#routingOptions input'));
+      return boxes.length ? boxes.filter(box => box.checked).map(box => box.dataset.routingName) : null;
+    }
+
+    // ----- WhatsApp message generator (Standard, Grand) -----
+    async function generateWhatsappMessages() {
+      const status = document.getElementById('waStatus');
+      const list = document.getElementById('waList');
+      status.textContent = 'Generating...';
+      const result = await api(`/api/events/${activeEvent.id}/whatsapp`, { method: 'POST', body: JSON.stringify({ template: document.getElementById('waTemplate').value }) });
+      if (!result.ok) { status.textContent = result.body.message || 'Could not generate messages.'; return; }
+      const messages = result.body.messages;
+      status.textContent = messages.length ? `${messages.length} message${messages.length === 1 ? '' : 's'} ready.` : 'Publish a guest link first.';
+      list.replaceChildren(...messages.map(item => {
+        const row = document.createElement('li');
+        row.className = 'rounded-2xl border border-purple-100 bg-white/80 p-3 text-xs';
+        const name = document.createElement('strong');
+        name.textContent = item.guest_name + (item.phone ? ` (+${item.phone})` : '');
+        const text = document.createElement('p');
+        text.className = 'mt-1 text-slate-600 break-words';
+        text.textContent = item.message;
+        const open = document.createElement('a');
+        open.href = item.url;
+        open.target = '_blank';
+        open.rel = 'noopener';
+        open.className = 'inline-block mt-2 mr-2 px-3 py-1.5 rounded-xl brand-gradient text-white font-bold';
+        open.textContent = 'Open WhatsApp';
+        const copy = document.createElement('button');
+        copy.type = 'button';
+        copy.className = 'mt-2 px-3 py-1.5 rounded-xl bg-white border border-purple-200 text-brand-purple font-bold';
+        copy.textContent = 'Copy message';
+        copy.addEventListener('click', () => navigator.clipboard.writeText(item.message).then(() => { copy.textContent = 'Copied'; }));
+        row.append(name, text, open, copy);
+        return row;
+      }));
+    }
+
+    // ----- live RSVP dashboard (Standard, Grand) -----
+    async function loadRsvps() {
+      if (!hasFeature('rsvp_dashboard')) return;
+      const result = await api(`/api/events/${activeEvent.id}/rsvps`);
+      if (!result.ok) return;
+      const { summary, items } = result.body;
+      document.getElementById('rsvpSummary').replaceChildren(...[['Yes', summary.yes], ['Maybe', summary.maybe], ['No', summary.no], ['Awaiting', summary.pending], ['Guests coming', summary.attending_guests]].map(([label, value]) => {
+        const chip = document.createElement('div');
+        chip.className = 'rounded-2xl bg-pink-50/70 border border-pink-100 py-2';
+        const number = document.createElement('div');
+        number.className = 'font-serif text-2xl font-bold text-brand-navy';
+        number.textContent = value;
+        const caption = document.createElement('div');
+        caption.className = 'text-[10px] font-bold uppercase text-slate-500';
+        caption.textContent = label;
+        chip.append(number, caption);
+        return chip;
+      }));
+      document.getElementById('rsvpBody').replaceChildren(...items.map(item => {
+        const row = document.createElement('tr');
+        [item.guest_name, item.response || 'awaiting', item.response === 'yes' ? item.guests : '', item.message || ''].forEach((value, index) => {
+          const cell = document.createElement('td');
+          cell.className = 'py-2.5 pr-2 ' + (index === 0 ? 'font-bold text-brand-navy' : 'text-slate-600 capitalize');
+          cell.textContent = value;
+          row.append(cell);
+        });
+        return row;
+      }));
+    }
+
+    // ----- UPI Shagun and background audio (Grand) -----
+    async function saveUpiSettings() {
+      const status = document.getElementById('upiStatus');
+      const result = await api(`/api/events/${activeEvent.id}/settings`, { method: 'PUT', body: JSON.stringify({ upi_id: document.getElementById('upiId').value, upi_name: document.getElementById('upiName').value }) });
+      if (result.ok) { applyUpdatedEvent(result.body.event); status.textContent = 'Saved. Your invitations now show the Shagun button.'; }
+      else status.textContent = result.body.message || 'Could not save UPI details.';
+    }
+
+    function renderAudioState() {
+      const player = document.getElementById('audioPreview');
+      const hasAudio = !!(activeEvent && activeEvent.audio_url);
+      if (hasAudio) player.src = activeEvent.audio_url; else player.removeAttribute('src');
+      player.classList.toggle('hidden', !hasAudio);
+      document.getElementById('audioRemoveBtn').classList.toggle('hidden', !hasAudio);
+    }
+
+    async function uploadAudio() {
+      const status = document.getElementById('audioStatus');
+      const file = document.getElementById('audioFile').files[0];
+      if (!file) { status.textContent = 'Choose an audio file first.'; return; }
+      const form = new FormData();
+      form.append('audio', file);
+      status.textContent = 'Uploading...';
+      const result = await api(`/api/events/${activeEvent.id}/audio`, { method: 'POST', body: form });
+      if (result.ok) { applyUpdatedEvent(result.body.event); status.textContent = 'Audio added to every invitation of this event.'; }
+      else status.textContent = result.body.message || 'Upload failed.';
+    }
+
+    async function removeAudio() {
+      const result = await api(`/api/events/${activeEvent.id}/audio`, { method: 'DELETE' });
+      if (result.ok) { applyUpdatedEvent(result.body.event); document.getElementById('audioStatus').textContent = 'Audio removed.'; }
+    }
+
+    async function handleGenerateSubmit(e) {
+      e.preventDefault();
+      if (!activeEvent) return;
+
+      await previewRenderPromise;
+      if (!activeTemplateLoaded) return alert("The selected invitation style could not be loaded. Please try another style.");
+      const data = getFormState();
+      if (data.routing_empty) return alert('Select at least one ceremony this guest is invited to.');
+      const requestBody = JSON.stringify({
+        name: data.name,
+        couple_names: data.couple_names,
+        event_type: data.event_type,
+        template: data.template,
+        rendered_html: data.rendered_html,
+        guest_phone: data.guest_phone,
+        allowed_ceremonies: data.allowed_ceremonies
+      });
+      if (new Blob([requestBody]).size > MAX_PUBLISH_PAYLOAD_BYTES) {
+        return alert('This invitation is too large to publish. Remove a photo and try again.');
+      }
+      const submitBtn = document.getElementById('submitBtn');
+      const resultBanner = document.getElementById('resultBanner');
+      const progressBar = document.getElementById('progressBar');
+      const progressPercent = document.getElementById('progressPercent');
+      const statusTitle = document.getElementById('statusTitle');
+      const statusSubtext = document.getElementById('statusSubtext');
+      const completedLinkSection = document.getElementById('completedLinkSection');
+
+      submitBtn.disabled = true;
+      document.getElementById('submitBtnText').textContent = 'Publishing...';
+      resultBanner.classList.remove('hidden');
+      completedLinkSection.classList.add('hidden');
+      progressBar.style.width = '40%';
+      progressPercent.textContent = '40%';
+      statusTitle.textContent = 'Publishing your invitation...';
+      statusSubtext.textContent = 'Saving your invitation...';
+
+      const result = await api(`/api/events/${activeEvent.id}/invites`, { method: 'POST', body: requestBody });
+      if (result.ok) {
+        const invite = result.body.invite;
+        progressBar.style.width = '100%';
+        progressPercent.textContent = '100%';
+        statusTitle.textContent = 'Invitation Published Successfully!';
+        statusSubtext.textContent = 'Your personalized guest link is now live.';
+
+        const linkEl = document.getElementById('generatedUrlLink');
+        linkEl.textContent = invite.url;
+        linkEl.href = invite.url;
+        const shareMsg = `Hi ${data.name}! Here is your personalized ${data.event_type.toLowerCase()} invitation from ${data.couple_names}: ${invite.url}`;
+        document.getElementById('whatsappShareBtn').href = `https://wa.me/${encodeURIComponent(invite.guest_phone)}?text=${encodeURIComponent(shareMsg)}`;
+        completedLinkSection.classList.remove('hidden');
+
+        applyUpdatedEvent(result.body.event);
+        fetchHistory();
+        loadRsvps();
+      } else {
+        progressBar.style.width = '100%';
+        progressPercent.textContent = '';
+        statusTitle.textContent = 'Could not publish this invitation';
+        statusSubtext.textContent = result.body.message || 'Please try again.';
+        if (result.body.error === 'link_limit_reached' && activeEvent.plan.id !== 'grand') {
+          statusSubtext.textContent += ' Use the Upgrade button above to add more guest links.';
+        }
+      }
+
+      submitBtn.disabled = false;
+      document.getElementById('submitBtnText').textContent = 'Create & Publish Personalized Invite Link';
+    }
+
+    async function previewGuestImport(event) {
+      pendingGuestRows = [];
+      const file = event.target.files[0];
+      const status = document.getElementById('guestImportStatus');
+      const preview = document.getElementById('guestImportPreview');
+      const button = document.getElementById('guestImportButton');
+      preview.classList.add('hidden');
+      button.disabled = true;
+      if (!file || !activeEvent) return;
+      const form = new FormData();
+      form.append('file', file);
+      status.textContent = 'Reading spreadsheet...';
+      const result = await api(`/api/events/${activeEvent.id}/guest-import/preview`, { method: 'POST', body: form });
+      if (!result.ok) {
+        status.textContent = result.body.message || 'Could not read this spreadsheet.';
+        return;
+      }
+      pendingGuestRows = result.body.guests;
+      preview.innerHTML = pendingGuestRows.slice(0, 8).map((guest, index) =>
+        `<li>${index + 1}. ${escapeHtml(guest.guest_name)}${guest.guest_phone ? ` · ${escapeHtml(guest.guest_phone)}` : ''}</li>`
+      ).join('');
+      preview.classList.remove('hidden');
+      status.textContent = `${pendingGuestRows.length} guest${pendingGuestRows.length === 1 ? '' : 's'} ready to review.`;
+      button.disabled = false;
+    }
+
+    async function importGuestRows() {
+      if (!activeEvent || !pendingGuestRows.length) return;
+      const status = document.getElementById('guestImportStatus');
+      const button = document.getElementById('guestImportButton');
+      const names = pendingGuestRows.map(guest => slugify(guest.guest_name));
+      if (new Set(names).size !== names.length) {
+        status.textContent = 'The spreadsheet has duplicate guest names that produce the same link. Correct them and upload again.';
+        return;
+      }
+      const listed = await api(`/api/events/${activeEvent.id}/invites`);
+      if (!listed.ok) {
+        status.textContent = listed.body.message || 'Could not check existing guest links.';
+        return;
+      }
+      const coupleSlug = getFormState().coupleSlug;
+      const existingSlugs = new Set(listed.body.invites
+        .filter(invite => new URL(invite.url, location.origin).pathname.split('/')[1] === coupleSlug)
+        .map(invite => slugify(invite.guest_name)));
+      const newLinks = names.filter(name => !existingSlugs.has(name)).length;
+      if (newLinks > activeEvent.links_remaining) {
+        status.textContent = `This file needs ${newLinks} new links, but your ${activeEvent.plan.name} plan has ${activeEvent.links_remaining} remaining. Upgrade your plan or reduce the list.`;
+        return;
+      }
+      const routing = getRoutingSelection();
+      if (routing && !routing.length) {
+        status.textContent = 'Select at least one ceremony before importing guests.';
+        return;
+      }
+      const originalNoteOption = document.querySelector('input[name="noteOption"]:checked').value;
+      const originalCustomNote = document.getElementById('customNoteInput').value;
+
+      button.disabled = true;
+      let published = 0;
+      for (const guest of pendingGuestRows) {
+        document.getElementById('guestName').value = guest.guest_name;
+        document.getElementById('guestPhone').value = guest.guest_phone;
+        document.getElementById('customNoteInput').value = guest.custom_note || originalCustomNote;
+        const noteOption = guest.custom_note ? 'custom' : originalNoteOption;
+        const selectedNoteOption = document.querySelector(`input[name="noteOption"][value="${CSS.escape(noteOption)}"]`);
+        if (selectedNoteOption) selectedNoteOption.checked = true;
+        updateLivePreview();
+        await previewRenderPromise;
+        if (!activeTemplateLoaded) {
+          status.textContent = `Stopped after ${published} links: the selected invitation template could not be loaded.`;
+          break;
+        }
+        const data = getFormState();
+        const requestBody = JSON.stringify({
+          name: data.name,
+          couple_names: data.couple_names,
+          event_type: data.event_type,
+          template: data.template,
+          rendered_html: data.rendered_html,
+          guest_phone: data.guest_phone,
+          allowed_ceremonies: data.allowed_ceremonies
+        });
+        if (new Blob([requestBody]).size > MAX_PUBLISH_PAYLOAD_BYTES) {
+          status.textContent = `Stopped after ${published} links: the invitation for ${guest.guest_name} is too large. Remove a photo and retry.`;
+          break;
+        }
+        const result = await api(`/api/events/${activeEvent.id}/invites`, { method: 'POST', body: requestBody });
+        if (!result.ok) {
+          status.textContent = `Published ${published} of ${pendingGuestRows.length}. Stopped at ${guest.guest_name}: ${result.body.message || 'publishing failed.'}`;
+          break;
+        }
+        published += 1;
+        applyUpdatedEvent(result.body.event);
+        status.textContent = `Published ${published} of ${pendingGuestRows.length} guest links...`;
+      }
+      if (published === pendingGuestRows.length) status.textContent = `Published all ${published} guest links.`;
+      await fetchHistory();
+      await loadRsvps();
+      button.disabled = false;
+    }
+
+    function slugify(text) { return (text || '').toLowerCase().replace(/&/g, 'and').replace(/[\W_]+/g, '-').replace(/^-+|-+$/g, '') || 'guest'; }
+    function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function getSelectedNote() {
+      const selected = document.querySelector('input[name="noteOption"]:checked');
+      return selected.value === 'custom' ? document.getElementById('customNoteInput').value.trim() : selected.value;
+    }
+    function handleNoteOptionChange() {
+      const selected = document.querySelector('input[name="noteOption"]:checked');
+      const customBox = document.getElementById('customNoteContainer');
+      selected && selected.value === 'custom' ? customBox.classList.remove('hidden') : customBox.classList.add('hidden');
+      updateLivePreview();
+    }
+    function handleEventTypeChange() {
+      const isWedding = document.getElementById('eventType').value === 'Wedding';
+      document.querySelectorAll('.wedding-only').forEach(field => field.classList.toggle('hidden', !isWedding));
+      document.getElementById('celebrantNamesField').classList.toggle('hidden', isWedding);
+      document.getElementById('eventDateLabel').textContent = isWedding ? 'Wedding date' : 'Event date';
+      document.getElementById('eventTimeLabel').textContent = isWedding ? 'Wedding time' : 'Event time';
+      updateLivePreview();
+    }
+    function handleCeremoniesChange() {
+      const container = document.getElementById('ceremonyDetailsContainer');
+      const previous = new Map(Array.from(container.querySelectorAll('[data-ceremony-name]'), card => [
+        card.dataset.ceremonyName,
+        Object.fromEntries(Array.from(card.querySelectorAll('[data-ceremony-field]'), input => [input.dataset.ceremonyField, input.value]))
+      ]));
+      const selected = Array.from(document.querySelectorAll('input[name="ceremonies"]:checked'), input => input.value);
+      container.innerHTML = selected.map(name => {
+        const saved = previous.get(name) || {};
+        return `<fieldset data-ceremony-name="${escapeHtml(name)}" class="rounded-2xl border border-purple-100 bg-white/70 p-4"><legend class="px-1 text-xs font-bold text-brand-navy">${escapeHtml(name)} details</legend><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><label class="text-[11px] font-semibold text-slate-600">Date<input data-ceremony-field="date" type="text" value="${escapeHtml(saved.date || '')}" placeholder="Date" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="text-[11px] font-semibold text-slate-600">Time<input data-ceremony-field="time" type="text" value="${escapeHtml(saved.time || '')}" placeholder="Start time" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="text-[11px] font-semibold text-slate-600">Venue<input data-ceremony-field="venue" type="text" value="${escapeHtml(saved.venue || '')}" placeholder="Venue name" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="text-[11px] font-semibold text-slate-600">Address<input data-ceremony-field="address" type="text" value="${escapeHtml(saved.address || '')}" placeholder="Venue address" oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="sm:col-span-2 text-[11px] font-semibold text-slate-600">Google Maps URL<input data-ceremony-field="map_url" type="url" value="${escapeHtml(saved.map_url || '')}" placeholder="https://maps.google.com/..." oninput="updateLivePreview()" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm"></label><label class="sm:col-span-2 text-[11px] font-semibold text-slate-600">Notes<textarea data-ceremony-field="notes" rows="2" oninput="updateLivePreview()" placeholder="Dress code, customs or other details" class="mt-1 w-full rounded-xl border border-purple-200 bg-white px-3 py-2 text-sm">${escapeHtml(saved.notes || '')}</textarea></label></div></fieldset>`;
+      }).join('');
+      container.classList.toggle('hidden', selected.length === 0);
+      renderRoutingOptions();
+      updateLivePreview();
+    }
+    function compressInvitePhoto(file) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        const objectUrl = URL.createObjectURL(file);
+        image.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          const maxDimensions = [640, 480, 360, 280, 220];
+          const qualities = [0.72, 0.6, 0.48, 0.38];
+          for (const maxDimension of maxDimensions) {
+            const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
+            canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+            canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+            context.fillStyle = '#fff';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+            for (const quality of qualities) {
+              const dataUrl = canvas.toDataURL('image/jpeg', quality);
+              if (dataUrl.length <= MAX_PHOTO_DATA_URL_LENGTH) {
+                resolve({ src: dataUrl, alt: file.name });
+                return;
+              }
+            }
+          }
+          reject(new Error(`${file.name} is too detailed to fit the invitation. Choose another photo.`));
+        };
+        image.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          reject(new Error(`${file.name} could not be opened as an image.`));
+        };
+        image.src = objectUrl;
+      });
+    }
+    async function handlePhotoUploadChange(event) {
+      const files = Array.from(event.target.files || []);
+      const status = document.getElementById('invitePhotoStatus');
+      if (files.length > MAX_INVITE_PHOTOS) {
+        event.target.value = '';
+        status.textContent = `Choose ${MAX_INVITE_PHOTOS} photos or fewer.`;
+        return;
+      }
+      const requestId = ++photoUploadRequestId;
+      status.textContent = files.length ? 'Preparing photos…' : 'Photos are resized to fit the shareable invitation.';
+      try {
+        const photos = await Promise.all(files.map(compressInvitePhoto));
+        if (requestId !== photoUploadRequestId) return;
+        uploadedInvitePhotos = photos;
+        renderInvitePhotoPreviews();
+        status.textContent = photos.length ? `${photos.length} photo${photos.length === 1 ? '' : 's'} ready for the invitation.` : 'Photos are resized to fit the shareable invitation.';
+        updateLivePreview();
+      } catch (error) {
+        if (requestId !== photoUploadRequestId) return;
+        event.target.value = '';
+        uploadedInvitePhotos = [];
+        renderInvitePhotoPreviews();
+        status.textContent = error.message;
+        updateLivePreview();
+      }
+    }
+    function clearInvitePhotos() {
+      photoUploadRequestId++;
+      uploadedInvitePhotos = [];
+      document.getElementById('invitePhotoInput').value = '';
+      document.getElementById('invitePhotoStatus').textContent = 'Photos are resized to fit the shareable invitation.';
+      renderInvitePhotoPreviews();
+      updateLivePreview();
+    }
+    function renderInvitePhotoPreviews() {
+      const preview = document.getElementById('invitePhotoPreview');
+      preview.replaceChildren();
+      preview.classList.toggle('hidden', uploadedInvitePhotos.length === 0);
+      document.getElementById('clearInvitePhotos').classList.toggle('hidden', uploadedInvitePhotos.length === 0);
+      uploadedInvitePhotos.forEach((photo, index) => {
+        const image = document.createElement('img');
+        image.src = photo.src;
+        image.alt = photo.alt;
+        image.className = 'aspect-square w-full rounded-xl border border-purple-100 object-cover';
+        preview.append(image);
+      });
+    }
+    function buildInvitePhotoGallery() {
+      if (!uploadedInvitePhotos.length) return '';
+      const images = uploadedInvitePhotos.map(photo => `<img src="${photo.src}" alt="${escapeHtml(photo.alt)}" loading="lazy">`).join('');
+      return `<section class="invite-gallery" aria-label="Invitation photo gallery"><h2>Our story in photos</h2><div class="invite-gallery-grid">${images}</div></section>`;
+    }
+    function loadDefaults() {
+      const d = JSON.parse(localStorage.getItem(STORAGE_KEYS.DEFAULTS) || '{}');
+      const defaultFields = ['eventType', 'celebrantNames', 'groomFullName', 'brideFullName', 'groomParents', 'groomFamilyName', 'brideParents', 'brideFamilyName', 'closeRelatives', 'weddingDate', 'weddingTime', 'muhurthamTime', 'guestArrivalTime', 'venueName', 'venueAddress', 'mapUrl', 'parkingTransport', 'mealDetails', 'receptionDateTime', 'receptionVenue', 'rsvpPhone', 'hostEmail'];
+      defaultFields.forEach(id => {
+        if (d[id] !== undefined && document.getElementById(id)) document.getElementById(id).value = d[id];
+      });
+      if (Array.isArray(d.ceremonies)) {
+        const selectedCeremonies = new Set(d.ceremonies);
+        document.querySelectorAll('input[name="ceremonies"]').forEach(input => { input.checked = selectedCeremonies.has(input.value); });
+        handleCeremoniesChange();
+        (d.ceremonyDetails || []).forEach(saved => {
+          const card = Array.from(document.querySelectorAll('[data-ceremony-name]')).find(item => item.dataset.ceremonyName === saved.name);
+          if (!card) return;
+          Object.entries(saved).forEach(([field, value]) => {
+            const input = card.querySelector(`[data-ceremony-field="${field}"]`);
+            if (input) input.value = value;
+          });
+        });
+      }
+    }
+    function saveEventDefaults() {
+      const defaultFields = ['eventType', 'celebrantNames', 'groomFullName', 'brideFullName', 'groomParents', 'groomFamilyName', 'brideParents', 'brideFamilyName', 'closeRelatives', 'weddingDate', 'weddingTime', 'muhurthamTime', 'guestArrivalTime', 'venueName', 'venueAddress', 'mapUrl', 'parkingTransport', 'mealDetails', 'receptionDateTime', 'receptionVenue', 'rsvpPhone', 'hostEmail'];
+      const defaults = Object.fromEntries(defaultFields.map(id => [id, document.getElementById(id).value]));
+      defaults.ceremonies = Array.from(document.querySelectorAll('input[name="ceremonies"]:checked'), input => input.value);
+      defaults.ceremonyDetails = collectEventDetails().ceremonies;
+      localStorage.setItem(STORAGE_KEYS.DEFAULTS, JSON.stringify(defaults));
+    }
+    function collectEventDetails() {
+      const value = id => document.getElementById(id).value.trim();
+      const ceremonies = Array.from(document.querySelectorAll('[data-ceremony-name]'), card => ({
+        name: card.dataset.ceremonyName,
+        date: card.querySelector('[data-ceremony-field="date"]').value.trim(),
+        time: card.querySelector('[data-ceremony-field="time"]').value.trim(),
+        venue: card.querySelector('[data-ceremony-field="venue"]').value.trim(),
+        address: card.querySelector('[data-ceremony-field="address"]').value.trim(),
+        map_url: card.querySelector('[data-ceremony-field="map_url"]').value.trim(),
+        notes: card.querySelector('[data-ceremony-field="notes"]').value.trim()
+      }));
+      return {
+        event_type: document.getElementById('eventType').value,
+        celebrants: value('celebrantNames'),
+        groom: value('groomFullName'),
+        bride: value('brideFullName'),
+        groom_parents: value('groomParents'),
+        groom_family: value('groomFamilyName'),
+        bride_parents: value('brideParents'),
+        bride_family: value('brideFamilyName'),
+        close_relatives: value('closeRelatives'),
+        date: value('weddingDate'),
+        time: value('weddingTime'),
+        muhurtham: value('muhurthamTime'),
+        guest_arrival: value('guestArrivalTime'),
+        venue: value('venueName'),
+        venue_address: value('venueAddress'),
+        map_url: value('mapUrl'),
+        parking_transport: value('parkingTransport'),
+        meal: value('mealDetails'),
+        reception_date_time: value('receptionDateTime'),
+        reception_venue: value('receptionVenue'),
+        ceremonies
+      };
+    }
+    function buildEventDetailsMarkup(details) {
+      const isWedding = details.event_type === 'Wedding';
+      const sections = [];
+      const addSection = (heading, rows) => {
+        const visibleRows = rows.filter(([, value]) => value);
+        if (!visibleRows.length) return;
+        sections.push(`<div class="invite-event-extra-section"><h3>${escapeHtml(heading)}</h3><dl>${visibleRows.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl></div>`);
+      };
+      addSection('Celebration details', [
+        ['Event', details.event_type],
+        ['Celebrating', isWedding ? '' : details.celebrants],
+        ['Guest arrival', details.guest_arrival],
+        ['Venue address', details.venue_address],
+        ['Parking and transportation', details.parking_transport],
+        ['Meal', details.meal]
+      ]);
+      if (isWedding) {
+        addSection('With our families', [
+          ['Groom', details.groom],
+          ['Groom’s family', details.groom_family],
+          ['Groom’s parents', details.groom_parents],
+          ['Bride', details.bride],
+          ['Bride’s family', details.bride_family],
+          ['Bride’s parents', details.bride_parents],
+          ['Siblings, grandparents and loved ones', details.close_relatives]
+        ]);
+        addSection('Wedding schedule', [
+          ['Muhurtham / auspicious time', details.muhurtham],
+          ['Reception', details.reception_date_time],
+          ['Reception venue', details.reception_venue]
+        ]);
+      }
+      details.ceremonies.forEach(ceremony => addSection(ceremony.name, [
+        ['Date', ceremony.date], ['Time', ceremony.time], ['Venue', ceremony.venue],
+        ['Address', ceremony.address], ['Map location', ceremony.map_url], ['Notes', ceremony.notes]
+      ]));
+      if (!sections.length) return '';
+      return `<section class="invite-event-extra" aria-label="Additional event details"><h2>More details</h2>${sections.join('')}</section>`;
+    }
+    function buildMapEmbedMarkup(venueName, mapUrl, venueAddress = '') {
+      const venue = String(venueName || 'Event venue').trim() || 'Event venue';
+      const mapLocation = [venue, venueAddress].filter(Boolean).join(', ');
+      let safeMapUrl = 'https://www.google.com/maps';
+      try {
+        const parsedUrl = new URL(mapUrl);
+        if (parsedUrl.protocol === 'https:' || parsedUrl.protocol === 'http:') safeMapUrl = parsedUrl.href;
+      } catch (error) {}
+      const safeVenue = escapeHtml(venue);
+      return `<section class="invite-map" aria-label="Map to ${safeVenue}"><div class="invite-map-heading"><span class="invite-map-kicker">Location</span><a class="invite-map-location" href="${escapeHtml(safeMapUrl)}" target="_blank" rel="noopener">${safeVenue}</a></div><iframe src="https://www.google.com/maps?q=${encodeURIComponent(mapLocation)}&amp;output=embed" title="Map showing ${safeVenue}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></section>`;
+    }
+    function buildFullPageHtml(guestName, coupleNames, renderedHtml, showArrival = true, mailAnimation = 'velvet', eventType = 'Wedding') {
+      const mailStyles = {
+        velvet: { className: 'arrival--velvet', seal: '&amp;' },
+        'rose-gold': { className: 'arrival--rose-gold', seal: '&#10084;' },
+        botanical: { className: 'arrival--botanical', seal: '&#10047;' },
+        celestial: { className: 'arrival--celestial', seal: '&#10022;' }
+      };
+      const selectedMailStyle = mailStyles[mailAnimation] || mailStyles.velvet;
+        const eventLabel = escapeHtml(eventType || 'Celebration');
+      const arrivalMarkup = showArrival ? `
+      <div class="arrival ${selectedMailStyle.className}" role="status" aria-label="A ${eventLabel.toLowerCase()} invitation is being delivered">
+    <div class="arrival-stage">
+      <div class="arrival-heading">Delivered with love</div>
+      <div class="arrival-flight">
+        <div class="arrival-envelope" role="button" tabindex="0" aria-label="Open the ${eventLabel.toLowerCase()} invitation for ${escapeHtml(guestName)}" onclick="const arrival=this.closest('.arrival');arrival.classList.add('arrival--opened');window.setTimeout(()=>arrival.remove(),1400)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}">
+          <div class="arrival-letter">
+            <div class="arrival-letter-label">You are warmly invited</div>
+            <div class="arrival-letter-couple">${escapeHtml(coupleNames)}</div>
+            <div class="arrival-letter-guest">A celebration prepared for ${escapeHtml(guestName)}</div>
+          </div>
+          <div class="arrival-flap"></div>
+          <div class="arrival-front"></div>
+          <div class="arrival-seal">${selectedMailStyle.seal}</div>
+          <div class="arrival-address">
+            <span class="arrival-address-label">A special invitation for</span>
+            <strong class="arrival-address-guest">${escapeHtml(guestName)}</strong>
+            <span class="arrival-address-couple">from ${escapeHtml(coupleNames)}</span>
+            <span class="arrival-address-action">Touch to open</span>
+          </div>
+        </div>
+      </div>
+      <div class="arrival-smoke"></div><div class="arrival-smoke"></div><div class="arrival-smoke"></div><div class="arrival-smoke"></div>
+    </div>
+  </div>` : '';
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${eventLabel} Invitation for ${escapeHtml(guestName)}</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fcfaff; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .invite-container { width: 100%; max-width: 420px; min-height: 100vh; background: white; box-shadow: 0 0 40px rgba(0,0,0,0.05); }
+    .invite-gallery, .invite-map { width: 100%; margin: 1.25rem 0; text-align: left; }
+    .invite-gallery h2 { margin: 0 0 .65rem; font: 600 1.15rem 'Cormorant Garamond',serif; }
+    .invite-gallery-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(100px,1fr)); gap: .5rem; }
+    .invite-gallery-grid img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; }
+    .invite-event-extra { width: 100%; margin: 1.25rem 0; padding: 1rem 0; border-top: 1px solid currentColor; text-align: left; opacity: .9; }
+    .invite-event-extra > h2 { margin: 0 0 .8rem; font: 600 1.15rem 'Cormorant Garamond',serif; }
+    .invite-event-extra-section + .invite-event-extra-section { margin-top: .85rem; }
+    .invite-event-extra-section h3 { margin: 0 0 .35rem; font: 700 .72rem 'Plus Jakarta Sans',sans-serif; }
+    .invite-event-extra-section dl { display: grid; gap: .35rem; margin: 0; font-size: .72rem; line-height: 1.5; }
+    .invite-event-extra-section dl > div { display: grid; grid-template-columns: minmax(6rem, .8fr) minmax(0, 1.4fr); gap: .5rem; }
+    .invite-event-extra-section dt { font-weight: 700; }
+    .invite-event-extra-section dd { margin: 0; overflow-wrap: anywhere; white-space: pre-line; }
+    .invite-map-heading { display: grid; gap: .15rem; margin-bottom: .5rem; }
+    .invite-map-kicker { font: 700 .62rem 'Plus Jakarta Sans',sans-serif; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+    .invite-map-location { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+    .invite-map iframe { display: block; width: 100%; min-height: 180px; aspect-ratio: 16 / 10; border: 0; border-radius: 6px; }
+    .invite-event-date { display: grid; justify-items: center; gap: .35rem; margin: .55rem 0 .85rem; }
+    .invite-date-scratch { position: relative; display: inline-grid; place-items: center; min-width: min(100%,180px); max-width: 100%; min-height: 2.35em; padding: .35em .75em; box-sizing: border-box; vertical-align: middle; }
+    .invite-scratch-cover { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 4px; cursor: crosshair; touch-action: none; transition: opacity .4s ease; }
+    .invite-event-date.is-revealed .invite-scratch-cover { opacity: 0; pointer-events: none; }
+    .invite-countdown { display: flex; justify-content: center; gap: .45rem; width: 100%; margin-top: .2rem; }
+    .invite-countdown[hidden] { display: none !important; }
+    .invite-countdown-unit { display: grid; min-width: 3.1rem; padding: .45rem .35rem; border: 1px solid currentColor; border-radius: 6px; text-align: center; }
+    .invite-countdown-unit strong { font: 700 1rem 'Plus Jakarta Sans',sans-serif; line-height: 1.15; }
+    .invite-countdown-unit span { margin-top: .2rem; font: 600 .55rem 'Plus Jakarta Sans',sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+    .invite-countdown-past { font-size: .75rem; font-weight: 700; }
+    .invite-letter-char { display: inline-block; opacity: 0; transform: translateY(.38em); }
+    .invite-letter-block.is-visible .invite-letter-char { animation: invite-letter-in .48s cubic-bezier(.2,.75,.25,1) both; animation-delay: var(--letter-delay,0ms); }
+    @keyframes invite-letter-in { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .invite-letter-char { opacity: 1; transform: none; animation: none !important; } .invite-scratch-cover { transition: none; } }
+    .arrival { --arrival-scene: radial-gradient(ellipse at 50% 42%, #63304f 0, #321e38 42%, #17141f 100%); --arrival-orbit: rgba(222,189,124,.17); --arrival-envelope: linear-gradient(135deg,#70294f,#a43b68 48%,#462448); --arrival-border: #d8b777; --arrival-shadow: 0 28px 75px rgba(0,0,0,.48),0 0 0 5px rgba(222,189,124,.12),inset 0 0 32px rgba(255,234,191,.12); --arrival-paper: linear-gradient(145deg,#fffdf5,#f3e4ca); --arrival-paper-ink: #53384a; --arrival-accent: #ae8150; --arrival-flap: linear-gradient(145deg,#87335d,#c35a78 55%,#7a3158); --arrival-front: linear-gradient(145deg,#552244,#a03b65 52%,#472040); --arrival-address: #ffeac4; --arrival-address-secondary: #f4d5b4; --arrival-seal: radial-gradient(circle at 35% 30%,#d5a65d,#8b3b62 75%); --arrival-seal-border: #f0d798; --arrival-seal-ink: #fff0ca; --arrival-smoke: radial-gradient(circle,rgba(255,249,232,.76),rgba(228,208,224,.32) 34%,transparent 72%); position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; overflow: hidden; color: #fff9ed; background: var(--arrival-scene); }
+    .arrival::before, .arrival::after { content: ''; position: absolute; width: min(84vw, 440px); aspect-ratio: 1; border: 1px solid var(--arrival-orbit); border-radius: 50%; animation: arrival-orbit 24s linear infinite; }
+    .arrival::after { width: min(70vw, 360px); animation-direction: reverse; }
+    .arrival--rose-gold { --arrival-scene: radial-gradient(ellipse at 50% 42%,#704351 0,#3c2936 45%,#1c1720 100%); --arrival-orbit: rgba(238,186,161,.22); --arrival-envelope: linear-gradient(135deg,#a5535f,#d28478 48%,#70404c); --arrival-border: #e6b894; --arrival-shadow: 0 28px 75px rgba(0,0,0,.44),0 0 0 5px rgba(230,184,148,.13),inset 0 0 32px rgba(255,239,215,.17); --arrival-paper: linear-gradient(145deg,#fffaf0,#f4dfd2); --arrival-paper-ink: #663c48; --arrival-accent: #b16b61; --arrival-flap: linear-gradient(145deg,#c47a77,#e0a08b 55%,#a25263); --arrival-front: linear-gradient(145deg,#854650,#c47a78 52%,#75404e); --arrival-address: #fff0df; --arrival-address-secondary: #f4d2c0; --arrival-seal: radial-gradient(circle at 35% 30%,#e5b797,#a65a65 75%); --arrival-seal-border: #f4d2b6; --arrival-seal-ink: #fff1df; --arrival-smoke: radial-gradient(circle,rgba(255,231,220,.8),rgba(232,180,183,.36) 34%,transparent 72%); }
+    .arrival--botanical { --arrival-scene: radial-gradient(ellipse at 50% 42%,#315d4b 0,#183b31 47%,#10241f 100%); --arrival-orbit: rgba(203,213,163,.2); --arrival-envelope: linear-gradient(135deg,#285647,#47785d 48%,#173c35); --arrival-border: #c4bd83; --arrival-shadow: 0 28px 75px rgba(0,0,0,.45),0 0 0 5px rgba(196,189,131,.12),inset 0 0 32px rgba(243,246,207,.13); --arrival-paper: linear-gradient(145deg,#fffdf0,#e6ead2); --arrival-paper-ink: #284638; --arrival-accent: #6b8257; --arrival-flap: linear-gradient(145deg,#547b5b,#82966b 55%,#365b4d); --arrival-front: linear-gradient(145deg,#234b40,#52775a 52%,#1d4038); --arrival-address: #f1efcf; --arrival-address-secondary: #d7dfb7; --arrival-seal: radial-gradient(circle at 35% 30%,#c5c27f,#426a51 75%); --arrival-seal-border: #e4dfa7; --arrival-seal-ink: #f6f3d5; --arrival-smoke: radial-gradient(circle,rgba(238,244,212,.75),rgba(179,207,169,.34) 34%,transparent 72%); }
+    .arrival--celestial { --arrival-scene: radial-gradient(ellipse at 50% 42%,#374a74 0,#202c4a 46%,#111725 100%); --arrival-orbit: rgba(178,204,232,.24); --arrival-envelope: linear-gradient(135deg,#26385f,#495b83 48%,#1c2848); --arrival-border: #c4d3e7; --arrival-shadow: 0 28px 75px rgba(0,0,0,.5),0 0 0 5px rgba(176,201,229,.13),inset 0 0 32px rgba(216,234,255,.14); --arrival-paper: linear-gradient(145deg,#fffefa,#e7edf5); --arrival-paper-ink: #354463; --arrival-accent: #7189aa; --arrival-flap: linear-gradient(145deg,#465b86,#788bad 55%,#34466e); --arrival-front: linear-gradient(145deg,#26385f,#50658c 52%,#202f53); --arrival-address: #e8f0ff; --arrival-address-secondary: #c4d4ee; --arrival-seal: radial-gradient(circle at 35% 30%,#c5d6ed,#536b97 75%); --arrival-seal-border: #d9e5f5; --arrival-seal-ink: #f2f7ff; --arrival-smoke: radial-gradient(circle,rgba(231,242,255,.82),rgba(177,197,234,.36) 34%,transparent 72%); }
+    .arrival-stage { position: relative; z-index: 1; width: min(92vw, 480px); height: 390px; display: grid; place-items: center; perspective: 900px; }
+    .arrival-heading { position: absolute; top: 23px; text-align: center; color: var(--arrival-address); font: 500 10px 'Plus Jakarta Sans', sans-serif; letter-spacing: 3px; text-transform: uppercase; animation: arrival-caption 1s .5s both; }
+    .arrival-heading::after { content: '✦'; display: block; margin-top: 11px; color: var(--arrival-address); font-size: 17px; }
+    .arrival-flight { position: relative; width: min(82vw, 380px); aspect-ratio: 1.55; transform-style: preserve-3d; animation: envelope-arrive 3.8s cubic-bezier(.18,.78,.2,1) both; }
+    .arrival-envelope { position: relative; width: 100%; height: 100%; border: 1px solid var(--arrival-border); border-radius: 9px; background: var(--arrival-envelope); box-shadow: var(--arrival-shadow); transform-style: preserve-3d; animation: envelope-sway 5.2s 5.35s ease-in-out infinite; cursor: pointer; }
+    .arrival-envelope:focus-visible { outline: 3px solid var(--arrival-address); outline-offset: 5px; }
+    .arrival-envelope::before { content: ''; position: absolute; inset: 7px; z-index: 5; border: 1px solid rgba(244,220,169,.53); border-radius: 5px; pointer-events: none; }
+    .arrival-letter { position: absolute; top: 5%; left: 7%; z-index: 1; width: 86%; height: 92%; padding: 19px 13px; box-sizing: border-box; text-align: center; color: var(--arrival-paper-ink); background: var(--arrival-paper); border: 1px solid var(--arrival-border); box-shadow: 0 3px 14px rgba(0,0,0,.22); transform: translateY(40%) scale(.94); animation: letter-emerge 1.8s 3.55s cubic-bezier(.2,.75,.25,1) forwards; }
+    .arrival-letter::before { content: '✧  ✦  ✧'; display: block; margin: 0 auto 8px; color: var(--arrival-accent); font-size: 13px; letter-spacing: 4px; }
+    .arrival-letter-label { color: var(--arrival-accent); font: 600 8px 'Plus Jakarta Sans', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+    .arrival-letter-couple { overflow-wrap: anywhere; margin: 5px 0 7px; color: var(--arrival-paper-ink); font: 600 clamp(18px, 5vw, 24px)/1.05 'Cormorant Garamond', serif; }
+    .arrival-letter-guest { overflow-wrap: anywhere; color: var(--arrival-paper-ink); font: italic 13px 'Cormorant Garamond', serif; }
+    .arrival-flap { position: absolute; inset: 0 0 auto; z-index: 4; height: 66%; background: var(--arrival-flap); clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: 50% 0; backface-visibility: hidden; animation: envelope-open 1.5s 3.15s ease-in forwards; filter: drop-shadow(0 3px 3px rgba(20,10,22,.25)); }
+    .arrival-front { position: absolute; inset: 0; z-index: 3; background: var(--arrival-front); clip-path: polygon(0 0, 50% 62%, 100% 0, 100% 100%, 0 100%); }
+    .arrival-front::before { content: ''; position: absolute; inset: 10px; border: 1px solid rgba(235,205,148,.65); clip-path: polygon(0 0, 50% 62%, 100% 0, 100% 100%, 0 100%); }
+    .arrival-address { position: absolute; z-index: 6; right: 9%; bottom: 7%; left: 9%; text-align: center; color: var(--arrival-address); text-shadow: 0 1px 4px rgba(30,10,25,.5); }
+    .arrival-address-label { display: block; font: 600 7px 'Plus Jakarta Sans', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+    .arrival-address-guest { display: block; overflow-wrap: anywhere; margin: 2px 0; font: 600 19px/1.05 'Cormorant Garamond', serif; }
+    .arrival-address-couple { display: block; overflow-wrap: anywhere; font: italic 11px 'Cormorant Garamond', serif; color: var(--arrival-address-secondary); }
+    .arrival-address-action { display: block; margin-top: 4px; font: 600 7px 'Plus Jakarta Sans', sans-serif; letter-spacing: 1.5px; text-transform: uppercase; color: var(--arrival-address-secondary); }
+    .arrival-seal { position: absolute; z-index: 7; top: 50%; left: 50%; width: 32px; aspect-ratio: 1; display: grid; place-items: center; border: 1px solid var(--arrival-seal-border); border-radius: 50%; color: var(--arrival-seal-ink); background: var(--arrival-seal); box-shadow: 0 3px 12px rgba(30,10,25,.4), inset 0 0 0 3px rgba(255,240,202,.16); font: 16px 'Cormorant Garamond', serif; transform: translate(-50%,-50%); animation: seal-glint 1.8s 2.1s ease-in-out infinite; }
+    .arrival-smoke { position: absolute; z-index: 8; left: 50%; top: 49%; width: 80px; aspect-ratio: 1; border-radius: 50%; opacity: 0; pointer-events: none; background: var(--arrival-smoke); filter: blur(10px); animation: smoke-bloom 3s 4.2s ease-out both; }
+    .arrival-smoke:nth-child(4) { --smoke-x: -130px; --smoke-y: -84px; animation-delay: 4.35s; }
+    .arrival-smoke:nth-child(5) { --smoke-x: 135px; --smoke-y: -112px; animation-delay: 4.5s; }
+    .arrival-smoke:nth-child(6) { --smoke-x: -185px; --smoke-y: -18px; animation-delay: 4.65s; }
+    .arrival--opened { pointer-events: none; animation: invitation-unveil 1.35s ease forwards; }
+    .arrival--opened .arrival-smoke { animation: invitation-smoke 1.35s ease-out forwards; }
+    .arrival--rose-gold .arrival-flight { animation-name: rose-gold-arrival; }
+    .arrival--botanical .arrival-flight { animation-name: botanical-arrival; }
+    .arrival--celestial .arrival-flight { animation-name: celestial-arrival; }
+    @keyframes envelope-arrive { 0% { opacity: 0; transform: translate3d(0, 62vh, -500px) rotate(-14deg) scale(.18); } 72% { opacity: 1; transform: translate3d(0, -13px, 0) rotate(2deg) scale(1.04); } 100% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0) scale(1); } }
+    @keyframes rose-gold-arrival { 0% { opacity: 0; transform: translate3d(-62vw, 48vh, -700px) rotate(-28deg) scale(.12); } 72% { opacity: 1; transform: translate3d(8px, -13px, 0) rotate(3deg) scale(1.04); } 100% { opacity: 1; transform: translate3d(0,0,0) rotate(0) scale(1); } }
+    @keyframes botanical-arrival { 0% { opacity: 0; transform: translate3d(58vw, 60vh, -900px) rotateY(28deg) rotate(13deg) scale(.1); } 72% { opacity: 1; transform: translate3d(-7px, -12px, 0) rotateY(-5deg) rotate(-2deg) scale(1.03); } 100% { opacity: 1; transform: translate3d(0,0,0) rotateY(0) rotate(0) scale(1); } }
+    @keyframes celestial-arrival { 0% { opacity: 0; transform: translate3d(0, -68vh, -1000px) rotate(22deg) scale(.12); } 72% { opacity: 1; transform: translate3d(0, 12px, 0) rotate(-3deg) scale(1.05); } 100% { opacity: 1; transform: translate3d(0,0,0) rotate(0) scale(1); } }
+    @keyframes envelope-sway { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-7px) rotate(.5deg); } }
+    @keyframes envelope-open { to { transform: rotateX(180deg); } }
+    @keyframes letter-emerge { to { transform: translateY(-29%) scale(1); } }
+    @keyframes smoke-bloom { 0% { opacity: 0; transform: translate(-50%, 0) scale(.25); } 22% { opacity: .9; } 100% { opacity: 0; transform: translate(calc(-50% + var(--smoke-x, 0px)), var(--smoke-y, -110px)) scale(2.6); } }
+    @keyframes invitation-smoke { 0% { opacity: 0; transform: translate(-50%, 0) scale(.3); } 24% { opacity: .9; } 100% { opacity: 0; transform: translate(calc(-50% + var(--smoke-x, 0px)), var(--smoke-y, -110px)) scale(3.2); } }
+    @keyframes invitation-unveil { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+    @keyframes seal-glint { 50% { box-shadow: 0 0 22px rgba(255,224,164,.7), inset 0 0 0 3px rgba(255,240,202,.25); } }
+    @keyframes arrival-caption { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @keyframes arrival-orbit { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .arrival *, .arrival::before, .arrival::after { animation: none !important; transition: none !important; } .arrival.arrival--opened { display: none; } }
+  </style>
+</head>
+<body>
+  ${arrivalMarkup}
+  <div class="invite-container">
+    ${renderedHtml}
+  </div>
+  <script>
+    (() => {
+      const invite = document.querySelector('.invite-container');
+      if (!invite) return;
+
+      const initializeCountdown = eventBlock => {
+        const dateText = eventBlock.querySelector('.invite-date-scratch').textContent.trim();
+        const timeText = eventBlock.querySelector('.invite-time').textContent;
+        const countdown = eventBlock.querySelector('.invite-countdown');
+        const target = new Date(dateText);
+        const timeMatch = timeText.match(/\\b(\\d{1,2})(?::(\\d{2}))?\\s*(AM|PM)\\b/i);
+        if (timeMatch && !Number.isNaN(target.getTime())) {
+          let hours = Number(timeMatch[1]) % 12;
+          if (timeMatch[3].toUpperCase() === 'PM') hours += 12;
+          target.setHours(hours, Number(timeMatch[2] || 0), 0, 0);
+        }
+        countdown.replaceChildren();
+        if (Number.isNaN(target.getTime())) {
+          countdown.textContent = 'Add a valid event date to start the countdown.';
+          countdown.classList.add('invite-countdown-past');
+          countdown.hidden = false;
+          return;
+        }
+        const values = ['Days', 'Hours', 'Minutes', 'Seconds'].map(label => {
+          const unit = document.createElement('span');
+          unit.className = 'invite-countdown-unit';
+          const value = document.createElement('strong');
+          const caption = document.createElement('span');
+          caption.textContent = label;
+          unit.append(value, caption);
+          countdown.append(unit);
+          return value;
+        });
+        let timer = null;
+        const update = () => {
+          const remaining = target.getTime() - Date.now();
+          if (remaining <= 0) {
+            countdown.replaceChildren();
+            countdown.textContent = 'The celebration has begun.';
+            countdown.classList.add('invite-countdown-past');
+            if (timer) clearInterval(timer);
+            return;
+          }
+          let seconds = Math.floor(remaining / 1000);
+          const days = Math.floor(seconds / 86400);
+          seconds %= 86400;
+          const hours = Math.floor(seconds / 3600);
+          seconds %= 3600;
+          const minutes = Math.floor(seconds / 60);
+          seconds %= 60;
+          [days, hours, minutes, seconds].forEach((value, index) => { values[index].textContent = String(value).padStart(2, '0'); });
+        };
+        update();
+        timer = setInterval(update, 1000);
+        countdown.hidden = false;
+      };
+
+      invite.querySelectorAll('.invite-date-scratch').forEach(dateElement => {
+        const eventBlock = dateElement.closest('.invite-event-date');
+        const cover = document.createElement('canvas');
+        const context = cover.getContext('2d', { willReadFrequently: true });
+        cover.className = 'invite-scratch-cover';
+        cover.setAttribute('role', 'button');
+        cover.tabIndex = 0;
+        cover.setAttribute('aria-label', 'Scratch to reveal the event date');
+        dateElement.append(cover);
+        const countdown = eventBlock.querySelector('.invite-countdown');
+        countdown.hidden = true;
+        let moves = 0;
+        let revealed = false;
+        let scratching = false;
+        const drawCover = () => {
+          const bounds = cover.getBoundingClientRect();
+          if (!bounds.width || !bounds.height) return;
+          const ratio = window.devicePixelRatio || 1;
+          cover.width = Math.round(bounds.width * ratio);
+          cover.height = Math.round(bounds.height * ratio);
+          context.setTransform(ratio, 0, 0, ratio, 0, 0);
+          const gradient = context.createLinearGradient(0, 0, bounds.width, bounds.height);
+          gradient.addColorStop(0, '#eee9dd');
+          gradient.addColorStop(.5, '#c6c0b4');
+          gradient.addColorStop(1, '#f5f0e6');
+          context.fillStyle = gradient;
+          context.fillRect(0, 0, bounds.width, bounds.height);
+          context.strokeStyle = 'rgba(255,255,255,.34)';
+          context.lineWidth = 1;
+          for (let line = -bounds.height; line < bounds.width + bounds.height; line += 9) {
+            context.beginPath();
+            context.moveTo(line, 0);
+            context.lineTo(line + bounds.height, bounds.height);
+            context.stroke();
+          }
+          context.fillStyle = '#4d493f';
+          context.font = '700 9px Plus Jakarta Sans, sans-serif';
+          context.textAlign = 'center';
+          context.textBaseline = 'middle';
+          context.fillText('SCRATCH TO REVEAL', bounds.width / 2, bounds.height / 2, bounds.width - 12);
+        };
+        const revealDate = () => {
+          if (revealed) return;
+          revealed = true;
+          eventBlock.classList.add('is-revealed');
+          cover.setAttribute('aria-label', 'Event date revealed');
+          initializeCountdown(eventBlock);
+          window.setTimeout(() => cover.remove(), 450);
+        };
+        const erasePoint = event => {
+          const bounds = cover.getBoundingClientRect();
+          const x = event.clientX - bounds.left;
+          const y = event.clientY - bounds.top;
+          context.globalCompositeOperation = 'destination-out';
+          context.beginPath();
+          context.arc(x, y, 16, 0, Math.PI * 2);
+          context.fill();
+          moves++;
+          if (moves % 5) return;
+          const pixels = context.getImageData(0, 0, cover.width, cover.height).data;
+          let clearCount = 0;
+          let sampleCount = 0;
+          const step = 4 * Math.max(1, Math.floor(cover.width / 80));
+          for (let pixel = 3; pixel < pixels.length; pixel += step) {
+            sampleCount++;
+            if (pixels[pixel] < 32) clearCount++;
+          }
+          if (sampleCount && clearCount / sampleCount > .38) revealDate();
+        };
+        cover.addEventListener('pointerdown', event => {
+          event.preventDefault();
+          scratching = true;
+          cover.setPointerCapture(event.pointerId);
+          erasePoint(event);
+        });
+        cover.addEventListener('pointermove', event => { if (scratching) erasePoint(event); });
+        cover.addEventListener('pointerup', () => { scratching = false; });
+        cover.addEventListener('pointercancel', () => { scratching = false; });
+        cover.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); revealDate(); }
+        });
+        new ResizeObserver(drawCover).observe(dateElement);
+        drawCover();
+      });
+
+      const letterObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          letterObserver.unobserve(entry.target);
+        });
+      }, { threshold: .15, rootMargin: '0px 0px -6% 0px' }) : null;
+      invite.querySelectorAll('h1,h2,h3,p,[class$="-guest"]').forEach(block => {
+        if (block.children.length && !block.matches('[class$="-guest"]')) return;
+        const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+        const textNodes = [];
+        while (walker.nextNode()) if (walker.currentNode.textContent.trim()) textNodes.push(walker.currentNode);
+        if (!textNodes.length) return;
+        block.classList.add('invite-letter-block');
+        let letterIndex = 0;
+        textNodes.forEach(textNode => {
+          const fragment = document.createDocumentFragment();
+          Array.from(textNode.textContent).forEach(character => {
+            const letter = document.createElement('span');
+            letter.className = 'invite-letter-char';
+            letter.style.setProperty('--letter-delay', Math.min(letterIndex * 18, 540) + 'ms');
+            letter.textContent = character === ' ' ? '\\u00a0' : character;
+            fragment.append(letter);
+            letterIndex++;
+          });
+          textNode.replaceWith(fragment);
+        });
+        if (letterObserver) letterObserver.observe(block);
+        else block.classList.add('is-visible');
+      });
+    })();
+  <\/script>
+</body>
+</html>`;
+    }
+
+    function getFormState() {
+      const guestName = document.getElementById('guestName').value || 'Valued Guest';
+      const eventDetails = collectEventDetails();
+      const routing = getRoutingSelection();
+      if (routing) eventDetails.ceremonies = eventDetails.ceremonies.filter(ceremony => routing.includes(ceremony.name));
+      const coupleNames = eventDetails.event_type === 'Wedding'
+        ? [eventDetails.groom, eventDetails.bride].filter(Boolean).join(' & ') || 'Wedding Couple'
+        : eventDetails.celebrants || eventDetails.event_type;
+      const selectedTheme = document.querySelector('input[name="templateType"]:checked');
+      const selectedMailAnimation = document.querySelector('input[name="mailAnimationType"]:checked');
+      const slug = slugify(guestName), coupleSlug = slugify(coupleNames);
+
+      return {
+        name: guestName, 
+        slug: slug, 
+        coupleSlug: coupleSlug,
+        template: selectedTheme ? selectedTheme.value : 'urlovingly',
+        mail_animation: selectedMailAnimation ? selectedMailAnimation.value : 'velvet',
+        event_type: eventDetails.event_type,
+        event_details: eventDetails,
+        ceremonies: eventDetails.ceremonies.map(ceremony => ceremony.name),
+        couple_names: coupleNames,
+        wedding_date: eventDetails.date,
+        wedding_time: eventDetails.time,
+        venue: eventDetails.venue,
+        map_url: eventDetails.map_url,
+        rsvp_phone: document.getElementById('rsvpPhone').value,
+        host_email: document.getElementById('hostEmail').value,
+        custom_note: getSelectedNote(),
+        rendered_html: buildFullPageHtml(guestName, coupleNames, renderedInvitationFragment, true, selectedMailAnimation ? selectedMailAnimation.value : 'velvet', eventDetails.event_type),
+        fullUrl: `${BASE_URL}/${coupleSlug}/to/${slug}/`,
+        guest_phone: hasFeature('whatsapp_generator') ? document.getElementById('guestPhone').value : '',
+        routing_empty: routing !== null && routing.length === 0,
+        allowed_ceremonies: routing && routing.length < document.querySelectorAll('#routingOptions input').length ? routing : []
+      };
+    }
+    async function replayMailAnimation() {
+      await previewRenderPromise;
+      if (!activeTemplateLoaded) return;
+      const data = getFormState();
+      document.getElementById('mobilePreviewViewport').srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, true, data.mail_animation, data.event_type);
+    }
+    function updateLivePreview() {
+      const data = getFormState();
+      const previewSelection = `${data.template}:${data.mail_animation}`;
+      const showArrival = previewSelection !== lastPreviewSelection || !previewIntroShown.has(data.mail_animation);
+      lastPreviewSelection = previewSelection;
+      
+      // Update visual URL preview elements
+      document.getElementById('coupleSlugPreview').textContent = data.coupleSlug;
+      document.getElementById('slugPreview').textContent = data.slug;
+      document.getElementById('previewBrowserUrl').textContent = data.fullUrl.replace(/^https?:\/\//, '');
+
+      const viewport = document.getElementById('mobilePreviewViewport');
+      const renderId = ++previewRenderId;
+      activeTemplateLoaded = false;
+      const templateRequest = invitationTemplateCache.has(data.template)
+        ? Promise.resolve(invitationTemplateCache.get(data.template))
+        : fetch(`/templates/${data.template}/index.html`).then(response => {
+          if (!response.ok) throw new Error(`Template request failed (${response.status})`);
+          return response.text();
+        }).then(markup => {
+          invitationTemplateCache.set(data.template, markup);
+          return markup;
+        });
+      previewRenderPromise = templateRequest
+        .then(templateMarkup => {
+          if (renderId !== previewRenderId) return;
+          const rsvpText = `Hi! I (${data.name}) happily confirm my attendance for ${data.couple_names}'s ${data.event_type.toLowerCase()}!`;
+          const values = {
+            guest_name: data.name,
+            couple_names: data.couple_names,
+            wedding_date: data.wedding_date,
+            wedding_time: data.wedding_time,
+            venue: data.venue,
+            custom_note: data.custom_note,
+            photo_gallery: buildInvitePhotoGallery(),
+            map_embed: buildMapEmbedMarkup(data.venue, data.map_url, data.event_details.venue_address),
+            map_url: data.map_url,
+            rsvp_phone: data.rsvp_phone,
+            host_email: data.host_email,
+            wa_url: `https://wa.me/${encodeURIComponent(data.rsvp_phone)}?text=${encodeURIComponent(rsvpText)}`,
+            email_url: `mailto:${encodeURIComponent(data.host_email)}?subject=${encodeURIComponent(`${data.event_type} RSVP - ${data.name}`)}&body=${encodeURIComponent(rsvpText)}`
+          };
+          const renderedMarkup = templateMarkup.replace(/\{\{\s*(guest_name|couple_names|wedding_date|wedding_time|venue|custom_note|photo_gallery|map_embed|map_url|rsvp_phone|host_email|wa_url|email_url)(?:\s*\|\s*(urlencode))?\s*\}\}/g, (match, key, encoded) => {
+            if (key === 'photo_gallery' || key === 'map_embed') return values[key];
+            return encoded ? encodeURIComponent(values[key]) : escapeHtml(values[key]);
+          });
+          const templateDocument = new DOMParser().parseFromString(renderedMarkup, 'text/html');
+          const signatureIntro = templateDocument.querySelector('.signature .signature-card > .signature-kicker');
+          if (signatureIntro && data.event_type !== 'Wedding') signatureIntro.textContent = `A personal ${data.event_type.toLowerCase()} invitation`;
+          templateDocument.querySelectorAll('.invite-countdown').forEach(countdown => countdown.setAttribute('aria-label', `Countdown to ${data.event_type}`));
+          const eventDetailsMarkup = buildEventDetailsMarkup(data.event_details);
+          if (eventDetailsMarkup) {
+            const eventAnchor = templateDocument.querySelector('.invite-event-date') || templateDocument.body.lastElementChild;
+            if (eventAnchor) eventAnchor.insertAdjacentHTML('afterend', eventDetailsMarkup);
+            else templateDocument.body.insertAdjacentHTML('beforeend', eventDetailsMarkup);
+          }
+          const styles = Array.from(templateDocument.head.querySelectorAll('style')).map(style => style.outerHTML).join('');
+          const stylesheets = Array.from(templateDocument.head.querySelectorAll('link[rel="stylesheet"]')).map(link => link.outerHTML).join('');
+          renderedInvitationFragment = stylesheets + styles + templateDocument.body.innerHTML;
+          viewport.srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, showArrival, data.mail_animation, data.event_type);
+          previewIntroShown.add(data.mail_animation);
+          activeTemplateLoaded = true;
+        })
+        .catch(error => {
+          if (renderId !== previewRenderId) return;
+          console.error('Invitation template could not be loaded:', error);
+          renderedInvitationFragment = '<p>This invitation style could not be loaded.</p>';
+          viewport.srcdoc = buildFullPageHtml(data.name, data.couple_names, renderedInvitationFragment, false, data.mail_animation, data.event_type);
+          activeTemplateLoaded = false;
+        });
+    }
+  </script>
+</body>
+</html>
